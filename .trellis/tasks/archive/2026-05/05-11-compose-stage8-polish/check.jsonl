@@ -1,0 +1,2 @@
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "验证 detekt 通过 + 单测 ≥ 8 个 + assembleDebug + lint"}
+{"file": ".trellis/tasks/05-11-compose-stage8-polish/prd.md", "reason": "验收标准：detekt + test + README"}

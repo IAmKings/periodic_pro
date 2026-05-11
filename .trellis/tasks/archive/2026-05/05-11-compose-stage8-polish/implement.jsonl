@@ -1,0 +1,4 @@
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "detekt 配置 + 单测规范 (JUnit4 + MockK + turbine) + 覆盖率目标"}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "ViewModel 测试模板 (StateFlow + turbine 验证)"}
+{"file": ".trellis/tasks/05-11-compose-stage8-polish/prd.md", "reason": "本任务 PRD：detekt + 8 单测 + README"}
+{"file": "design/README.md", "reason": "设计 Token 参考 (README 编写)"}
