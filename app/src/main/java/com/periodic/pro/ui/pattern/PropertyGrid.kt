@@ -20,15 +20,6 @@ import com.periodic.pro.theme.PeriodicProTheme
 import android.content.res.Configuration
 
 /**
- * 属性条目，包含名称、值和可选单位。
- */
-data class PropertyItem(
-    val name: String,
-    val value: String?,
-    val unit: String? = null,
-)
-
-/**
  * 2 列属性网格。
  *
  * 每行展示 2 个属性（属性名 + 属性值 + 单位），null 值显示 "—"。
@@ -70,6 +61,15 @@ fun PropertyGrid(
         }
     }
 }
+
+/**
+ * 属性条目，包含名称、值和可选单位。
+ */
+data class PropertyItem(
+    val name: String,
+    val value: String?,
+    val unit: String? = null,
+)
 
 @Composable
 private fun PropertyCell(

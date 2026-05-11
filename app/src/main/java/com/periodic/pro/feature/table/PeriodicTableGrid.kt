@@ -2,6 +2,7 @@ package com.periodic.pro.feature.table
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -113,7 +114,7 @@ fun PeriodicTableGrid(
                 .zoomable(
                     state = zoomableState,
                     onClick = { offset ->
-                        val cell = hitTest(offset, clampedCellPx, density)
+                        val cell = hitTest(offset, clampedCellPx)
                         if (cell != null) {
                             val element = gridMap[cell]
                             if (element != null) {
@@ -122,7 +123,7 @@ fun PeriodicTableGrid(
                         }
                     },
                     onLongClick = { offset ->
-                        val cell = hitTest(offset, clampedCellPx, density)
+                        val cell = hitTest(offset, clampedCellPx)
                         if (cell != null) {
                             val element = gridMap[cell]
                             if (element != null) {
@@ -221,13 +222,14 @@ private fun buildGridMap(elements: List<Element>): Map<Pair<Int, Int>, Element> 
 private fun hitTest(
     offset: Offset,
     cellPx: Float,
-    density: androidx.compose.ui.unit.Density,
 ): Pair<Int, Int>? {
     val col = (offset.x / cellPx).toInt()
     val row = (offset.y / cellPx).toInt()
-    if (col < 0 || col > 17) return null
-    if (row < 0 || row > 8) return null
-    return Pair(row, col)
+    return if (col in 0..17 && row in 0..8) {
+        Pair(row, col)
+    } else {
+        null
+    }
 }
 
 /**
@@ -318,7 +320,8 @@ private fun FBlockMarker(
         modifier = modifier
             .padding(1.dp)
             .clip(shape)
-            .background(Color(0xFFE0E0E0)),
+            .background(Color(0xFFE0E0E0))
+            .clickable { onClick() },
         contentAlignment = Alignment.Center,
     ) {
         Text(

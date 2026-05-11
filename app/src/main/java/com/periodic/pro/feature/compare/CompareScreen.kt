@@ -1,6 +1,7 @@
 package com.periodic.pro.feature.compare
 
 import android.content.res.Configuration
+import java.util.Locale
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -424,7 +425,7 @@ private fun formatDouble(value: Double?): String? {
     return if (value == value.toLong().toDouble()) {
         value.toLong().toString()
     } else {
-        String.format("%.2f", value).trimEnd('0').trimEnd('.')
+        String.format(Locale.US, "%.2f", value).trimEnd('0').trimEnd('.')
     }
 }
 

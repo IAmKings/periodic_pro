@@ -16,7 +16,6 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -51,7 +50,7 @@ private val navItems = listOf(
  * - 横屏/折叠屏：NavigationRail
  * - 平板（>= 840dp）：NavigationDrawer
  *
- * TODO: 升级到 window-core 1.4+ 后，用 `isWidthAtLeastBreakpoint(WIDTH_DP_EXPANDED_LOWER_BOUND)`
+ * 计划：升级到 window-core 1.4+ 后，用 `isWidthAtLeastBreakpoint(WIDTH_DP_EXPANDED_LOWER_BOUND)`
  *       替换已 deprecated 的 WindowWidthSizeClass 枚举比较。
  */
 @Composable

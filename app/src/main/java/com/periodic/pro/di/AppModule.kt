@@ -2,6 +2,7 @@ package com.periodic.pro.di
 
 import com.periodic.pro.data.element.ElementRepository
 import com.periodic.pro.data.favorites.FavoritesRepository
+import com.periodic.pro.data.favorites.favoritesDataStore
 import com.periodic.pro.data.theme.ThemePreferenceRepository
 import com.periodic.pro.feature.compare.CompareViewModel
 import com.periodic.pro.feature.favorites.FavoritesViewModel
@@ -13,7 +14,7 @@ import org.koin.dsl.module
 
 val appModule = module {
     single { ElementRepository(androidContext()) }
-    single { FavoritesRepository(androidContext()) }
+    single { FavoritesRepository(androidContext().favoritesDataStore) }
     single { ThemePreferenceRepository(androidContext()) }
 
     viewModel { TableViewModel(get(), get()) }

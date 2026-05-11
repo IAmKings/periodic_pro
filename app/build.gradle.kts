@@ -3,6 +3,13 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    id("io.gitlab.arturbosch.detekt")
+}
+
+detekt {
+    config = files("${rootDir}/config/detekt/detekt.yml")
+    buildUponDefaultConfig = true
+    parallel = true
 }
 
 android {
@@ -116,6 +123,9 @@ dependencies {
 
     // Adaptive Navigation Suite
     implementation(libs.compose.adaptive.navigation.suite)
+
+    // Detekt formatting plugin
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
 
     // Test
     testImplementation(libs.junit)

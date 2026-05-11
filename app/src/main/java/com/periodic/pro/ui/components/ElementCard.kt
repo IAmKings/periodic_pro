@@ -38,8 +38,6 @@ import com.periodic.pro.theme.forCategory
  * @param onClick 点击回调
  * @param modifier Modifier
  * @param zhName 元素中文名（可选）
- * @param isFavorite 是否已收藏
- * @param onLongClick 长按回调（可选）
  */
 @Composable
 fun ElementCard(
@@ -47,8 +45,6 @@ fun ElementCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     zhName: String? = null,
-    isFavorite: Boolean = false,
-    onLongClick: (() -> Unit)? = null,
 ) {
     val categoryColor = LocalCategoryColors.current.forCategory(element.category)
     val shape = MaterialTheme.shapes.medium

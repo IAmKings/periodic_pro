@@ -1,0 +1,109 @@
+# detekt 配置 —— 基于默认规则
+# 目标：代码质量检查，阻止明显 bug 与风格问题
+build:
+  maxIssues: 200
+
+comments:
+  active: true
+  CommentOverPrivateFunction:
+    active: false
+  UndocumentedPublicClass:
+    active: false
+  UndocumentedPublicFunction:
+    active: false
+  UndocumentedPublicProperty:
+    active: false
+
+complexity:
+  active: true
+  ComplexCondition:
+    active: true
+    threshold: 4
+  CyclomaticComplexMethod:
+    active: true
+    threshold: 30
+    ignoreSingleWhenExpression: true
+  LongMethod:
+    active: true
+    threshold: 120
+  TooManyFunctions:
+    active: false
+  LongParameterList:
+    active: true
+    threshold: 12
+
+coroutines:
+  active: true
+  RedundantSuspendModifier:
+    active: true
+  SuspendFunSwallowedCancellation:
+    active: true
+  SleepInsteadOfDelay:
+    active: true
+
+exceptions:
+  active: true
+  TooGenericExceptionCaught:
+    active: true
+    exceptionNames:
+      - Exception
+      - Throwable
+      - RuntimeException
+  TooGenericExceptionThrown:
+    active: true
+    exceptionNames:
+      - Exception
+      - Throwable
+      - RuntimeException
+
+naming:
+  active: true
+  FunctionNaming:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**']
+    ignoreAnnotated: ['Composable']
+  VariableNaming:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**']
+  MemberNameEqualsClassName:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**']
+
+performance:
+  active: true
+  SpreadOperator:
+    active: true
+
+potential-bugs:
+  active: true
+  CastToNullableType:
+    active: true
+  UnreachableCode:
+    active: true
+  MapGetWithNotNullAssertionOperator:
+    active: true
+
+style:
+  active: true
+  ForbiddenComment:
+    active: true
+    comments:
+      - 'TODO:'
+      - 'FIXME:'
+      - 'HACK:'
+      - 'STOPSHIP:'
+  UnusedImports:
+    active: true
+  UnusedPrivateMember:
+    active: true
+    ignoreAnnotated: ['Preview', 'Composable']
+  UseCheckOrError:
+    active: true
+  UseRequire:
+    active: true
+  MagicNumber:
+    active: false
+  MaxLineLength:
+    active: false
+  WildcardImport:
+    active: false

@@ -42,6 +42,7 @@ class CompareViewModel(
         }
     }
 
+    @Suppress("UnusedParameter")
     fun handle(intent: CompareIntent) {
         // Navigation handled by callback in Screen layer
     }

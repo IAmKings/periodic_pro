@@ -1,6 +1,7 @@
 package com.periodic.pro.feature.detail
 
 import android.content.res.Configuration
+import java.util.Locale
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -477,7 +477,7 @@ private fun formatDouble(value: Double?): String? {
         // 整数值（如 atomicRadius）
         value.toLong().toString()
     } else {
-        String.format("%.2f", value).trimEnd('0').trimEnd('.')
+        String.format(Locale.US, "%.2f", value).trimEnd('0').trimEnd('.')
     }
 }
 
