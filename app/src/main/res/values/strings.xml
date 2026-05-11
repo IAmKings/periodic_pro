@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">周期表 Pro</string>
+
+    <!-- Navigation -->
+    <string name="tab_home">首页</string>
+    <string name="tab_table">周期表</string>
+    <string name="tab_compare">对比</string>
+    <string name="tab_favorites">收藏</string>
+    <string name="tab_settings">设置</string>
+
+    <!-- Screen titles -->
+    <string name="screen_home">首页</string>
+    <string name="screen_table">周期表</string>
+    <string name="screen_detail">元素详情 #%d</string>
+    <string name="screen_compare">元素对比</string>
+    <string name="screen_favorites">收藏</string>
+</resources>

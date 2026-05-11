@@ -1,0 +1,9 @@
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "验证 Composable 参数顺序、GlassSurface 实现是否符合红线"}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "验证包结构是否与 spec 一致"}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "验证 Koin 注入模式是否正确（非 Hilt）"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "验证 lint 配置 + assembleDebug 通过"}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "验证 @Serializable 路由 / sealed interface 使用正确"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/glass-blur-compose.md", "reason": "红线验证：Haze 1.7.2 锁版本、LocalHazeState 下发"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/navigation-suite-scaffold.md", "reason": "验证 NavigationSuiteScaffold + currentWindowAdaptiveInfo 用法正确"}
+{"file": ".trellis/tasks/05-11-compose-stage2-skeleton/prd.md", "reason": "验收标准：assembleDebug 通过 + Theme 5 文件 + 5 屏路由 + GlassSurface"}
+{"file": "design/README.md", "reason": "验证 Theme 色板/间距/字阶是否与设计稿一致"}

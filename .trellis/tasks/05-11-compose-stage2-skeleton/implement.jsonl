@@ -1,0 +1,11 @@
+{"file": ".trellis/spec/frontend/index.md", "reason": "Compose 规范总入口，搭建工程前必读"}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "包结构规范，确定 theme/ui/navigation/feature 包分层"}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "Composable 规范：modifier 第一参数、State Hoisting、Glass Blur 红线（Haze 1.7.2）"}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "ViewModel + StateFlow + UDF + Koin 注入模板"}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "Kotlin sealed interface / @Serializable 路由 / value class 规范"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "Lint 配置规范，保证 assembleDebug + lint 通过"}
+{"file": ".trellis/spec/guides/cross-layer-thinking-guide.md", "reason": "跨层思考：theme ↔ ui ↔ feature 数据流"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/glass-blur-compose.md", "reason": "Haze 1.7.2 锁版本 + LocalHazeState + GlassSurface API 设计"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/navigation-suite-scaffold.md", "reason": "currentWindowAdaptiveInfo 新 API + NavigationSuiteScaffold 用法 + type-safe routes"}
+{"file": ".trellis/tasks/05-11-compose-stage2-skeleton/prd.md", "reason": "本任务 PRD：Gradle 配置清单 + Theme 5 文件要求 + 导航骨架 + GlassSurface"}
+{"file": "design/README.md", "reason": "Design Token 速查：色板/字阶/8pt Grid/Elevation/圆角 直接映射到 theme/*.kt"}
