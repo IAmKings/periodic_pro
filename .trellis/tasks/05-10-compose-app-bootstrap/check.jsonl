@@ -1,0 +1,13 @@
+{"file": ".trellis/spec/frontend/index.md", "reason": "Frontend spec 总入口；check 时核对结构是否落在改写后的 Compose 规范内"}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "目录结构 spec；验证包分层（ui/data/domain/theme/feature/）是否合规"}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "组件规范；验证 Composable 命名、modifier 参数顺序、State Hoisting 落地"}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "状态管理 spec；验证 ViewModel + StateFlow + UDF + sealed Intent 落地与否"}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "Kotlin idioms 验证：sealed / data class / value class / coroutines 是否规范使用"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "核心质量门：Lint / detekt / 单测覆盖（ViewModel / Repository）必须达标"}
+{"file": ".trellis/spec/frontend/hook-guidelines.md", "reason": "Composable 局部状态规范；检查 remember / derivedStateOf / produceState 误用"}
+{"file": ".trellis/spec/guides/code-reuse-thinking-guide.md", "reason": "代码复用审查工具；识别重复 Composable / 重复常量等违 DRY 现象"}
+{"file": ".trellis/spec/guides/cross-layer-thinking-guide.md", "reason": "跨层一致性审查；data ↔ domain ↔ ui 字段映射是否完整"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/compose-periodic-table.md", "reason": "周期表关键决策验证：是否用了自定义 Layout / Telephoto；CategoryColors 是否独立 CompositionLocal；多选模式 ContextualTopAppBar 是否正确"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/glass-blur-compose.md", "reason": "Glass Blur 红线检查：禁止 LazyColumn 子项使用 GlassSurface；同屏 ≤ 5 个；Haze 锁 1.7.x 而非 2.0 alpha"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/navigation-suite-scaffold.md", "reason": "导航决策验证：是否使用 currentWindowAdaptiveInfo 新 API；NavHost 唯一性；多 BackStack saveState/restoreState 正确"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/elements-dataset.md", "reason": "数据集决策验证：超重元素 null 兜底；中文字段独立 elements_zh.json；署名要求"}
