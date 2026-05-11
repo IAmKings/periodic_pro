@@ -51,8 +51,11 @@ package app.periodic.feature.table
 import app.periodic.data.element.model.Element
 import app.periodic.data.element.model.ElementCategory
 
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+
 data class TableUiState(
-    val elements: List<Element> = emptyList(),
+    val elements: ImmutableList<Element> = persistentListOf(),
     val query: String = "",
     val filterCategory: ElementCategory? = null,
     val selected: Set<Int> = emptySet(),           // 多选模式选中的原子序号

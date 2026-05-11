@@ -40,6 +40,9 @@ periodic-pro/
 ├── App.kt                       # Application 子类，注册 Koin
 ├── MainActivity.kt              # 单 Activity；setContent { PeriodicProTheme { PeriodicProApp() } }
 │
+├── di/                          # Koin 依赖注入模块
+│   └── AppModule.kt             # module { ... } 单例 / viewModel 注册
+│
 ├── theme/                       # 设计系统层（与设计图 01 Design System 一一对应）
 │   ├── Color.kt                 # Primary/Secondary + CategoryPalette（10 色 element category）
 │   ├── Typography.kt            # 字阶
