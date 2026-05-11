@@ -47,6 +47,21 @@ data class CategoryColors(
     val actinide: Color = Color(0xFFE599F7),
 )
 
+// 添加 forCategory 方法到 CategoryColors（扩展函数）
+fun CategoryColors.forCategory(category: String): Color = when (category) {
+    "alkali-metal" -> alkali
+    "alkaline-earth-metal" -> alkalineEarth
+    "transition-metal" -> transition
+    "post-transition-metal" -> postTransition
+    "metalloid" -> metalloid
+    "nonmetal" -> nonmetal
+    "halogen" -> halogen
+    "noble-gas" -> nobleGas
+    "lanthanide" -> lanthanide
+    "actinide" -> actinide
+    else -> Color.Gray
+}
+
 // 深色模式降饱和版（降低 20-30% 饱和度，适配暗色背景）
 val DarkCategoryColors = CategoryColors(
     alkali = Color(0xFFCC5555),

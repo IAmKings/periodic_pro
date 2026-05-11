@@ -1,7 +1,7 @@
 {
-  "id": "compose-app-bootstrap",
-  "name": "compose-app-bootstrap",
-  "title": "周期表 App Compose 客户端规划",
+  "id": "compose-stage3-data",
+  "name": "compose-stage3-data",
+  "title": "Stage 3: 数据层与全局组件",
   "description": "",
   "status": "in_progress",
   "dev_type": null,
@@ -10,7 +10,7 @@
   "priority": "P2",
   "creator": "klz",
   "assignee": "klz",
-  "createdAt": "2026-05-10",
+  "createdAt": "2026-05-11",
   "completedAt": null,
   "branch": null,
   "base_branch": "master",
@@ -18,11 +18,8 @@
   "commit": null,
   "pr_url": null,
   "subtasks": [],
-  "children": [
-    "05-11-compose-stage2-skeleton",
-    "05-11-compose-stage3-data"
-  ],
-  "parent": null,
+  "children": [],
+  "parent": "05-10-compose-app-bootstrap",
   "relatedFiles": [],
   "notes": "",
   "meta": {}

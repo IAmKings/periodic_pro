@@ -1,9 +1,13 @@
 package com.periodic.pro.di
 
-import org.koin.core.module.Module
+import com.periodic.pro.data.element.ElementRepository
+import com.periodic.pro.data.favorites.FavoritesRepository
+import com.periodic.pro.data.theme.ThemePreferenceRepository
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
-val appModule: Module = module {
-    // Stage 2 skeleton: no DI registrations needed yet.
-    // Will be populated with Repository/ViewModel in Stage 3+.
+val appModule = module {
+    single { ElementRepository(androidContext()) }
+    single { FavoritesRepository(androidContext()) }
+    single { ThemePreferenceRepository(androidContext()) }
 }

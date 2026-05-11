@@ -1,0 +1,592 @@
+[
+  {
+    "atomicNumber": 1,
+    "nameZh": "氢",
+    "pinyin": "qīng"
+  },
+  {
+    "atomicNumber": 2,
+    "nameZh": "氦",
+    "pinyin": "hài"
+  },
+  {
+    "atomicNumber": 3,
+    "nameZh": "锂",
+    "pinyin": "lǐ"
+  },
+  {
+    "atomicNumber": 4,
+    "nameZh": "铍",
+    "pinyin": "pí"
+  },
+  {
+    "atomicNumber": 5,
+    "nameZh": "硼",
+    "pinyin": "péng"
+  },
+  {
+    "atomicNumber": 6,
+    "nameZh": "碳",
+    "pinyin": "tàn"
+  },
+  {
+    "atomicNumber": 7,
+    "nameZh": "氮",
+    "pinyin": "dàn"
+  },
+  {
+    "atomicNumber": 8,
+    "nameZh": "氧",
+    "pinyin": "yǎng"
+  },
+  {
+    "atomicNumber": 9,
+    "nameZh": "氟",
+    "pinyin": "fú"
+  },
+  {
+    "atomicNumber": 10,
+    "nameZh": "氖",
+    "pinyin": "nǎi"
+  },
+  {
+    "atomicNumber": 11,
+    "nameZh": "钠",
+    "pinyin": "nà"
+  },
+  {
+    "atomicNumber": 12,
+    "nameZh": "镁",
+    "pinyin": "měi"
+  },
+  {
+    "atomicNumber": 13,
+    "nameZh": "铝",
+    "pinyin": "lǚ"
+  },
+  {
+    "atomicNumber": 14,
+    "nameZh": "硅",
+    "pinyin": "guī"
+  },
+  {
+    "atomicNumber": 15,
+    "nameZh": "磷",
+    "pinyin": "lín"
+  },
+  {
+    "atomicNumber": 16,
+    "nameZh": "硫",
+    "pinyin": "liú"
+  },
+  {
+    "atomicNumber": 17,
+    "nameZh": "氯",
+    "pinyin": "lǜ"
+  },
+  {
+    "atomicNumber": 18,
+    "nameZh": "氩",
+    "pinyin": "yà"
+  },
+  {
+    "atomicNumber": 19,
+    "nameZh": "钾",
+    "pinyin": "jiǎ"
+  },
+  {
+    "atomicNumber": 20,
+    "nameZh": "钙",
+    "pinyin": "gài"
+  },
+  {
+    "atomicNumber": 21,
+    "nameZh": "钪",
+    "pinyin": "kàng"
+  },
+  {
+    "atomicNumber": 22,
+    "nameZh": "钛",
+    "pinyin": "tài"
+  },
+  {
+    "atomicNumber": 23,
+    "nameZh": "钒",
+    "pinyin": "fán"
+  },
+  {
+    "atomicNumber": 24,
+    "nameZh": "铬",
+    "pinyin": "gè"
+  },
+  {
+    "atomicNumber": 25,
+    "nameZh": "锰",
+    "pinyin": "měng"
+  },
+  {
+    "atomicNumber": 26,
+    "nameZh": "铁",
+    "pinyin": "tiě"
+  },
+  {
+    "atomicNumber": 27,
+    "nameZh": "钴",
+    "pinyin": "gǔ"
+  },
+  {
+    "atomicNumber": 28,
+    "nameZh": "镍",
+    "pinyin": "niè"
+  },
+  {
+    "atomicNumber": 29,
+    "nameZh": "铜",
+    "pinyin": "tóng"
+  },
+  {
+    "atomicNumber": 30,
+    "nameZh": "锌",
+    "pinyin": "xīn"
+  },
+  {
+    "atomicNumber": 31,
+    "nameZh": "镓",
+    "pinyin": "jiā"
+  },
+  {
+    "atomicNumber": 32,
+    "nameZh": "锗",
+    "pinyin": "zhě"
+  },
+  {
+    "atomicNumber": 33,
+    "nameZh": "砷",
+    "pinyin": "shēn"
+  },
+  {
+    "atomicNumber": 34,
+    "nameZh": "硒",
+    "pinyin": "xī"
+  },
+  {
+    "atomicNumber": 35,
+    "nameZh": "溴",
+    "pinyin": "xiù"
+  },
+  {
+    "atomicNumber": 36,
+    "nameZh": "氪",
+    "pinyin": "kè"
+  },
+  {
+    "atomicNumber": 37,
+    "nameZh": "铷",
+    "pinyin": "rú"
+  },
+  {
+    "atomicNumber": 38,
+    "nameZh": "锶",
+    "pinyin": "sī"
+  },
+  {
+    "atomicNumber": 39,
+    "nameZh": "钇",
+    "pinyin": "yǐ"
+  },
+  {
+    "atomicNumber": 40,
+    "nameZh": "锆",
+    "pinyin": "gào"
+  },
+  {
+    "atomicNumber": 41,
+    "nameZh": "铌",
+    "pinyin": "ní"
+  },
+  {
+    "atomicNumber": 42,
+    "nameZh": "钼",
+    "pinyin": "mù"
+  },
+  {
+    "atomicNumber": 43,
+    "nameZh": "锝",
+    "pinyin": "dé"
+  },
+  {
+    "atomicNumber": 44,
+    "nameZh": "钌",
+    "pinyin": "liǎo"
+  },
+  {
+    "atomicNumber": 45,
+    "nameZh": "铑",
+    "pinyin": "lǎo"
+  },
+  {
+    "atomicNumber": 46,
+    "nameZh": "钯",
+    "pinyin": "bǎ"
+  },
+  {
+    "atomicNumber": 47,
+    "nameZh": "银",
+    "pinyin": "yín"
+  },
+  {
+    "atomicNumber": 48,
+    "nameZh": "镉",
+    "pinyin": "gé"
+  },
+  {
+    "atomicNumber": 49,
+    "nameZh": "铟",
+    "pinyin": "yīn"
+  },
+  {
+    "atomicNumber": 50,
+    "nameZh": "锡",
+    "pinyin": "xī"
+  },
+  {
+    "atomicNumber": 51,
+    "nameZh": "锑",
+    "pinyin": "tī"
+  },
+  {
+    "atomicNumber": 52,
+    "nameZh": "碲",
+    "pinyin": "dì"
+  },
+  {
+    "atomicNumber": 53,
+    "nameZh": "碘",
+    "pinyin": "diǎn"
+  },
+  {
+    "atomicNumber": 54,
+    "nameZh": "氙",
+    "pinyin": "xiān"
+  },
+  {
+    "atomicNumber": 55,
+    "nameZh": "铯",
+    "pinyin": "sè"
+  },
+  {
+    "atomicNumber": 56,
+    "nameZh": "钡",
+    "pinyin": "bèi"
+  },
+  {
+    "atomicNumber": 57,
+    "nameZh": "镧",
+    "pinyin": "lán"
+  },
+  {
+    "atomicNumber": 58,
+    "nameZh": "铈",
+    "pinyin": "shì"
+  },
+  {
+    "atomicNumber": 59,
+    "nameZh": "镨",
+    "pinyin": "pǔ"
+  },
+  {
+    "atomicNumber": 60,
+    "nameZh": "钕",
+    "pinyin": "nǚ"
+  },
+  {
+    "atomicNumber": 61,
+    "nameZh": "钷",
+    "pinyin": "pǒ"
+  },
+  {
+    "atomicNumber": 62,
+    "nameZh": "钐",
+    "pinyin": "shān"
+  },
+  {
+    "atomicNumber": 63,
+    "nameZh": "铕",
+    "pinyin": "yǒu"
+  },
+  {
+    "atomicNumber": 64,
+    "nameZh": "钆",
+    "pinyin": "gá"
+  },
+  {
+    "atomicNumber": 65,
+    "nameZh": "铽",
+    "pinyin": "tè"
+  },
+  {
+    "atomicNumber": 66,
+    "nameZh": "镝",
+    "pinyin": "dī"
+  },
+  {
+    "atomicNumber": 67,
+    "nameZh": "钬",
+    "pinyin": "huǒ"
+  },
+  {
+    "atomicNumber": 68,
+    "nameZh": "铒",
+    "pinyin": "ěr"
+  },
+  {
+    "atomicNumber": 69,
+    "nameZh": "铥",
+    "pinyin": "diū"
+  },
+  {
+    "atomicNumber": 70,
+    "nameZh": "镱",
+    "pinyin": "yì"
+  },
+  {
+    "atomicNumber": 71,
+    "nameZh": "镥",
+    "pinyin": "lǔ"
+  },
+  {
+    "atomicNumber": 72,
+    "nameZh": "铪",
+    "pinyin": "hā"
+  },
+  {
+    "atomicNumber": 73,
+    "nameZh": "钽",
+    "pinyin": "tǎn"
+  },
+  {
+    "atomicNumber": 74,
+    "nameZh": "钨",
+    "pinyin": "wū"
+  },
+  {
+    "atomicNumber": 75,
+    "nameZh": "铼",
+    "pinyin": "lái"
+  },
+  {
+    "atomicNumber": 76,
+    "nameZh": "锇",
+    "pinyin": "é"
+  },
+  {
+    "atomicNumber": 77,
+    "nameZh": "铱",
+    "pinyin": "yī"
+  },
+  {
+    "atomicNumber": 78,
+    "nameZh": "铂",
+    "pinyin": "bó"
+  },
+  {
+    "atomicNumber": 79,
+    "nameZh": "金",
+    "pinyin": "jīn"
+  },
+  {
+    "atomicNumber": 80,
+    "nameZh": "汞",
+    "pinyin": "gǒng"
+  },
+  {
+    "atomicNumber": 81,
+    "nameZh": "铊",
+    "pinyin": "tā"
+  },
+  {
+    "atomicNumber": 82,
+    "nameZh": "铅",
+    "pinyin": "qiān"
+  },
+  {
+    "atomicNumber": 83,
+    "nameZh": "铋",
+    "pinyin": "bì"
+  },
+  {
+    "atomicNumber": 84,
+    "nameZh": "钋",
+    "pinyin": "pō"
+  },
+  {
+    "atomicNumber": 85,
+    "nameZh": "砹",
+    "pinyin": "ài"
+  },
+  {
+    "atomicNumber": 86,
+    "nameZh": "氡",
+    "pinyin": "dōng"
+  },
+  {
+    "atomicNumber": 87,
+    "nameZh": "钫",
+    "pinyin": "fāng"
+  },
+  {
+    "atomicNumber": 88,
+    "nameZh": "镭",
+    "pinyin": "léi"
+  },
+  {
+    "atomicNumber": 89,
+    "nameZh": "锕",
+    "pinyin": "ā"
+  },
+  {
+    "atomicNumber": 90,
+    "nameZh": "钍",
+    "pinyin": "tǔ"
+  },
+  {
+    "atomicNumber": 91,
+    "nameZh": "镤",
+    "pinyin": "pú"
+  },
+  {
+    "atomicNumber": 92,
+    "nameZh": "铀",
+    "pinyin": "yóu"
+  },
+  {
+    "atomicNumber": 93,
+    "nameZh": "镎",
+    "pinyin": "ná"
+  },
+  {
+    "atomicNumber": 94,
+    "nameZh": "钚",
+    "pinyin": "bù"
+  },
+  {
+    "atomicNumber": 95,
+    "nameZh": "镅",
+    "pinyin": "méi"
+  },
+  {
+    "atomicNumber": 96,
+    "nameZh": "锔",
+    "pinyin": "jú"
+  },
+  {
+    "atomicNumber": 97,
+    "nameZh": "锫",
+    "pinyin": "péi"
+  },
+  {
+    "atomicNumber": 98,
+    "nameZh": "锎",
+    "pinyin": "kāi"
+  },
+  {
+    "atomicNumber": 99,
+    "nameZh": "锿",
+    "pinyin": "āi"
+  },
+  {
+    "atomicNumber": 100,
+    "nameZh": "镄",
+    "pinyin": "fèi"
+  },
+  {
+    "atomicNumber": 101,
+    "nameZh": "钔",
+    "pinyin": "mén"
+  },
+  {
+    "atomicNumber": 102,
+    "nameZh": "锘",
+    "pinyin": "nuò"
+  },
+  {
+    "atomicNumber": 103,
+    "nameZh": "铹",
+    "pinyin": "láo"
+  },
+  {
+    "atomicNumber": 104,
+    "nameZh": "𬬻",
+    "pinyin": "lú"
+  },
+  {
+    "atomicNumber": 105,
+    "nameZh": "𬭊",
+    "pinyin": "dù"
+  },
+  {
+    "atomicNumber": 106,
+    "nameZh": "𬭳",
+    "pinyin": "xǐ"
+  },
+  {
+    "atomicNumber": 107,
+    "nameZh": "𬭛",
+    "pinyin": "bō"
+  },
+  {
+    "atomicNumber": 108,
+    "nameZh": "𬭶",
+    "pinyin": "hēi"
+  },
+  {
+    "atomicNumber": 109,
+    "nameZh": "鿏",
+    "pinyin": "mài"
+  },
+  {
+    "atomicNumber": 110,
+    "nameZh": "𫟼",
+    "pinyin": "dá"
+  },
+  {
+    "atomicNumber": 111,
+    "nameZh": "𬬭",
+    "pinyin": "lún"
+  },
+  {
+    "atomicNumber": 112,
+    "nameZh": "鿔",
+    "pinyin": "gē"
+  },
+  {
+    "atomicNumber": 113,
+    "nameZh": "鉨",
+    "pinyin": "nǐ"
+  },
+  {
+    "atomicNumber": 114,
+    "nameZh": "鈇",
+    "pinyin": "fū"
+  },
+  {
+    "atomicNumber": 115,
+    "nameZh": "鏌",
+    "pinyin": "mò"
+  },
+  {
+    "atomicNumber": 116,
+    "nameZh": "鉝",
+    "pinyin": "lì"
+  },
+  {
+    "atomicNumber": 117,
+    "nameZh": "鿬",
+    "pinyin": "tián"
+  },
+  {
+    "atomicNumber": 118,
+    "nameZh": "鿫",
+    "pinyin": "ào"
+  }
+]
