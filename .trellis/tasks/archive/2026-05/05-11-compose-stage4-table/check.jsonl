@@ -1,0 +1,7 @@
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "验证 Composable 参数顺序、CategoryColors 注入正确"}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "验证 TableViewModel UDF 范式 + 多选状态管理"}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "验证 feature/table/ 包结构合规"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "验证 lint 通过 + 代码规范"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/compose-periodic-table.md", "reason": "红线验证：自定义 Layout 非 LazyVerticalGrid / Telephoto onClick 槽位 / CategoryColors 独立注入 / 多选 ContextualTopAppBar"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/navigation-suite-scaffold.md", "reason": "验证 WindowWidthSizeClass 响应式实现正确"}
+{"file": ".trellis/tasks/05-11-compose-stage4-table/prd.md", "reason": "验收标准：18×9 网格 / 缩放 / 筛选 / 多选 / 搜索 / 响应式 / assembleDebug"}

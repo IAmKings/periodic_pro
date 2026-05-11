@@ -1,0 +1,8 @@
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "Composable 规范：modifier 第一参数、State Hoisting、CategoryColors staticCompositionLocalOf"}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "UDF 范式：TableViewModel + StateFlow + sealed Intent + 多选模式 rememberSaveable"}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "feature/table/ 包结构：TableScreen/TableViewModel/TableUiState/TableIntent/PeriodicTableGrid"}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "sealed interface Intent / @Serializable 路由 / ImmutableList"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/compose-periodic-table.md", "reason": "核心研究：18×9 自定义 Layout + Telephoto zoomable + CategoryColors forCategory() + 多选 ContextualTopAppBar + 响应式适配"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/navigation-suite-scaffold.md", "reason": "currentWindowAdaptiveInfo + WindowWidthSizeClass 响应式判断"}
+{"file": ".trellis/tasks/05-11-compose-stage4-table/prd.md", "reason": "本任务 PRD：网格布局映射 / 手势 / 筛选 / 多选 / 搜索 / 响应式"}
+{"file": "design/README.md", "reason": "设计参考：Category 10 色板 + ElementCard 4dp 色条 + 8pt Grid 间距"}
