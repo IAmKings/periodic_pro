@@ -1,0 +1,13 @@
+{"file": ".trellis/spec/frontend/index.md", "reason": "Frontend spec 总入口；Stage 1 需先读取当前 web 模板内容作为改写 baseline，Stage 2+ 读取改写后的 Android Compose 规范"}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "目录结构 spec；Stage 1 要改写成 Android 单 module 包分层（ui/data/domain/theme/feature/）"}
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "组件规范；Stage 1 要改写成 Composable 命名 / modifier 参数顺序 / State Hoisting / Slot API 规范"}
+{"file": ".trellis/spec/frontend/hook-guidelines.md", "reason": "Hook 规范；Stage 1 要改写成 Composable 局部状态（remember / derivedStateOf / produceState）规范"}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "状态管理 spec；Stage 1 要改写成 ViewModel + StateFlow + UDF + sealed Intent 模板"}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "类型安全 spec；Stage 1 要改写成 Kotlin idioms（sealed / data class / value class / coroutines）"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "质量规范 spec；Stage 1 要改写成 Lint / detekt / 单测覆盖要求"}
+{"file": ".trellis/spec/guides/code-reuse-thinking-guide.md", "reason": "代码复用思考指南；02 Components 抽象、ElementCard / GlassSurface 等复用决策必读"}
+{"file": ".trellis/spec/guides/cross-layer-thinking-guide.md", "reason": "跨层思考指南；data → domain → ui → feature 多层数据流必读"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/elements-dataset.md", "reason": "118 元素数据集决策：Bowserinator + 自建中文 elements_zh.json；超重元素 null 兜底；113/115/117/118 生僻字 Noto Sans CJK"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/compose-periodic-table.md", "reason": "周期表布局核心研究：自定义 Layout / BoxGrid；Telephoto zoomable；CategoryColors + staticCompositionLocalOf；多选模式；响应式适配"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/glass-blur-compose.md", "reason": "Glass Blur 决策：Haze 1.7.2 锁版本；LocalHazeState；同屏 3-5 个上限；禁止 LazyColumn 子项使用 GlassSurface"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/navigation-suite-scaffold.md", "reason": "导航与自适应：currentWindowAdaptiveInfo 新 API；NavigationSuiteScaffold；type-safe Navigation；多 BackStack；Expanded 用 ListDetailPaneScaffold"}
