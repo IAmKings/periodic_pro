@@ -9,8 +9,9 @@ object Routes {
     const val HOME = "home"
     const val TABLE = "table"
     const val DETAIL = "detail/{atomicNumber}"
-    const val COMPARE = "compare"
+    const val COMPARE = "compare?ids={ids}"
     const val FAVORITES = "favorites"
 
     fun detail(atomicNumber: Int) = "detail/$atomicNumber"
+    fun compare(ids: List<Int>) = "compare?ids=${ids.joinToString(",")}"
 }

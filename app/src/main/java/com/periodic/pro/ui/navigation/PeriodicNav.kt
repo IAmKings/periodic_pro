@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.periodic.pro.R
+import com.periodic.pro.feature.table.TableScreen
 import com.periodic.pro.ui.components.GlassSurface
 
 @Composable
@@ -31,7 +32,16 @@ fun PeriodicNav(
             PlaceholderScreen(title = stringResource(R.string.screen_home), showGlass = true)
         }
         composable(Routes.TABLE) {
-            PlaceholderScreen(title = stringResource(R.string.screen_table))
+            TableScreen(
+                onNavigateToDetail = { atomicNumber ->
+                    navController.navigate(Routes.detail(atomicNumber))
+                },
+                onNavigateToCompare = { ids ->
+                    if (ids.isNotEmpty()) {
+                        navController.navigate(Routes.compare(ids))
+                    }
+                },
+            )
         }
         composable(
             route = Routes.DETAIL,
@@ -40,8 +50,17 @@ fun PeriodicNav(
             val atomicNumber = backStackEntry.arguments?.getInt("atomicNumber") ?: 0
             PlaceholderScreen(title = stringResource(R.string.screen_detail, atomicNumber))
         }
-        composable(Routes.COMPARE) {
-            PlaceholderScreen(title = stringResource(R.string.screen_compare))
+        composable(
+            route = Routes.COMPARE,
+            arguments = listOf(navArgument("ids") {
+                type = NavType.StringType
+                defaultValue = ""
+            }),
+        ) { backStackEntry ->
+            val ids = (backStackEntry.arguments?.getString("ids") ?: "")
+                .split(",")
+                .mapNotNull { it.toIntOrNull() }
+            PlaceholderScreen(title = "Compare: ${ids.joinToString(", ")}")
         }
         composable(Routes.FAVORITES) {
             PlaceholderScreen(title = stringResource(R.string.screen_favorites))

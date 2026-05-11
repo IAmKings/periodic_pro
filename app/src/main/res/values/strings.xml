@@ -15,4 +15,26 @@
     <string name="screen_detail">元素详情 #%d</string>
     <string name="screen_compare">元素对比</string>
     <string name="screen_favorites">收藏</string>
+
+    <!-- Periodic Table Screen -->
+    <string name="search_elements">搜索元素</string>
+    <string name="loading">加载中...</string>
+
+    <!-- Category names -->
+    <string name="category_all">全部</string>
+    <string name="category_alkali_metal">碱金属</string>
+    <string name="category_alkaline_earth_metal">碱土金属</string>
+    <string name="category_transition_metal">过渡金属</string>
+    <string name="category_post_transition_metal">后过渡金属</string>
+    <string name="category_metalloid">类金属</string>
+    <string name="category_nonmetal">非金属</string>
+    <string name="category_halogen">卤素</string>
+    <string name="category_noble_gas">稀有气体</string>
+    <string name="category_lanthanide">镧系</string>
+    <string name="category_actinide">锕系</string>
+
+    <!-- Multi-select mode -->
+    <string name="multiselect_selected">已选 %d 个</string>
+    <string name="multiselect_cancel">取消</string>
+    <string name="multiselect_confirm">对比</string>
 </resources>
