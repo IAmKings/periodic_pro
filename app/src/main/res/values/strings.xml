@@ -57,4 +57,9 @@
     <string name="property_atomic_radius">原子半径</string>
     <string name="property_ionization_energy">电离能</string>
     <string name="property_electron_configuration">电子排布</string>
+    <string name="property_category">分类</string>
+
+    <!-- Compare Screen -->
+    <string name="compare_empty_title">从周期表多选元素开始对比</string>
+    <string name="compare_empty_action">去周期表</string>
 </resources>

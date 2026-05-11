@@ -97,6 +97,7 @@ dependencies {
     // Koin
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
+    implementation(libs.koin.androidx.compose)
 
     // DataStore
     implementation(libs.datastore.preferences)

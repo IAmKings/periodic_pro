@@ -1,7 +1,7 @@
 {
-  "id": "compose-app-bootstrap",
-  "name": "compose-app-bootstrap",
-  "title": "周期表 App Compose 客户端规划",
+  "id": "compose-stage6-compare",
+  "name": "compose-stage6-compare",
+  "title": "Stage 6: 对比屏",
   "description": "",
   "status": "in_progress",
   "dev_type": null,
@@ -10,7 +10,7 @@
   "priority": "P2",
   "creator": "klz",
   "assignee": "klz",
-  "createdAt": "2026-05-10",
+  "createdAt": "2026-05-11",
   "completedAt": null,
   "branch": null,
   "base_branch": "master",
@@ -18,14 +18,8 @@
   "commit": null,
   "pr_url": null,
   "subtasks": [],
-  "children": [
-    "05-11-compose-stage2-skeleton",
-    "05-11-compose-stage3-data",
-    "05-11-compose-stage4-table",
-    "05-11-compose-stage5-detail",
-    "05-11-compose-stage6-compare"
-  ],
-  "parent": null,
+  "children": [],
+  "parent": "05-10-compose-app-bootstrap",
   "relatedFiles": [],
   "notes": "",
   "meta": {}

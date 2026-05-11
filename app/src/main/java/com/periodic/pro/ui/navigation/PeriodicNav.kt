@@ -13,10 +13,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.navArgument
 import com.periodic.pro.R
 import com.periodic.pro.feature.table.TableScreen
 import com.periodic.pro.feature.detail.DetailScreen
+import com.periodic.pro.feature.compare.CompareScreen
 import com.periodic.pro.ui.components.GlassSurface
 
 @Composable
@@ -64,7 +66,19 @@ fun PeriodicNav(
             val ids = (backStackEntry.arguments?.getString("ids") ?: "")
                 .split(",")
                 .mapNotNull { it.toIntOrNull() }
-            PlaceholderScreen(title = "Compare: ${ids.joinToString(", ")}")
+            CompareScreen(
+                ids = ids,
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToTable = {
+                    navController.navigate(Routes.TABLE) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+            )
         }
         composable(Routes.FAVORITES) {
             PlaceholderScreen(title = stringResource(R.string.screen_favorites))
