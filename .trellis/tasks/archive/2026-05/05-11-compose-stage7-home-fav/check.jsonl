@@ -1,0 +1,5 @@
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "验证 Composable 规范：modifier、@Preview、SwipeToDismissBox"}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "验证 StateFlow + FavoritesRepository Flow 联动"}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "验证包结构合规"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "验证 lint 通过"}
+{"file": ".trellis/tasks/05-11-compose-stage7-home-fav/prd.md", "reason": "验收标准：Home/Favorites 两屏 + 搜索 UseCase + 5 屏互通"}
