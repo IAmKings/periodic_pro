@@ -1,0 +1,7 @@
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "验证 Composable 参数顺序、@Preview、Glass Blur 红线、48dp 最小点击区"}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "验证包结构合规"}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "验证 data class @Serializable / null 值处理"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "验证 lint 通过 + 代码规范"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/elements-dataset.md", "reason": "验证数据集：118 元素完整 / Z≥104 null 兜底 / 中文生僻字正确"}
+{"file": ".trellis/tasks/05-11-compose-stage3-data/prd.md", "reason": "验收标准：元素 JSON / Repository / 7 组件 / assembleDebug 通过"}
+{"file": "design/README.md", "reason": "验证组件与设计稿一致性"}

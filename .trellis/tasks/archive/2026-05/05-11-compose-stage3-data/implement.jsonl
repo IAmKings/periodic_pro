@@ -1,0 +1,7 @@
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "Composable 组件规范：modifier 第一参数、State Hoisting、@Preview、Glass Blur 红线"}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "包结构规范：data/element/model/ 路径 + assets/ 双文件"}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "Repository + Koin 注入模板"}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "@Serializable data class / Kotlin null 安全规范（超重元素 null 字段）"}
+{"file": ".trellis/tasks/05-10-compose-app-bootstrap/research/elements-dataset.md", "reason": "118 元素数据集决策：Bowserinator + 自建中文 + 超重元素 null 兜底 + CC BY-SA 署名"}
+{"file": ".trellis/tasks/05-11-compose-stage3-data/prd.md", "reason": "本任务 PRD：Element model / Repository / 7 组件清单"}
+{"file": "design/README.md", "reason": "组件设计参考：2.1 节 Category 10 色板 + 2.3 节 8pt Grid + 第 3 章组件清单"}
