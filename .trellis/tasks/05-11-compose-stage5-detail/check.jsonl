@@ -1,0 +1,5 @@
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "验证 Composable 参数顺序、Canvas 动画、@Preview"}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "验证 DetailViewModel UDF 范式 + SavedStateHandle"}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "验证 null 值兜底"}
+{"file": ".trellis/spec/frontend/quality-guidelines.md", "reason": "验证 lint 通过"}
+{"file": ".trellis/tasks/05-11-compose-stage5-detail/prd.md", "reason": "验收标准：Canvas 动画 / PropertyGrid / 收藏 / assembleDebug"}

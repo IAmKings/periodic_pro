@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.periodic.pro.R
 import com.periodic.pro.feature.table.TableScreen
+import com.periodic.pro.feature.detail.DetailScreen
 import com.periodic.pro.ui.components.GlassSurface
 
 @Composable
@@ -48,7 +49,10 @@ fun PeriodicNav(
             arguments = listOf(navArgument("atomicNumber") { type = NavType.IntType }),
         ) { backStackEntry ->
             val atomicNumber = backStackEntry.arguments?.getInt("atomicNumber") ?: 0
-            PlaceholderScreen(title = stringResource(R.string.screen_detail, atomicNumber))
+            DetailScreen(
+                atomicNumber = atomicNumber,
+                onNavigateBack = { navController.popBackStack() },
+            )
         }
         composable(
             route = Routes.COMPARE,

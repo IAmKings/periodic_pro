@@ -37,4 +37,24 @@
     <string name="multiselect_selected">已选 %d 个</string>
     <string name="multiselect_cancel">取消</string>
     <string name="multiselect_confirm">对比</string>
+
+    <!-- Detail Screen -->
+    <string name="detail_back">返回</string>
+    <string name="detail_favorite">收藏</string>
+    <string name="detail_not_found">元素未找到</string>
+    <string name="detail_more_info">额外信息</string>
+    <string name="detail_discovered_by">发现者</string>
+    <string name="detail_year">发现年份</string>
+    <string name="detail_group">族</string>
+    <string name="detail_period">周期</string>
+
+    <!-- Property names -->
+    <string name="property_atomic_mass">原子量</string>
+    <string name="property_density">密度</string>
+    <string name="property_melting_point">熔点</string>
+    <string name="property_boiling_point">沸点</string>
+    <string name="property_electronegativity">电负性</string>
+    <string name="property_atomic_radius">原子半径</string>
+    <string name="property_ionization_energy">电离能</string>
+    <string name="property_electron_configuration">电子排布</string>
 </resources>

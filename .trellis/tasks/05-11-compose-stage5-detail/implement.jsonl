@@ -1,0 +1,6 @@
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "Composable 规范：modifier 第一参数、@Preview、Canvas 动画模式"}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "UDF 范式：DetailViewModel + StateFlow + SavedStateHandle 参数获取"}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "feature/detail/ 包结构 + ui/pattern/AtomCanvas.kt"}
+{"file": ".trellis/spec/frontend/type-safety.md", "reason": "null 安全规范：属性 null 值显示 '—'"}
+{"file": ".trellis/tasks/05-11-compose-stage5-detail/prd.md", "reason": "本任务 PRD：Canvas 动画 + PropertyGrid + 收藏按钮"}
+{"file": "design/README.md", "reason": "设计参考：PropertyGrid 模式 + Category 色板 + 8pt Grid"}
