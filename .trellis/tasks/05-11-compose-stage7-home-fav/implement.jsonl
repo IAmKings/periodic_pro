@@ -1,0 +1,5 @@
+{"file": ".trellis/spec/frontend/component-guidelines.md", "reason": "Composable 规范：modifier 第一参数、@Preview、SwipeToDismissBox 模式"}
+{"file": ".trellis/spec/frontend/state-management.md", "reason": "UDF：HomeViewModel + FavoritesViewModel + StateFlow + sealed Intent"}
+{"file": ".trellis/spec/frontend/directory-structure.md", "reason": "feature/home/ + feature/favorites/ + domain/usecase/ 包结构"}
+{"file": ".trellis/tasks/05-11-compose-stage7-home-fav/prd.md", "reason": "本任务 PRD：Home 屏 + Favorites 屏 + 全局搜索 UseCase"}
+{"file": "design/README.md", "reason": "Dashboard 模式 + Empty State 模式 + Feed 模式参考"}

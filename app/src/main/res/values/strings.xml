@@ -62,4 +62,20 @@
     <!-- Compare Screen -->
     <string name="compare_empty_title">从周期表多选元素开始对比</string>
     <string name="compare_empty_action">去周期表</string>
+
+    <!-- Home Screen -->
+    <string name="home_subtitle">探索 118 种化学元素</string>
+    <string name="home_featured_section">推荐元素</string>
+    <string name="home_dashboard_section">快捷入口</string>
+    <string name="home_dashboard_table">周期表</string>
+    <string name="home_dashboard_compare">元素对比</string>
+    <string name="home_dashboard_favorites">我的收藏</string>
+    <string name="home_dashboard_more">更多功能</string>
+    <string name="search_placeholder">搜索元素名称、符号或序号</string>
+
+    <!-- Favorites Screen -->
+    <string name="favorites_empty_title">还没有收藏任何元素</string>
+    <string name="favorites_empty_subtitle">从周期表中长按元素即可收藏</string>
+    <string name="favorites_empty_action">去周期表看看</string>
+    <string name="favorites_remove">删除收藏</string>
 </resources>

@@ -2,6 +2,8 @@ package com.periodic.pro.ui.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
@@ -12,6 +14,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.periodic.pro.theme.PeriodicProTheme
 
@@ -34,6 +37,7 @@ fun PeriodicSearchBar(
     onQueryChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     placeholder: String,
+    onSubmit: () -> Unit = {},
     searchContentDescription: String? = null,
     clearContentDescription: String? = null,
 ) {
@@ -44,6 +48,12 @@ fun PeriodicSearchBar(
         placeholder = { Text(placeholder) },
         shape = MaterialTheme.shapes.small,
         singleLine = true,
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Search,
+        ),
+        keyboardActions = KeyboardActions(
+            onSearch = { onSubmit() },
+        ),
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,

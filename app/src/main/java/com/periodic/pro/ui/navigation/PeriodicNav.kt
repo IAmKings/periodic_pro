@@ -1,25 +1,18 @@
 package com.periodic.pro.ui.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
-import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.navArgument
-import com.periodic.pro.R
-import com.periodic.pro.feature.table.TableScreen
-import com.periodic.pro.feature.detail.DetailScreen
 import com.periodic.pro.feature.compare.CompareScreen
-import com.periodic.pro.ui.components.GlassSurface
+import com.periodic.pro.feature.detail.DetailScreen
+import com.periodic.pro.feature.favorites.FavoritesScreen
+import com.periodic.pro.feature.home.HomeScreen
+import com.periodic.pro.feature.table.TableScreen
 
 @Composable
 fun PeriodicNav(
@@ -31,11 +24,48 @@ fun PeriodicNav(
         startDestination = Routes.HOME,
         modifier = modifier,
     ) {
+        // === Home ===
         composable(Routes.HOME) {
-            PlaceholderScreen(title = stringResource(R.string.screen_home), showGlass = true)
+            HomeScreen(
+                onNavigateToTable = { query ->
+                    navController.navigate(Routes.table(query)) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                onNavigateToDetail = { atomicNumber ->
+                    navController.navigate(Routes.detail(atomicNumber))
+                },
+                onNavigateToCompare = {
+                    navController.navigate(Routes.COMPARE) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                onNavigateToFavorites = {
+                    navController.navigate(Routes.FAVORITES) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+            )
         }
-        composable(Routes.TABLE) {
+
+        // === Table (周期表) ===
+        composable(
+            route = Routes.TABLE,
+        ) {
             TableScreen(
+                initialQuery = "",
                 onNavigateToDetail = { atomicNumber ->
                     navController.navigate(Routes.detail(atomicNumber))
                 },
@@ -46,6 +76,8 @@ fun PeriodicNav(
                 },
             )
         }
+
+        // === Detail (元素详情) ===
         composable(
             route = Routes.DETAIL,
             arguments = listOf(navArgument("atomicNumber") { type = NavType.IntType }),
@@ -56,6 +88,8 @@ fun PeriodicNav(
                 onNavigateBack = { navController.popBackStack() },
             )
         }
+
+        // === Compare (元素对比) ===
         composable(
             route = Routes.COMPARE,
             arguments = listOf(navArgument("ids") {
@@ -80,35 +114,23 @@ fun PeriodicNav(
                 },
             )
         }
-        composable(Routes.FAVORITES) {
-            PlaceholderScreen(title = stringResource(R.string.screen_favorites))
-        }
-    }
-}
 
-@Composable
-private fun PlaceholderScreen(
-    title: String,
-    showGlass: Boolean = false,
-) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        if (showGlass) {
-            GlassSurface(
-                modifier = Modifier.fillMaxSize(),
-                shape = RoundedCornerShape(0.dp),
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(text = title)
-                }
-            }
-        } else {
-            Text(text = title)
+        // === Favorites (收藏) ===
+        composable(Routes.FAVORITES) {
+            FavoritesScreen(
+                onNavigateToDetail = { atomicNumber ->
+                    navController.navigate(Routes.detail(atomicNumber))
+                },
+                onNavigateToTable = {
+                    navController.navigate(Routes.TABLE) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+            )
         }
     }
 }

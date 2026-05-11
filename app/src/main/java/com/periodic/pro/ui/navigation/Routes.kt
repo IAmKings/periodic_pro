@@ -1,5 +1,7 @@
 package com.periodic.pro.ui.navigation
 
+import android.net.Uri
+
 /**
  * 路由路径常量（Navigation Compose 2.7.7 字符串路由）。
  * TODO: 升级到 Navigation 2.8+ 后迁移到 @Serializable type-safe 路由
@@ -14,4 +16,13 @@ object Routes {
 
     fun detail(atomicNumber: Int) = "detail/$atomicNumber"
     fun compare(ids: List<Int>) = "compare?ids=${ids.joinToString(",")}"
+
+    /**
+     * 构建带搜索 query 的 table 路由。
+     * query 为空时使用基本路由以支持底部导航匹配。
+     */
+    fun table(query: String = ""): String {
+        if (query.isBlank()) return TABLE
+        return "table?query=${Uri.encode(query)}"
+    }
 }

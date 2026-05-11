@@ -72,6 +72,7 @@ private val categoryEntries = listOf(
 /**
  * 周期表屏入口。
  *
+ * @param initialQuery 初始搜索 query（从 Home 搜索进入时携带）
  * @param onNavigateToDetail 导航到元素详情
  * @param onNavigateToCompare 导航到元素对比
  * @param modifier Modifier
@@ -79,6 +80,7 @@ private val categoryEntries = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TableScreen(
+    initialQuery: String = "",
     onNavigateToDetail: (Int) -> Unit,
     onNavigateToCompare: (List<Int>) -> Unit,
     modifier: Modifier = Modifier,
@@ -87,6 +89,13 @@ fun TableScreen(
     val favoritesRepo = koinInject<FavoritesRepository>()
     val viewModel = remember { TableViewModel(elementRepo, favoritesRepo) }
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    // 从 Home 搜索进入时自动填入搜索 query
+    LaunchedEffect(initialQuery) {
+        if (initialQuery.isNotEmpty()) {
+            viewModel.handle(TableIntent.Search(initialQuery))
+        }
+    }
 
     // 收集副作用（导航事件）
     LaunchedEffect(Unit) {
