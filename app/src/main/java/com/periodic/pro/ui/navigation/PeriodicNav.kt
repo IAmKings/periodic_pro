@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import com.periodic.pro.feature.category.CategoryScreen
 import com.periodic.pro.feature.compare.CompareScreen
 import com.periodic.pro.feature.detail.DetailScreen
+import com.periodic.pro.feature.discover.DiscoverScreen
 import com.periodic.pro.feature.favorites.FavoritesScreen
 import com.periodic.pro.feature.home.HomeScreen
 import com.periodic.pro.feature.profile.ProfileScreen
@@ -131,6 +132,15 @@ fun PeriodicNav(
                         launchSingleTop = true
                         restoreState = true
                     }
+                },
+            )
+        }
+
+        // === Discover (发现) ===
+        composable(Routes.DISCOVER) {
+            DiscoverScreen(
+                onNavigateToDetail = { atomicNumber ->
+                    navController.navigate(Routes.detail(atomicNumber))
                 },
             )
         }

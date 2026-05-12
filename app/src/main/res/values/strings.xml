@@ -9,6 +9,7 @@
     <string name="tab_favorites">收藏</string>
     <string name="tab_category">分类</string>
     <string name="tab_settings">设置</string>
+    <string name="tab_discover">发现</string>
 
     <!-- Screen titles -->
     <string name="screen_home">首页</string>
@@ -79,6 +80,11 @@
     <string name="favorites_empty_subtitle">从周期表中长按元素即可收藏</string>
     <string name="favorites_empty_action">去周期表看看</string>
     <string name="favorites_remove">删除收藏</string>
+
+    <!-- Discover Screen -->
+    <string name="screen_discover">发现</string>
+    <string name="discover_daily_recommend">每日推荐</string>
+    <string name="discover_feed_title">全部发现</string>
 
     <!-- Profile / Settings Screen -->
     <string name="profile_theme">主题模式</string>

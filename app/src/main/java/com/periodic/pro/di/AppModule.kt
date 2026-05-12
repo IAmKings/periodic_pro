@@ -1,5 +1,6 @@
 package com.periodic.pro.di
 
+import com.periodic.pro.data.discover.DiscoverRepository
 import com.periodic.pro.data.element.ElementRepository
 import com.periodic.pro.data.favorites.FavoritesRepository
 import com.periodic.pro.data.favorites.favoritesDataStore
@@ -7,6 +8,7 @@ import com.periodic.pro.data.theme.ThemePreferenceRepository
 import com.periodic.pro.feature.category.CategoryViewModel
 import com.periodic.pro.feature.compare.CompareViewModel
 import com.periodic.pro.feature.detail.DetailViewModel
+import com.periodic.pro.feature.discover.DiscoverViewModel
 import com.periodic.pro.feature.favorites.FavoritesViewModel
 import com.periodic.pro.feature.home.HomeViewModel
 import com.periodic.pro.feature.profile.ProfileViewModel
@@ -25,6 +27,8 @@ val appModule = module {
     viewModel { HomeViewModel(get()) }
     viewModel { FavoritesViewModel(get(), get()) }
     viewModel { params -> DetailViewModel(get(), get(), params.get()) }
+    single { DiscoverRepository(androidContext()) }
     viewModel { CategoryViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
+    viewModel { DiscoverViewModel(get()) }
 }

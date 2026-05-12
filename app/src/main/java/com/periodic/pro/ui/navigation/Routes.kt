@@ -15,6 +15,7 @@ object Routes {
     const val COMPARE = "compare?ids={ids}"
     const val FAVORITES = "favorites"
     const val PROFILE = "profile"
+    const val DISCOVER = "discover"
     const val CATEGORY = "category"
     const val CATEGORY_DETAIL = "category/{categoryId}"
 
