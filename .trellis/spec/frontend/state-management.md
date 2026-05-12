@@ -274,6 +274,39 @@ val vm: DetailViewModel = koinViewModel { parametersOf(atomicNumber) }
 
 ---
 
+## 7. Theme / 全局偏好接线（Preview 安全降级）
+
+`ThemePreferenceRepository` 在 `PeriodicProTheme` 中读取 Flow，但 **Preview 中无 Koin 上下文**，需要优雅降级：
+
+```kotlin
+// theme/PeriodicProTheme.kt
+@Composable
+fun PeriodicProTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit,
+) {
+    // Preview 安全：runCatching 兜底
+    val themeRepo = runCatching { koinInject<ThemePreferenceRepository>() }.getOrNull()
+    val themeMode by (themeRepo?.themeMode ?: flowOf(ThemeMode.SYSTEM))
+        .collectAsState(initial = ThemeMode.SYSTEM)
+
+    val isDark = when (themeMode) {
+        ThemeMode.SYSTEM -> isSystemInDarkTheme()
+        ThemeMode.LIGHT -> false
+        ThemeMode.DARK -> true
+    }
+
+    // ... MaterialTheme with darkColorScheme / lightColorScheme
+}
+```
+
+**规则**：
+- `runCatching { koinInject<>() }` 保护 Preview，不抛异常
+- 无 Koin 时 fallback 到 `ThemeMode.SYSTEM`
+- ViewModel 只需调用 `themeRepo.setThemeMode(mode)`，Flows 自动通知 Theme 重组
+
+---
+
 ## Anti-patterns
 
 1. **不要**让 ViewModel 持有 `MutableState` 或调用 `mutableStateOf`——业务层只用 `StateFlow`，UI 层才用 Compose state 原语

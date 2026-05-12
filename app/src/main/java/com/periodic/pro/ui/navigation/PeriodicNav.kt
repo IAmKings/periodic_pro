@@ -8,10 +8,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.navArgument
+import com.periodic.pro.feature.category.CategoryScreen
 import com.periodic.pro.feature.compare.CompareScreen
 import com.periodic.pro.feature.detail.DetailScreen
 import com.periodic.pro.feature.favorites.FavoritesScreen
 import com.periodic.pro.feature.home.HomeScreen
+import com.periodic.pro.feature.profile.ProfileScreen
 import com.periodic.pro.feature.table.TableScreen
 
 @Composable
@@ -130,6 +132,36 @@ fun PeriodicNav(
                         restoreState = true
                     }
                 },
+            )
+        }
+
+        // === Profile (设置) ===
+        composable(Routes.PROFILE) {
+            ProfileScreen(
+                onNavigateBack = { navController.popBackStack() },
+            )
+        }
+
+        // === Category (分类浏览) ===
+        composable(Routes.CATEGORY) {
+            CategoryScreen(
+                onNavigateToDetail = { atomicNumber ->
+                    navController.navigate(Routes.detail(atomicNumber))
+                },
+            )
+        }
+
+        // === Category Detail (分类详情) ===
+        composable(
+            route = Routes.CATEGORY_DETAIL,
+            arguments = listOf(navArgument("categoryId") { type = NavType.StringType }),
+        ) { backStackEntry ->
+            val categoryId = backStackEntry.arguments?.getString("categoryId") ?: ""
+            CategoryScreen(
+                onNavigateToDetail = { atomicNumber ->
+                    navController.navigate(Routes.detail(atomicNumber))
+                },
+                initialCategoryId = categoryId,
             )
         }
     }

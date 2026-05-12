@@ -8,7 +8,8 @@ data class Element(
     val symbol: String,
     val name: String,
     val atomicMass: Double? = null,
-    val category: String,
+    @kotlinx.serialization.Serializable(with = CategorySerializer::class)
+    val category: Category,
     val electronConfiguration: String? = null,
     val electronegativity: Double? = null,
     val atomicRadius: Double? = null,

@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.R
+import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.LocalCategoryColors
@@ -222,16 +223,16 @@ private fun buildPropertyDefs(
 ): List<PropertyDef> {
     // Pre-resolve category display names from string resources
     val categoryNames = mapOf(
-        "alkali-metal" to stringResource(R.string.category_alkali_metal),
-        "alkaline-earth-metal" to stringResource(R.string.category_alkaline_earth_metal),
-        "transition-metal" to stringResource(R.string.category_transition_metal),
-        "post-transition-metal" to stringResource(R.string.category_post_transition_metal),
-        "metalloid" to stringResource(R.string.category_metalloid),
-        "nonmetal" to stringResource(R.string.category_nonmetal),
-        "halogen" to stringResource(R.string.category_halogen),
-        "noble-gas" to stringResource(R.string.category_noble_gas),
-        "lanthanide" to stringResource(R.string.category_lanthanide),
-        "actinide" to stringResource(R.string.category_actinide),
+        Category.ALKALI_METAL to stringResource(R.string.category_alkali_metal),
+        Category.ALKALINE_EARTH to stringResource(R.string.category_alkaline_earth_metal),
+        Category.TRANSITION_METAL to stringResource(R.string.category_transition_metal),
+        Category.POST_TRANSITION to stringResource(R.string.category_post_transition_metal),
+        Category.METALLOID to stringResource(R.string.category_metalloid),
+        Category.NONMETAL to stringResource(R.string.category_nonmetal),
+        Category.HALOGEN to stringResource(R.string.category_halogen),
+        Category.NOBLE_GAS to stringResource(R.string.category_noble_gas),
+        Category.LANTHANIDE to stringResource(R.string.category_lanthanide),
+        Category.ACTINIDE to stringResource(R.string.category_actinide),
     )
 
     return listOf(
@@ -243,7 +244,7 @@ private fun buildPropertyDefs(
         PropertyDef(labelAtomicRadius) { formatDouble(it.atomicRadius) },
         PropertyDef(labelIonizationEnergy) { formatDouble(it.ionizationEnergy) },
         PropertyDef(labelElectronConfig) { it.electronConfiguration },
-        PropertyDef(labelCategory) { categoryNames[it.category] ?: it.category },
+        PropertyDef(labelCategory) { categoryNames[it.category] ?: it.category.displayName },
         PropertyDef(labelPeriod) { it.period?.toString() },
         PropertyDef(labelGroup) { it.group?.toString() },
     )
@@ -436,7 +437,7 @@ private val previewHydrogen = Element(
     symbol = "H",
     name = "Hydrogen",
     atomicMass = 1.008,
-    category = "nonmetal",
+    category = Category.NONMETAL,
     electronConfiguration = "1s1",
     electronegativity = 2.20,
     atomicRadius = 25.0,
@@ -453,7 +454,7 @@ private val previewHelium = Element(
     symbol = "He",
     name = "Helium",
     atomicMass = 4.0026,
-    category = "noble-gas",
+    category = Category.NOBLE_GAS,
     electronConfiguration = "1s2",
     electronegativity = null,
     atomicRadius = 31.0,

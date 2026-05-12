@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.R
+import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.Elevation
@@ -280,14 +281,14 @@ private fun DashboardCard(
 // ===== Preview Data =====
 
 private val previewElements = listOf(
-    Element(atomicNumber = 1, symbol = "H", name = "Hydrogen", category = "nonmetal"),
-    Element(atomicNumber = 2, symbol = "He", name = "Helium", category = "noble-gas"),
-    Element(atomicNumber = 6, symbol = "C", name = "Carbon", category = "nonmetal"),
-    Element(atomicNumber = 8, symbol = "O", name = "Oxygen", category = "nonmetal"),
-    Element(atomicNumber = 26, symbol = "Fe", name = "Iron", category = "transition-metal"),
-    Element(atomicNumber = 29, symbol = "Cu", name = "Copper", category = "transition-metal"),
-    Element(atomicNumber = 79, symbol = "Au", name = "Gold", category = "transition-metal"),
-    Element(atomicNumber = 80, symbol = "Hg", name = "Mercury", category = "transition-metal"),
+    Element(atomicNumber = 1, symbol = "H", name = "Hydrogen", category = Category.NONMETAL),
+    Element(atomicNumber = 2, symbol = "He", name = "Helium", category = Category.NOBLE_GAS),
+    Element(atomicNumber = 6, symbol = "C", name = "Carbon", category = Category.NONMETAL),
+    Element(atomicNumber = 8, symbol = "O", name = "Oxygen", category = Category.NONMETAL),
+    Element(atomicNumber = 26, symbol = "Fe", name = "Iron", category = Category.TRANSITION_METAL),
+    Element(atomicNumber = 29, symbol = "Cu", name = "Copper", category = Category.TRANSITION_METAL),
+    Element(atomicNumber = 79, symbol = "Au", name = "Gold", category = Category.TRANSITION_METAL),
+    Element(atomicNumber = 80, symbol = "Hg", name = "Mercury", category = Category.TRANSITION_METAL),
 )
 
 // ===== Previews =====

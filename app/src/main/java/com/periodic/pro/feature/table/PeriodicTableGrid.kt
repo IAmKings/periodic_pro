@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.data.element.model.ElementZh
 import com.periodic.pro.theme.LocalCategoryColors
@@ -63,7 +64,7 @@ import me.saket.telephoto.zoomable.zoomable
 fun PeriodicTableGrid(
     elements: List<Element>,
     zhMap: Map<Int, ElementZh>,
-    selectedCategory: String?,
+    selectedCategory: Category?,
     searchQuery: String,
     isMultiSelectMode: Boolean,
     selectedIds: Set<Int>,

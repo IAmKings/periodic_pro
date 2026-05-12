@@ -14,9 +14,13 @@ object Routes {
     const val DETAIL = "detail/{atomicNumber}"
     const val COMPARE = "compare?ids={ids}"
     const val FAVORITES = "favorites"
+    const val PROFILE = "profile"
+    const val CATEGORY = "category"
+    const val CATEGORY_DETAIL = "category/{categoryId}"
 
     fun detail(atomicNumber: Int) = "detail/$atomicNumber"
     fun compare(ids: List<Int>) = "compare?ids=${ids.joinToString(",")}"
+    fun categoryDetail(categoryId: String) = "category/$categoryId"
 
     /**
      * 构建带搜索 query 的 table 路由。

@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.R
+import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.LocalCategoryColors
@@ -49,10 +50,8 @@ import com.periodic.pro.ui.components.CategoryChip
 import com.periodic.pro.ui.pattern.AtomCanvas
 import com.periodic.pro.ui.pattern.PropertyGrid
 import com.periodic.pro.ui.pattern.PropertyItem
-import org.koin.compose.koinInject
-import com.periodic.pro.data.element.ElementRepository
-import com.periodic.pro.data.favorites.FavoritesRepository
-import androidx.compose.runtime.remember
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 /**
  * 元素详情屏入口。
@@ -68,9 +67,7 @@ fun DetailScreen(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val elementRepo = koinInject<ElementRepository>()
-    val favoritesRepo = koinInject<FavoritesRepository>()
-    val viewModel = remember { DetailViewModel(elementRepo, favoritesRepo, atomicNumber) }
+    val viewModel: DetailViewModel = koinViewModel { parametersOf(atomicNumber) }
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     DetailContent(
@@ -319,7 +316,7 @@ private fun ElementInfoSection(
 
         // 分类标签
         CategoryChip(
-            text = stringResource(categoryStringRes(element.category)),
+            text = element.category.displayName,
             selected = true,
             onClick = {},
             selectedColor = categoryColor,
@@ -481,23 +478,6 @@ private fun formatDouble(value: Double?): String? {
     }
 }
 
-/**
- * Category 英文标识到中文文案 string resource 的映射。
- */
-private fun categoryStringRes(category: String): Int = when (category) {
-    "alkali-metal" -> R.string.category_alkali_metal
-    "alkaline-earth-metal" -> R.string.category_alkaline_earth_metal
-    "transition-metal" -> R.string.category_transition_metal
-    "post-transition-metal" -> R.string.category_post_transition_metal
-    "metalloid" -> R.string.category_metalloid
-    "nonmetal" -> R.string.category_nonmetal
-    "halogen" -> R.string.category_halogen
-    "noble-gas" -> R.string.category_noble_gas
-    "lanthanide" -> R.string.category_lanthanide
-    "actinide" -> R.string.category_actinide
-    else -> R.string.category_all
-}
-
 // ========== Preview ==========
 
 @Preview(name = "Light - H", showBackground = true)
@@ -516,7 +496,7 @@ private fun DetailContentHydrogenPreview() {
                     symbol = "H",
                     name = "Hydrogen",
                     atomicMass = 1.008,
-                    category = "nonmetal",
+                    category = Category.NONMETAL,
                     electronConfiguration = "1s1",
                     electronegativity = 2.20,
                     atomicRadius = 25.0,
@@ -555,7 +535,7 @@ private fun DetailContentIronPreview() {
                     symbol = "Fe",
                     name = "Iron",
                     atomicMass = 55.845,
-                    category = "transition-metal",
+                    category = Category.TRANSITION_METAL,
                     electronConfiguration = "[Ar] 3d6 4s2",
                     electronegativity = 1.83,
                     atomicRadius = 126.0,

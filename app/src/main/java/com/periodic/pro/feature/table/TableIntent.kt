@@ -1,5 +1,7 @@
 package com.periodic.pro.feature.table
 
+import com.periodic.pro.data.element.model.Category
+
 /**
  * 周期表屏用户意图。
  */
@@ -11,7 +13,7 @@ sealed interface TableIntent {
     data class Search(val query: String) : TableIntent
 
     /** 按分类筛选（null = "全部"） */
-    data class FilterByCategory(val category: String?) : TableIntent
+    data class FilterByCategory(val category: Category?) : TableIntent
 
     /** 多选模式下切换选中/取消选中 */
     data class ToggleElement(val atomicNumber: Int) : TableIntent

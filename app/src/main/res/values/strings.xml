@@ -7,6 +7,7 @@
     <string name="tab_table">周期表</string>
     <string name="tab_compare">对比</string>
     <string name="tab_favorites">收藏</string>
+    <string name="tab_category">分类</string>
     <string name="tab_settings">设置</string>
 
     <!-- Screen titles -->
@@ -78,4 +79,19 @@
     <string name="favorites_empty_subtitle">从周期表中长按元素即可收藏</string>
     <string name="favorites_empty_action">去周期表看看</string>
     <string name="favorites_remove">删除收藏</string>
+
+    <!-- Profile / Settings Screen -->
+    <string name="profile_theme">主题模式</string>
+    <string name="profile_theme_system">跟随系统</string>
+    <string name="profile_theme_system_desc">自动跟随系统外观</string>
+    <string name="profile_theme_light">浅色</string>
+    <string name="profile_theme_light_desc">始终使用浅色主题</string>
+    <string name="profile_theme_dark">深色</string>
+    <string name="profile_theme_dark_desc">始终使用深色主题</string>
+    <string name="profile_about">关于</string>
+    <string name="profile_version">版本 %s</string>
+    <string name="profile_tech_stack">技术栈：</string>
+    <string name="profile_attribution">数据署名</string>
+    <string name="profile_attribution_desc">元素数据来源于 Wikipedia，基于 CC BY-SA 3.0 许可协议提供。</string>
+    <string name="profile_attribution_license">CC BY-SA 3.0</string>
 </resources>

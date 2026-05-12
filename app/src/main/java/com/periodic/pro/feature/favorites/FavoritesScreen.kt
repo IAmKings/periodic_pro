@@ -37,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.R
+import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.PeriodicProTheme
@@ -219,19 +220,19 @@ private val previewHydrogen = Element(
     atomicNumber = 1,
     symbol = "H",
     name = "Hydrogen",
-    category = "nonmetal",
+    category = Category.NONMETAL,
 )
 private val previewHelium = Element(
     atomicNumber = 2,
     symbol = "He",
     name = "Helium",
-    category = "noble-gas",
+    category = Category.NOBLE_GAS,
 )
 private val previewIron = Element(
     atomicNumber = 26,
     symbol = "Fe",
     name = "Iron",
-    category = "transition-metal",
+    category = Category.TRANSITION_METAL,
 )
 
 // ===== Previews =====

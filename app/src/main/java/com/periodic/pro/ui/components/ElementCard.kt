@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.theme.Elevation
 import com.periodic.pro.theme.LocalCategoryColors
@@ -111,7 +112,7 @@ private val sampleHydrogen = Element(
     symbol = "H",
     name = "Hydrogen",
     atomicMass = 1.008,
-    category = "nonmetal",
+    category = Category.NONMETAL,
     group = 1,
     period = 1,
 )
@@ -121,7 +122,7 @@ private val sampleIron = Element(
     symbol = "Fe",
     name = "Iron",
     atomicMass = 55.845,
-    category = "transition-metal",
+    category = Category.TRANSITION_METAL,
     group = 8,
     period = 4,
 )

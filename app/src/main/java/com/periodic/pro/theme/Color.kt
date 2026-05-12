@@ -1,6 +1,7 @@
 package com.periodic.pro.theme
 
 import androidx.compose.ui.graphics.Color
+import com.periodic.pro.data.element.model.Category
 
 // ===== Material 3 主色系 =====
 // 浅色模式
@@ -48,18 +49,17 @@ data class CategoryColors(
 )
 
 // 添加 forCategory 方法到 CategoryColors（扩展函数）
-fun CategoryColors.forCategory(category: String): Color = when (category) {
-    "alkali-metal" -> alkali
-    "alkaline-earth-metal" -> alkalineEarth
-    "transition-metal" -> transition
-    "post-transition-metal" -> postTransition
-    "metalloid" -> metalloid
-    "nonmetal" -> nonmetal
-    "halogen" -> halogen
-    "noble-gas" -> nobleGas
-    "lanthanide" -> lanthanide
-    "actinide" -> actinide
-    else -> Color.Gray
+fun CategoryColors.forCategory(category: Category): Color = when (category) {
+    Category.ALKALI_METAL -> alkali
+    Category.ALKALINE_EARTH -> alkalineEarth
+    Category.TRANSITION_METAL -> transition
+    Category.POST_TRANSITION -> postTransition
+    Category.METALLOID -> metalloid
+    Category.NONMETAL -> nonmetal
+    Category.HALOGEN -> halogen
+    Category.NOBLE_GAS -> nobleGas
+    Category.LANTHANIDE -> lanthanide
+    Category.ACTINIDE -> actinide
 }
 
 // 深色模式降饱和版（降低 20-30% 饱和度，适配暗色背景）

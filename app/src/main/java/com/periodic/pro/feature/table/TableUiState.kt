@@ -1,5 +1,6 @@
 package com.periodic.pro.feature.table
 
+import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.data.element.model.ElementZh
 
@@ -18,7 +19,7 @@ data class TableUiState(
     val elements: List<Element> = emptyList(),
     val zhMap: Map<Int, ElementZh> = emptyMap(),
     val searchQuery: String = "",
-    val selectedCategory: String? = null,
+    val selectedCategory: Category? = null,
     val isMultiSelectMode: Boolean = false,
     val selectedIds: Set<Int> = emptySet(),
     val isLoading: Boolean = true,

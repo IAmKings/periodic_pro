@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.R
+import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.ElementRepository
 import com.periodic.pro.data.favorites.FavoritesRepository
 import com.periodic.pro.theme.Dimensions
@@ -44,29 +45,28 @@ import com.periodic.pro.ui.components.PeriodicSearchBar
 import org.koin.compose.koinInject
 
 /**
- * 分类条目定义：ID 与中文显示名。
+ * 分类条目定义：ID（Category）与中文显示名。
  */
 private data class CategoryEntry(
-    val id: String?,
+    val id: Category?,
     val labelRes: Int,
 )
 
 /**
  * 10 种元素分类 + "全部"。
- * 注意：category 值与 Element.category 字段一致。
  */
 private val categoryEntries = listOf(
     CategoryEntry(null, R.string.category_all),
-    CategoryEntry("alkali-metal", R.string.category_alkali_metal),
-    CategoryEntry("alkaline-earth-metal", R.string.category_alkaline_earth_metal),
-    CategoryEntry("transition-metal", R.string.category_transition_metal),
-    CategoryEntry("post-transition-metal", R.string.category_post_transition_metal),
-    CategoryEntry("metalloid", R.string.category_metalloid),
-    CategoryEntry("nonmetal", R.string.category_nonmetal),
-    CategoryEntry("halogen", R.string.category_halogen),
-    CategoryEntry("noble-gas", R.string.category_noble_gas),
-    CategoryEntry("lanthanide", R.string.category_lanthanide),
-    CategoryEntry("actinide", R.string.category_actinide),
+    CategoryEntry(Category.ALKALI_METAL, R.string.category_alkali_metal),
+    CategoryEntry(Category.ALKALINE_EARTH, R.string.category_alkaline_earth_metal),
+    CategoryEntry(Category.TRANSITION_METAL, R.string.category_transition_metal),
+    CategoryEntry(Category.POST_TRANSITION, R.string.category_post_transition_metal),
+    CategoryEntry(Category.METALLOID, R.string.category_metalloid),
+    CategoryEntry(Category.NONMETAL, R.string.category_nonmetal),
+    CategoryEntry(Category.HALOGEN, R.string.category_halogen),
+    CategoryEntry(Category.NOBLE_GAS, R.string.category_noble_gas),
+    CategoryEntry(Category.LANTHANIDE, R.string.category_lanthanide),
+    CategoryEntry(Category.ACTINIDE, R.string.category_actinide),
 )
 
 /**

@@ -187,7 +187,55 @@ data class TableUiState(
 
 ---
 
-## 9. Anti-patterns
+## 9. `enum class` + 自定义 `KSerializer`
+
+当 JSON 字段值为字符串（如 `"alkali-metal"`）需要映射为强类型枚举时，使用自定义 `KSerializer`：
+
+```kotlin
+// data/element/model/Category.kt
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+
+enum class Category(val id: String, val displayName: String) {
+    ALKALI_METAL("alkali-metal", "碱金属"),
+    ALKALINE_EARTH("alkaline-earth", "碱土金属"),
+    // ... 10 values total
+}
+
+object CategorySerializer : KSerializer<Category> {
+    override val descriptor = PrimitiveSerialDescriptor("Category", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: Category) {
+        encoder.encodeString(value.id)
+    }
+
+    override fun deserialize(decoder: Decoder): Category {
+        val id = decoder.decodeString()
+        return Category.entries.firstOrNull { it.id == id }
+            ?: error("Unknown category: $id")
+    }
+}
+
+// 使用
+@Serializable
+data class Element(
+    @Serializable(with = CategorySerializer::class)
+    val category: Category,
+)
+```
+
+**规则**：
+- 枚举 `id` 必须与 JSON 数据一致
+- `deserialize` 中找不到匹配时抛异常（数据不合法就该炸）
+- `displayName` 直接用于 UI，不需要额外的 `stringResource` 映射表
+
+---
+
+## 10. Anti-patterns
 
 1. **不要** 用 `any?` 等价物 `Any?`/`*` 在公共 API；类型是文档
 2. **不要** 用 `lateinit var` 在 ViewModel 中替代 `MutableStateFlow` 初始值——丢失初始态语义
