@@ -71,3 +71,36 @@ Category枚举(类型安全) + PropertyChip组件 + ThemePreference接线 + Deta
 ### Next Steps
 
 - None - task complete
+
+
+## Session 3: Discover屏: 32条趣味知识 + 每日推荐 + Feed流
+
+**Date**: 2026-05-13
+**Task**: Discover屏: 32条趣味知识 + 每日推荐 + Feed流
+**Branch**: `master`
+
+### Summary
+
+Discover屏(第8屏): assets/discover.json 32条中文化学冷知识(32种元素), DiscoverItem + DiscoverRepository(data/discover/), MVI(Screen+ViewModel+UiState+Intent+Effect), 每日推荐Hero Card + LazyColumn Feed流, 点击跳转元素详情, NavigationSuite第6个tab(Explore图标), Koin注册, 编译lint/detekt全绿.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `3f393cb` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
