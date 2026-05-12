@@ -1,0 +1,30 @@
+{
+  "id": "design-audit",
+  "name": "design-audit",
+  "title": "design 验收：核对代码与设计稿差距",
+  "description": "",
+  "status": "completed",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P2",
+  "creator": "klz",
+  "assignee": "klz",
+  "createdAt": "2026-05-12",
+  "completedAt": "2026-05-13",
+  "branch": null,
+  "base_branch": "master",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [
+    "05-12-design-foundation",
+    "05-12-design-profile",
+    "05-12-design-category"
+  ],
+  "parent": null,
+  "relatedFiles": [],
+  "notes": "",
+  "meta": {}
+}
