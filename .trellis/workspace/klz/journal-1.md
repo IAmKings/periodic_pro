@@ -38,3 +38,36 @@
 ### Next Steps
 
 - None - task complete
+
+
+## Session 2: Design审计: 地基重构 + Profile屏 + Category屏
+
+**Date**: 2026-05-13
+**Task**: Design审计: 地基重构 + Profile屏 + Category屏
+**Branch**: `master`
+
+### Summary
+
+Category枚举(类型安全) + PropertyChip组件 + ThemePreference接线 + DetailVM Koin注册; Profile/Settings屏(主题三段切换+关于+署名); Category屏(10分类入口Grid+详情列表); 7屏完整MVI, 编译lint/detekt全绿.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `5a2fa4c` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
