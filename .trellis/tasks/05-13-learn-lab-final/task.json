@@ -1,0 +1,31 @@
+{
+  "id": "learn-lab-final",
+  "name": "learn-lab-final",
+  "title": "Learn屏 + Lab屏: 最后2屏收尾",
+  "description": "",
+  "status": "in_progress",
+  "dev_type": null,
+  "scope": null,
+  "package": null,
+  "priority": "P2",
+  "creator": "klz",
+  "assignee": "klz",
+  "createdAt": "2026-05-13",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "master",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [
+    "05-13-learn-phase1-core",
+    "05-13-learn-phase2-important",
+    "05-13-learn-phase3-full",
+    "05-13-lab-reactions"
+  ],
+  "parent": null,
+  "relatedFiles": [],
+  "notes": "",
+  "meta": {}
+}
