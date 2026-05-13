@@ -246,3 +246,36 @@ ci.yml(push→assembleDebug+lint+detekt), release.yml(tag v*→签名+GitHub Rel
 ### Next Steps
 
 - None - task complete
+
+
+## Session 8: App内自动更新: GitHub Release检测 + DownloadManager下载 + FileProvider安装
+
+**Date**: 2026-05-14
+**Task**: App内自动更新: GitHub Release检测 + DownloadManager下载 + FileProvider安装
+**Branch**: `master`
+
+### Summary
+
+data/update(GitHubRelease+UpdateRepository+ApkInstaller), UpdateDialog组件, Profile(版本BuildConfig.VERSION_NAME+检查更新+三状态), MainActivity启动2s自动检测(日限1次), Android 7+FileProvider+8+安装权限, INTERNET+WRITE_EXTERNAL_STORAGE+REQUEST_INSTALL_PACKAGES权限. 14文件,编译/lint/detekt全绿.
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `f6ca679` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
