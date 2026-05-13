@@ -210,3 +210,39 @@ P0: LabColors/LearnBadgeColors提取至Color.kt, 零硬编码Color; P1: 5处elev
 ### Next Steps
 
 - None - task complete
+
+
+## Session 7: GitHub Actions CI/CD: push编译 + tag发布 + 版本0.1.1
+
+**Date**: 2026-05-13
+**Task**: GitHub Actions CI/CD: push编译 + tag发布 + 版本0.1.1
+**Branch**: `master`
+
+### Summary
+
+ci.yml(push→assembleDebug+lint+detekt), release.yml(tag v*→签名+GitHub Release), build.gradle.kts signingConfigs环境变量注入, README keystore配置指南, gradle-wrapper.properties修正, keystore校验加固, 版本0.1.0→0.1.1
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `b359f3a` | (see git log) |
+| `bc1055b` | (see git log) |
+| `df9045e` | (see git log) |
+| `4d0792f` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
