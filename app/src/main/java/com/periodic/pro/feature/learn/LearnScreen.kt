@@ -330,6 +330,7 @@ private fun LearnListItem(
                         text = stringResource(
                             R.string.learn_element_label,
                             item.atomicNumber,
+                            symbol,
                         ),
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.SemiBold,
