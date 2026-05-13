@@ -63,6 +63,40 @@ app/src/main/java/com/periodic/pro/
 
 元素数据来自 [Bowserinator/Periodic-Table-JSON](https://github.com/Bowserinator/Periodic-Table-JSON)，基于 [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) 许可。
 
+## CI/CD
+
+GitHub Actions 自动化流水线：
+
+| 触发 | 动作 |
+|------|------|
+| `push` / PR | 编译 debug + lint + detekt |
+| tag `v*` | 编译 release + 签名 + GitHub Release |
+
+### Release 签名配置
+
+1. 生成 keystore：
+```bash
+keytool -genkey -v -keystore release.keystore -alias periodicpro \
+  -keyalg RSA -keysize 2048 -validity 10000 \
+  -storepass <你的密码> -keypass <你的密码> \
+  -dname "CN=PeriodicPro, OU=Dev, O=PeriodicPro, L=Beijing, ST=Beijing, C=CN"
+```
+
+2. 在 GitHub 仓库 Settings → Secrets and variables → Actions 中添加以下 Secrets：
+
+| Secret | 值 |
+|--------|----|
+| `KEYSTORE_BASE64` | `base64 -i release.keystore` 的输出 |
+| `KEYSTORE_PASSWORD` | keystore 密码 |
+| `KEY_ALIAS` | 密钥别名（如 `periodicpro`） |
+| `KEY_PASSWORD` | 密钥密码 |
+
+3. 推送 tag 触发发布：
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
 ## 设计资产
 
 `design/` 目录包含 4 张高保真设计图（Design System / Components / Patterns / Screens）和解析文档 `design/README.md`。
