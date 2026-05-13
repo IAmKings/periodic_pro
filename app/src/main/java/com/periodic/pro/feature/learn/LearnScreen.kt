@@ -96,6 +96,7 @@ fun LearnScreen(
         )
         LearnNavMode.DETAIL -> LearnDetailContent(
             item = state.selectedItem,
+            symbol = state.selectedItem?.atomicNumber?.let { state.symbolMap[it] } ?: "?",
             onBack = { vm.handle(LearnIntent.BackToList) },
             onNavigateToDetail = { atomicNumber ->
                 vm.handle(LearnIntent.NavigateToDetail(atomicNumber))
@@ -370,6 +371,7 @@ private fun LearnListItem(
 @Composable
 private fun LearnDetailContent(
     item: LearnItem?,
+    symbol: String,
     onBack: () -> Unit,
     onNavigateToDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -393,7 +395,7 @@ private fun LearnDetailContent(
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(R.string.learn_detail_title, item.atomicNumber),
+                        text = stringResource(R.string.learn_detail_title, item.atomicNumber, symbol),
                         style = MaterialTheme.typography.titleLarge,
                     )
                 },
@@ -657,6 +659,7 @@ private fun LearnDetailPreview() {
     PeriodicProTheme {
         LearnDetailContent(
             item = previewItem,
+            symbol = "H",
             onBack = {},
             onNavigateToDetail = {},
         )
