@@ -52,6 +52,7 @@ import com.periodic.pro.R
 import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.theme.Dimensions
+import com.periodic.pro.theme.Elevation
 import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.PeriodicProTheme
 import com.periodic.pro.theme.forCategory
@@ -200,7 +201,7 @@ private fun CategoryEntranceCard(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = Elevation.Shadow1),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
         ),

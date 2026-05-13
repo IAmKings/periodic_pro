@@ -2,6 +2,7 @@ package com.periodic.pro.feature.table
 
 import app.cash.turbine.test
 import com.periodic.pro.data.element.ElementRepository
+import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.data.favorites.FavoritesRepository
 import io.mockk.MockKAnnotations
@@ -43,28 +44,28 @@ class TableViewModelTest {
             symbol = "H",
             name = "Hydrogen",
             atomicMass = 1.008,
-            category = "nonmetal",
+            category = Category.NONMETAL,
         ),
         Element(
             atomicNumber = 2,
             symbol = "He",
             name = "Helium",
             atomicMass = 4.0026,
-            category = "noble-gas",
+            category = Category.NOBLE_GAS,
         ),
         Element(
             atomicNumber = 26,
             symbol = "Fe",
             name = "Iron",
             atomicMass = 55.845,
-            category = "transition-metal",
+            category = Category.TRANSITION_METAL,
         ),
         Element(
             atomicNumber = 79,
             symbol = "Au",
             name = "Gold",
             atomicMass = 196.9666,
-            category = "transition-metal",
+            category = Category.TRANSITION_METAL,
         ),
     )
 
@@ -112,9 +113,9 @@ class TableViewModelTest {
         viewModel = TableViewModel(elementRepo, favoritesRepo)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        viewModel.handle(TableIntent.FilterByCategory("transition-metal"))
+        viewModel.handle(TableIntent.FilterByCategory(Category.TRANSITION_METAL))
 
-        assertEquals("transition-metal", viewModel.state.value.selectedCategory)
+        assertEquals(Category.TRANSITION_METAL, viewModel.state.value.selectedCategory)
     }
 
     @Test
@@ -122,7 +123,7 @@ class TableViewModelTest {
         viewModel = TableViewModel(elementRepo, favoritesRepo)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        viewModel.handle(TableIntent.FilterByCategory("transition-metal"))
+        viewModel.handle(TableIntent.FilterByCategory(Category.TRANSITION_METAL))
         viewModel.handle(TableIntent.FilterByCategory(null))
 
         assertEquals(null, viewModel.state.value.selectedCategory)

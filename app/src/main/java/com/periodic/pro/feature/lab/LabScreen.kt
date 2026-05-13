@@ -64,26 +64,10 @@ import com.periodic.pro.data.lab.model.ChemicalReaction
 import com.periodic.pro.data.lab.model.ReactionLevel
 import com.periodic.pro.data.lab.model.ReactionType
 import com.periodic.pro.theme.Dimensions
+import com.periodic.pro.theme.Elevation
+import com.periodic.pro.theme.LabColors
 import com.periodic.pro.theme.PeriodicProTheme
 import org.koin.androidx.compose.koinViewModel
-
-// ===== Reaction Type badge colors =====
-private val CombinationColor = Color(0xFF2E7D32)
-private val DecompositionColor = Color(0xFFD32F2F)
-private val DisplacementColor = Color(0xFF1565C0)
-private val DoubleDisplacementColor = Color(0xFF6A1B9A)
-private val RedoxColor = Color(0xFFE65100)
-private val OtherColor = Color(0xFF616161)
-
-private val CombinationBg = Color(0xFFE8F5E9)
-private val DecompositionBg = Color(0xFFFFEBEE)
-private val DisplacementBg = Color(0xFFE3F2FD)
-private val DoubleDisplacementBg = Color(0xFFF3E5F5)
-private val RedoxBg = Color(0xFFFFF3E0)
-private val OtherBg = Color(0xFFF5F5F5)
-
-private val JuniorBadgeColor = Color(0xFF1565C0)
-private val SeniorBadgeColor = Color(0xFFE65100)
 
 /**
  * Lab 屏入口。
@@ -293,7 +277,7 @@ private fun FilterChipsRow(
                 },
                 label = { Text(stringResource(R.string.lab_level_junior)) },
                 colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = JuniorBadgeColor.copy(alpha = 0.15f),
+                    selectedContainerColor = LabColors.JuniorBadge.copy(alpha = 0.15f),
                 ),
             )
             // Senior
@@ -306,7 +290,7 @@ private fun FilterChipsRow(
                 },
                 label = { Text(stringResource(R.string.lab_level_senior)) },
                 colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = SeniorBadgeColor.copy(alpha = 0.15f),
+                    selectedContainerColor = LabColors.SeniorBadge.copy(alpha = 0.15f),
                 ),
             )
         }
@@ -375,7 +359,7 @@ private fun ReactionListItem(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = Elevation.Shadow1),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
@@ -530,8 +514,8 @@ private fun LabDetailContent(
                         label = stringResource(R.string.lab_reaction_level),
                         value = stringResource(levelLabelRes(reaction.level)),
                         badgeColor = when (reaction.level) {
-                            ReactionLevel.JUNIOR -> JuniorBadgeColor
-                            ReactionLevel.SENIOR -> SeniorBadgeColor
+                            ReactionLevel.JUNIOR -> LabColors.JuniorBadge
+                            ReactionLevel.SENIOR -> LabColors.SeniorBadge
                         },
                     )
                 }
@@ -686,8 +670,8 @@ private fun LevelBadge(
     modifier: Modifier = Modifier,
 ) {
     val (color, bg) = when (level) {
-        ReactionLevel.JUNIOR -> JuniorBadgeColor to JuniorBadgeColor.copy(alpha = 0.12f)
-        ReactionLevel.SENIOR -> SeniorBadgeColor to SeniorBadgeColor.copy(alpha = 0.12f)
+        ReactionLevel.JUNIOR -> LabColors.JuniorBadge to LabColors.JuniorBadge.copy(alpha = 0.12f)
+        ReactionLevel.SENIOR -> LabColors.SeniorBadge to LabColors.SeniorBadge.copy(alpha = 0.12f)
     }
     Box(
         modifier = modifier
@@ -731,21 +715,21 @@ private fun ElementChip(
 // ===== Helper functions =====
 
 private fun typeColor(type: ReactionType): Color = when (type) {
-    ReactionType.COMBINATION -> CombinationColor
-    ReactionType.DECOMPOSITION -> DecompositionColor
-    ReactionType.DISPLACEMENT -> DisplacementColor
-    ReactionType.DOUBLE_DISPLACEMENT -> DoubleDisplacementColor
-    ReactionType.REDOX -> RedoxColor
-    ReactionType.OTHER -> OtherColor
+    ReactionType.COMBINATION -> LabColors.Combination
+    ReactionType.DECOMPOSITION -> LabColors.Decomposition
+    ReactionType.DISPLACEMENT -> LabColors.Displacement
+    ReactionType.DOUBLE_DISPLACEMENT -> LabColors.DoubleDisplacement
+    ReactionType.REDOX -> LabColors.Redox
+    ReactionType.OTHER -> LabColors.Other
 }
 
 private fun typeBgColor(type: ReactionType): Color = when (type) {
-    ReactionType.COMBINATION -> CombinationBg
-    ReactionType.DECOMPOSITION -> DecompositionBg
-    ReactionType.DISPLACEMENT -> DisplacementBg
-    ReactionType.DOUBLE_DISPLACEMENT -> DoubleDisplacementBg
-    ReactionType.REDOX -> RedoxBg
-    ReactionType.OTHER -> OtherBg
+    ReactionType.COMBINATION -> LabColors.CombinationBg
+    ReactionType.DECOMPOSITION -> LabColors.DecompositionBg
+    ReactionType.DISPLACEMENT -> LabColors.DisplacementBg
+    ReactionType.DOUBLE_DISPLACEMENT -> LabColors.DoubleDisplacementBg
+    ReactionType.REDOX -> LabColors.RedoxBg
+    ReactionType.OTHER -> LabColors.OtherBg
 }
 
 private fun typeLabelRes(type: ReactionType): Int = when (type) {

@@ -275,7 +275,7 @@ private fun PeriodicTableCell(
             // 原子序号
             Text(
                 text = "${element.atomicNumber}",
-                style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
+                style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
                 maxLines = 1,
@@ -283,8 +283,7 @@ private fun PeriodicTableCell(
             // 元素符号
             Text(
                 text = element.symbol,
-                style = MaterialTheme.typography.titleSmall.copy(
-                    fontSize = 12.sp,
+                style = MaterialTheme.typography.labelMedium.copy(
                     fontWeight = FontWeight.Bold,
                 ),
                 color = MaterialTheme.colorScheme.onSurface,
@@ -295,7 +294,7 @@ private fun PeriodicTableCell(
             if (zhName != null) {
                 Text(
                     text = zhName,
-                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 8.sp),
+                    style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     maxLines = 1,
@@ -321,7 +320,7 @@ private fun FBlockMarker(
         modifier = modifier
             .padding(1.dp)
             .clip(shape)
-            .background(Color(0xFFE0E0E0))
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .clickable { onClick() },
         contentAlignment = Alignment.Center,
     ) {

@@ -30,7 +30,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -39,7 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.R
 import com.periodic.pro.data.discover.model.DiscoverItem
+import com.periodic.pro.theme.CategoryColors
 import com.periodic.pro.theme.Dimensions
+import com.periodic.pro.theme.Elevation
 import com.periodic.pro.theme.PeriodicProTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -193,13 +194,13 @@ private fun DailyRecommendSection(
     modifier: Modifier = Modifier,
 ) {
     // 默认使用过渡金属色，因为可能不知道元素分类
-    val elementColor = Color(0xFF4DABF7)
+    val elementColor = CategoryColors().metalloid
 
     Card(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.large,
-        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = Elevation.Shadow2),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
@@ -279,7 +280,7 @@ private fun DiscoverFeedCard(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = Elevation.Shadow1),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
@@ -295,7 +296,7 @@ private fun DiscoverFeedCard(
                 modifier = Modifier
                     .size(44.dp)
                     .background(
-                        color = Color(0xFF4DABF7).copy(alpha = 0.15f),
+                        color = CategoryColors().metalloid.copy(alpha = 0.15f),
                         shape = RoundedCornerShape(22.dp),
                     ),
                 contentAlignment = Alignment.Center,
@@ -304,7 +305,7 @@ private fun DiscoverFeedCard(
                     text = item.atomicNumber.toString(),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF4DABF7),
+                    color = CategoryColors().metalloid,
                 )
             }
 

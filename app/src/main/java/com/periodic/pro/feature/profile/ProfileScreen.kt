@@ -266,7 +266,7 @@ private fun AboutSection() {
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                 ),
-                modifier = Modifier.size(56.dp),
+                modifier = Modifier.size(Dimensions.Dp56),
             ) {
                 Text(
                     text = "P",

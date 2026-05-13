@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
+import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.Elevation
 import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.PeriodicProTheme
@@ -66,7 +67,7 @@ fun ElementCard(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(4.dp)
+                    .height(Dimensions.Dp4)
                     .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
                     .background(categoryColor),
             )
@@ -74,7 +75,7 @@ fun ElementCard(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(12.dp),
+                    .padding(Dimensions.Dp12),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 // 原子序号

@@ -66,6 +66,37 @@ fun CategoryColors.forCategory(category: Category): Color = when (category) {
     Category.ACTINIDE -> actinide
 }
 
+// ===== LabColors — 化学反应类型色板 =====
+object LabColors {
+    val Combination = Color(0xFF2E7D32)
+    val Decomposition = Color(0xFFD32F2F)
+    val Displacement = Color(0xFF1565C0)
+    val DoubleDisplacement = Color(0xFF6A1B9A)
+    val Redox = Color(0xFFE65100)
+    val Other = Color(0xFF616161)
+    val CombinationBg = Color(0xFFE8F5E9)
+    val DecompositionBg = Color(0xFFFFEBEE)
+    val DisplacementBg = Color(0xFFE3F2FD)
+    val DoubleDisplacementBg = Color(0xFFF3E5F5)
+    val RedoxBg = Color(0xFFFFF3E0)
+    val OtherBg = Color(0xFFF5F5F5)
+    val JuniorBadge = Color(0xFF1565C0)
+    val SeniorBadge = Color(0xFFE65100)
+}
+
+// ===== LearnBadgeColors — 学习等级标签色板 =====
+object LearnBadgeColors {
+    val Core = Color(0xFFE03131)
+    val Important = Color(0xFFF08C00)
+    val Other = Color(0xFF2F9E44)
+    val CoreBg = Color(0xFFFFE8E8)
+    val ImportantBg = Color(0xFFFFF3D6)
+    val OtherBg = Color(0xFFE6F9E8)
+}
+
+// ===== AtomCanvas — 原子模型电子颜色 =====
+val AtomElectronColor: Color = Color(0xFF4FC3F7)
+
 // 深色模式降饱和版（降低 20-30% 饱和度，适配暗色背景）
 val DarkCategoryColors = CategoryColors(
     alkali = Color(0xFFCC5555),

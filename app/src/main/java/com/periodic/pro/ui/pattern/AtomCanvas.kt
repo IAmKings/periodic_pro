@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import com.periodic.pro.theme.AtomElectronColor
 import com.periodic.pro.theme.PeriodicProTheme
 import kotlin.math.cos
 import kotlin.math.sin
@@ -90,7 +91,7 @@ fun AtomCanvas(
             center.x + outerOrbitRadius * cos(electronAngle).toFloat(),
             center.y + outerOrbitRadius * sin(electronAngle).toFloat(),
         )
-        drawCircle(color = Color(0xFF4FC3F7), radius = 6f, center = electronPos)
+        drawCircle(color = AtomElectronColor, radius = 6f, center = electronPos)
     }
 }
 

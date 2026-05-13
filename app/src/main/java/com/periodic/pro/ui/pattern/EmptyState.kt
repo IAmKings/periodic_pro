@@ -55,7 +55,7 @@ fun EmptyState(
         Icon(
             imageVector = icon,
             contentDescription = title,
-            modifier = Modifier.size(64.dp),
+            modifier = Modifier.size(Dimensions.Dp64),
             tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
         )
 

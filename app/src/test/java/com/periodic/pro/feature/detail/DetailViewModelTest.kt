@@ -1,6 +1,7 @@
 package com.periodic.pro.feature.detail
 
 import com.periodic.pro.data.element.ElementRepository
+import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.data.favorites.FavoritesRepository
 import io.mockk.MockKAnnotations
@@ -40,7 +41,7 @@ class DetailViewModelTest {
         symbol = "H",
         name = "Hydrogen",
         atomicMass = 1.008,
-        category = "nonmetal",
+        category = Category.NONMETAL,
         electronConfiguration = "1s1",
         electronegativity = 2.2,
         atomicRadius = 120.0,

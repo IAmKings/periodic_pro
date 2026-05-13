@@ -52,17 +52,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.R
 import com.periodic.pro.data.learn.model.LearnItem
 import com.periodic.pro.theme.Dimensions
+import com.periodic.pro.theme.Elevation
+import com.periodic.pro.theme.LearnBadgeColors
 import com.periodic.pro.theme.PeriodicProTheme
 import org.koin.androidx.compose.koinViewModel
-
-// ===== Level badge colors =====
-private val CoreBadgeColor = Color(0xFFE03131)
-private val ImportantBadgeColor = Color(0xFFF08C00)
-private val OtherBadgeColor = Color(0xFF2F9E44)
-
-private val CoreBadgeBg = Color(0xFFFFE8E8)
-private val ImportantBadgeBg = Color(0xFFFFF3D6)
-private val OtherBadgeBg = Color(0xFFE6F9E8)
 
 /**
  * Learn 屏入口。
@@ -175,7 +168,7 @@ private fun LearnListContent(
                     item(key = "section_core") {
                         LevelSectionHeader(
                             title = stringResource(R.string.learn_level_core),
-                            badgeColor = CoreBadgeColor,
+                            badgeColor = LearnBadgeColors.Core,
                         )
                     }
                     items(state.coreItems, key = { "core_${it.atomicNumber}" }) { item ->
@@ -192,7 +185,7 @@ private fun LearnListContent(
                     item(key = "section_important") {
                         LevelSectionHeader(
                             title = stringResource(R.string.learn_level_important),
-                            badgeColor = ImportantBadgeColor,
+                            badgeColor = LearnBadgeColors.Important,
                         )
                     }
                     items(
@@ -212,7 +205,7 @@ private fun LearnListContent(
                     item(key = "section_other") {
                         LevelSectionHeader(
                             title = stringResource(R.string.learn_level_normal),
-                            badgeColor = OtherBadgeColor,
+                            badgeColor = LearnBadgeColors.Other,
                         )
                     }
                     items(state.otherItems, key = { "other_${it.atomicNumber}" }) { item ->
@@ -274,14 +267,14 @@ private fun LearnListItem(
     modifier: Modifier = Modifier,
 ) {
     val badgeColor = when (item.level) {
-        "core" -> CoreBadgeColor
-        "important" -> ImportantBadgeColor
-        else -> OtherBadgeColor
+        "core" -> LearnBadgeColors.Core
+        "important" -> LearnBadgeColors.Important
+        else -> LearnBadgeColors.Other
     }
     val badgeBg = when (item.level) {
-        "core" -> CoreBadgeBg
-        "important" -> ImportantBadgeBg
-        else -> OtherBadgeBg
+        "core" -> LearnBadgeColors.CoreBg
+        "important" -> LearnBadgeColors.ImportantBg
+        else -> LearnBadgeColors.OtherBg
     }
     val badgeText = when (item.level) {
         "core" -> stringResource(R.string.learn_badge_core)
@@ -293,7 +286,7 @@ private fun LearnListItem(
         onClick = onClick,
         modifier = modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = Elevation.Shadow1),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
