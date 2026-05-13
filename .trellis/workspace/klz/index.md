@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 5
+- **Total Sessions**: 6
 - **Last Active**: 2026-05-13
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~178 | Active |
+| `journal-1.md` | ~212 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 6 | 2026-05-13 | Design合规审计: P0+P1修复 + Learn列表滚动位置恢复 | `65a3905`, `6dd56ad` | `master` |
 | 5 | 2026-05-13 | Learn+Lab全量: 118元素三等级 + 47初高中反应 + 符号显示修复 | `dfbadc7`, `a1a87a7`, `b907e8f`, `cab6725`, `75aa46b`, `550bfb9`, `7f28e3c` | `master` |
 | 4 | 2026-05-13 | 设计一致性修复: P0+P1 8项 + design-spec.md规范文档 | `0d4e710` | `master` |
 | 3 | 2026-05-13 | Discover屏: 32条趣味知识 + 每日推荐 + Feed流 | `3f393cb` | `master` |
