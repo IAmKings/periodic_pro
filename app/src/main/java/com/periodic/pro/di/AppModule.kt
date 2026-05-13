@@ -4,6 +4,8 @@ import com.periodic.pro.data.discover.DiscoverRepository
 import com.periodic.pro.data.element.ElementRepository
 import com.periodic.pro.data.favorites.FavoritesRepository
 import com.periodic.pro.data.favorites.favoritesDataStore
+import com.periodic.pro.data.lab.LabRepository
+import com.periodic.pro.data.learn.LearnRepository
 import com.periodic.pro.data.theme.ThemePreferenceRepository
 import com.periodic.pro.feature.category.CategoryViewModel
 import com.periodic.pro.feature.compare.CompareViewModel
@@ -11,6 +13,8 @@ import com.periodic.pro.feature.detail.DetailViewModel
 import com.periodic.pro.feature.discover.DiscoverViewModel
 import com.periodic.pro.feature.favorites.FavoritesViewModel
 import com.periodic.pro.feature.home.HomeViewModel
+import com.periodic.pro.feature.lab.LabViewModel
+import com.periodic.pro.feature.learn.LearnViewModel
 import com.periodic.pro.feature.profile.ProfileViewModel
 import com.periodic.pro.feature.table.TableViewModel
 import org.koin.android.ext.koin.androidContext
@@ -28,7 +32,11 @@ val appModule = module {
     viewModel { FavoritesViewModel(get(), get()) }
     viewModel { params -> DetailViewModel(get(), get(), params.get()) }
     single { DiscoverRepository(androidContext()) }
+    single { LearnRepository(androidContext()) }
+    single { LabRepository(androidContext()) }
     viewModel { CategoryViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
     viewModel { DiscoverViewModel(get()) }
+    viewModel { LearnViewModel(get()) }
+    viewModel { LabViewModel(get()) }
 }

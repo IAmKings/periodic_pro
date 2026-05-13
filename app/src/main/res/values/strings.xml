@@ -86,6 +86,50 @@
     <string name="discover_daily_recommend">每日推荐</string>
     <string name="discover_feed_title">全部发现</string>
 
+    <!-- Learn Screen -->
+    <string name="tab_learn">学习</string>
+    <string name="screen_learn">学习</string>
+    <string name="learn_level_core">核心元素</string>
+    <string name="learn_level_important">重点元素</string>
+    <string name="learn_level_normal">普通元素</string>
+    <string name="learn_badge_core">核心</string>
+    <string name="learn_badge_important">重点</string>
+    <string name="learn_badge_normal">普通</string>
+    <string name="learn_element_label">#%d 号元素</string>
+    <string name="learn_detail_title">#%d 学习资料</string>
+    <string name="learn_detail_not_found">学习资料未找到</string>
+    <string name="learn_section_discovery">发现历史</string>
+    <string name="learn_section_applications">实际应用</string>
+    <string name="learn_section_funfacts">趣味知识</string>
+    <string name="learn_view_detail">查看元素详情</string>
+
+    <!-- Lab Screen -->
+    <string name="tab_lab">实验室</string>
+    <string name="screen_lab">化学实验室</string>
+    <string name="lab_filter_all">全部</string>
+    <string name="lab_level_junior">初中</string>
+    <string name="lab_level_senior">高中</string>
+    <string name="lab_type_combination">化合反应</string>
+    <string name="lab_type_decomposition">分解反应</string>
+    <string name="lab_type_displacement">置换反应</string>
+    <string name="lab_type_double_displacement">复分解反应</string>
+    <string name="lab_type_redox">氧化还原反应</string>
+    <string name="lab_type_other">其他</string>
+    <string name="lab_type_combination_short">化合</string>
+    <string name="lab_type_decomposition_short">分解</string>
+    <string name="lab_type_displacement_short">置换</string>
+    <string name="lab_type_double_displacement_short">复分解</string>
+    <string name="lab_type_redox_short">氧化还原</string>
+    <string name="lab_type_other_short">其他</string>
+    <string name="lab_reaction_type">反应类型</string>
+    <string name="lab_reaction_level">年级等级</string>
+    <string name="lab_conditions">反应条件</string>
+    <string name="lab_phenomenon">实验现象</string>
+    <string name="lab_involved_elements">涉及元素</string>
+    <string name="lab_note">补充说明</string>
+    <string name="lab_no_reactions">没有符合条件的反应</string>
+    <string name="lab_detail_not_found">反应详情未找到</string>
+
     <!-- Profile / Settings Screen -->
     <string name="profile_theme">主题模式</string>
     <string name="profile_theme_system">跟随系统</string>

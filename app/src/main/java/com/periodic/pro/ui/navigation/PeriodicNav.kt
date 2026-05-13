@@ -14,6 +14,8 @@ import com.periodic.pro.feature.detail.DetailScreen
 import com.periodic.pro.feature.discover.DiscoverScreen
 import com.periodic.pro.feature.favorites.FavoritesScreen
 import com.periodic.pro.feature.home.HomeScreen
+import com.periodic.pro.feature.lab.LabScreen
+import com.periodic.pro.feature.learn.LearnScreen
 import com.periodic.pro.feature.profile.ProfileScreen
 import com.periodic.pro.feature.table.TableScreen
 
@@ -149,6 +151,24 @@ fun PeriodicNav(
         composable(Routes.PROFILE) {
             ProfileScreen(
                 onNavigateBack = { navController.popBackStack() },
+            )
+        }
+
+        // === Learn (学习) ===
+        composable(Routes.LEARN) {
+            LearnScreen(
+                onNavigateToDetail = { atomicNumber ->
+                    navController.navigate(Routes.detail(atomicNumber))
+                },
+            )
+        }
+
+        // === Lab (化学实验室) ===
+        composable(Routes.LAB) {
+            LabScreen(
+                onNavigateToDetail = { atomicNumber ->
+                    navController.navigate(Routes.detail(atomicNumber))
+                },
             )
         }
 

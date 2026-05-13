@@ -3,11 +3,15 @@ package com.periodic.pro.ui.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.School
+import androidx.compose.material.icons.filled.Science
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.TableChart
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.School
+import androidx.compose.material.icons.outlined.Science
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material.icons.outlined.TableChart
@@ -46,6 +50,8 @@ private val navItems = listOf(
     NavItem(R.string.tab_compare, Icons.Filled.TableChart, Icons.Outlined.TableChart, Routes.COMPARE),
     NavItem(R.string.tab_favorites, Icons.Filled.Star, Icons.Outlined.StarBorder, Routes.FAVORITES),
     NavItem(R.string.tab_discover, Icons.Filled.Explore, Icons.Outlined.Explore, Routes.DISCOVER),
+    NavItem(R.string.tab_learn, Icons.Filled.School, Icons.Outlined.School, Routes.LEARN),
+    NavItem(R.string.tab_lab, Icons.Filled.Science, Icons.Outlined.Science, Routes.LAB),
     NavItem(R.string.tab_settings, Icons.Filled.Settings, Icons.Outlined.Settings, Routes.PROFILE),
 )
 
