@@ -2,6 +2,7 @@ package com.periodic.pro.feature.lab
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.periodic.pro.data.element.ElementRepository
 import com.periodic.pro.data.lab.LabRepository
 import com.periodic.pro.data.lab.model.ReactionLevel
 import com.periodic.pro.data.lab.model.ReactionType
@@ -20,6 +21,7 @@ import kotlinx.coroutines.launch
  */
 class LabViewModel(
     private val labRepo: LabRepository,
+    private val elementRepo: ElementRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LabUiState())
@@ -48,10 +50,13 @@ class LabViewModel(
             _state.update { it.copy(isLoading = true, errorMessage = null) }
             try {
                 val reactions = labRepo.loadAll()
+                val symbolMap = elementRepo.getAll()
+                    .associate { it.atomicNumber to it.symbol }
                 _state.update {
                     it.copy(
                         allReactions = reactions,
                         filteredReactions = reactions,
+                        symbolMap = symbolMap,
                         isLoading = false,
                     )
                 }

@@ -3,6 +3,7 @@ package com.periodic.pro.feature.discover
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.periodic.pro.data.discover.DiscoverRepository
+import com.periodic.pro.data.element.ElementRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
  */
 class DiscoverViewModel(
     private val discoverRepo: DiscoverRepository,
+    private val elementRepo: ElementRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(DiscoverUiState())
@@ -47,10 +49,13 @@ class DiscoverViewModel(
             try {
                 val items = discoverRepo.loadAll()
                 val daily = discoverRepo.getDailyRecommend()
+                val symbolMap = elementRepo.getAll()
+                    .associate { it.atomicNumber to it.symbol }
                 _state.update {
                     it.copy(
                         items = items,
                         dailyRecommend = daily,
+                        symbolMap = symbolMap,
                         isLoading = false,
                     )
                 }

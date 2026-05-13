@@ -15,6 +15,8 @@ data class DiscoverUiState(
     val dailyRecommend: DiscoverItem? = null,
     val isLoading: Boolean = true,
     val errorMessage: String? = null,
+    /** 原子序数 → 元素符号映射 */
+    val symbolMap: Map<Int, String> = emptyMap(),
 ) {
     val isReady: Boolean get() = !isLoading && errorMessage == null
 }

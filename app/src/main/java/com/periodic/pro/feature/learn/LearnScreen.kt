@@ -180,6 +180,7 @@ private fun LearnListContent(
                     items(state.coreItems, key = { "core_${it.atomicNumber}" }) { item ->
                         LearnListItem(
                             item = item,
+                            symbol = state.symbolMap[item.atomicNumber] ?: "?",
                             onClick = { onIntent(LearnIntent.SelectElement(item.atomicNumber)) },
                         )
                     }
@@ -199,6 +200,7 @@ private fun LearnListContent(
                     ) { item ->
                         LearnListItem(
                             item = item,
+                            symbol = state.symbolMap[item.atomicNumber] ?: "?",
                             onClick = { onIntent(LearnIntent.SelectElement(item.atomicNumber)) },
                         )
                     }
@@ -215,6 +217,7 @@ private fun LearnListContent(
                     items(state.normalItems, key = { "normal_${it.atomicNumber}" }) { item ->
                         LearnListItem(
                             item = item,
+                            symbol = state.symbolMap[item.atomicNumber] ?: "?",
                             onClick = { onIntent(LearnIntent.SelectElement(item.atomicNumber)) },
                         )
                     }
@@ -265,6 +268,7 @@ private fun LevelSectionHeader(
 @Composable
 private fun LearnListItem(
     item: LearnItem,
+    symbol: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -310,7 +314,7 @@ private fun LearnListItem(
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text = "#${item.atomicNumber}",
+                    text = symbol,
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = badgeColor,

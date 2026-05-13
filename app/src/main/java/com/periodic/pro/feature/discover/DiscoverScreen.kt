@@ -113,6 +113,7 @@ fun DiscoverScreen(
             DiscoverContent(
                 items = state.items,
                 dailyRecommend = state.dailyRecommend,
+                symbolMap = state.symbolMap,
                 onItemClick = { vm.handle(DiscoverIntent.SelectItem(it)) },
                 modifier = Modifier.padding(padding),
             )
@@ -129,6 +130,7 @@ fun DiscoverScreen(
 private fun DiscoverContent(
     items: List<DiscoverItem>,
     dailyRecommend: DiscoverItem?,
+    symbolMap: Map<Int, String>,
     onItemClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -145,6 +147,7 @@ private fun DiscoverContent(
             item(key = "daily_recommend") {
                 DailyRecommendSection(
                     item = dailyRecommend,
+                    symbol = symbolMap[dailyRecommend.atomicNumber] ?: "?",
                     onClick = { onItemClick(dailyRecommend.atomicNumber) },
                 )
             }
@@ -165,6 +168,7 @@ private fun DiscoverContent(
         items(items, key = { it.atomicNumber.toString() + it.title }) { item ->
             DiscoverFeedCard(
                 item = item,
+                symbol = symbolMap[item.atomicNumber] ?: "?",
                 onClick = { onItemClick(item.atomicNumber) },
             )
         }
@@ -184,6 +188,7 @@ private fun DiscoverContent(
 @Composable
 private fun DailyRecommendSection(
     item: DiscoverItem,
+    symbol: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -226,7 +231,7 @@ private fun DailyRecommendSection(
 
                     // 元素符号大标
                     Text(
-                        text = "#${item.atomicNumber}",
+                        text = symbol,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         color = elementColor,
@@ -266,6 +271,7 @@ private fun DailyRecommendSection(
 @Composable
 private fun DiscoverFeedCard(
     item: DiscoverItem,
+    symbol: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -367,6 +373,7 @@ private fun DiscoverContentPreview() {
         DiscoverContent(
             items = previewDiscoverItems,
             dailyRecommend = previewDaily,
+            symbolMap = emptyMap(),
             onItemClick = {},
         )
     }

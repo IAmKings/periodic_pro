@@ -2,6 +2,7 @@ package com.periodic.pro.feature.learn
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.periodic.pro.data.element.ElementRepository
 import com.periodic.pro.data.learn.LearnRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
  */
 class LearnViewModel(
     private val learnRepo: LearnRepository,
+    private val elementRepo: ElementRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(LearnUiState())
@@ -44,8 +46,10 @@ class LearnViewModel(
             _state.update { it.copy(isLoading = true, errorMessage = null) }
             try {
                 val items = learnRepo.loadAll()
+                val symbolMap = elementRepo.getAll()
+                    .associate { it.atomicNumber to it.symbol }
                 _state.update {
-                    it.copy(items = items, isLoading = false)
+                    it.copy(items = items, symbolMap = symbolMap, isLoading = false)
                 }
             } catch (e: Exception) {
                 _state.update {

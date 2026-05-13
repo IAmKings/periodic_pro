@@ -117,6 +117,7 @@ fun LabScreen(
         )
         LabNavMode.DETAIL -> LabDetailContent(
             reaction = state.selectedReaction,
+            symbolMap = state.symbolMap,
             onBack = { vm.handle(LabIntent.BackToList) },
             onNavigateToDetail = { atomicNumber ->
                 vm.handle(LabIntent.NavigateToDetail(atomicNumber))
@@ -436,6 +437,7 @@ private fun ReactionListItem(
 @Composable
 private fun LabDetailContent(
     reaction: ChemicalReaction?,
+    symbolMap: Map<Int, String>,
     onBack: () -> Unit,
     onNavigateToDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -565,6 +567,7 @@ private fun LabDetailContent(
                     reaction.involvedElements.forEach { atomicNumber ->
                         ElementChip(
                             atomicNumber = atomicNumber,
+                            symbol = symbolMap[atomicNumber] ?: "?",
                             onClick = { onNavigateToDetail(atomicNumber) },
                         )
                     }
@@ -705,6 +708,7 @@ private fun LevelBadge(
 @Composable
 private fun ElementChip(
     atomicNumber: Int,
+    symbol: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -716,7 +720,7 @@ private fun ElementChip(
             .padding(horizontal = Dimensions.Dp12, vertical = 6.dp),
     ) {
         Text(
-            text = "#$atomicNumber",
+            text = symbol,
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -853,6 +857,7 @@ private fun LabDetailPreview() {
     PeriodicProTheme {
         LabDetailContent(
             reaction = previewReaction,
+            symbolMap = emptyMap(),
             onBack = {},
             onNavigateToDetail = {},
         )

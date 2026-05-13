@@ -36,7 +36,7 @@ val appModule = module {
     single { LabRepository(androidContext()) }
     viewModel { CategoryViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
-    viewModel { DiscoverViewModel(get()) }
-    viewModel { LearnViewModel(get()) }
-    viewModel { LabViewModel(get()) }
+    viewModel { DiscoverViewModel(get(), get()) }
+    viewModel { LearnViewModel(get(), get()) }
+    viewModel { LabViewModel(get(), get()) }
 }
