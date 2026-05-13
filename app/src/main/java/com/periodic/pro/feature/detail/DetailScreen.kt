@@ -1,7 +1,6 @@
 package com.periodic.pro.feature.detail
 
 import android.content.res.Configuration
-import java.util.Locale
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,12 +45,13 @@ import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.PeriodicProTheme
 import com.periodic.pro.theme.forCategory
-import com.periodic.pro.ui.components.CategoryChip
+import com.periodic.pro.ui.components.PropertyChip
 import com.periodic.pro.ui.pattern.AtomCanvas
 import com.periodic.pro.ui.pattern.PropertyGrid
 import com.periodic.pro.ui.pattern.PropertyItem
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
+import java.util.Locale
 
 /**
  * 元素详情屏入口。
@@ -315,11 +315,11 @@ private fun ElementInfoSection(
         Spacer(modifier = Modifier.height(Dimensions.Dp12))
 
         // 分类标签
-        CategoryChip(
+        PropertyChip(
             text = element.category.displayName,
             selected = true,
             onClick = {},
-            selectedColor = categoryColor,
+            categoryColor = categoryColor,
         )
 
         Spacer(modifier = Modifier.height(Dimensions.Dp16))

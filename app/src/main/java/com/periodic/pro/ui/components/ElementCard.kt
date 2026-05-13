@@ -74,13 +74,13 @@ fun ElementCard(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 4.dp, vertical = 4.dp),
+                    .padding(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 // 原子序号
                 Text(
                     text = "${element.atomicNumber}",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                 )
@@ -128,8 +128,9 @@ private val sampleIron = Element(
 )
 
 @Preview(name = "Light", showBackground = true)
+@Preview(name = "Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun ElementCardLightPreview() {
+private fun ElementCardHydrogenPreview() {
     PeriodicProTheme {
         ElementCard(
             element = sampleHydrogen,
@@ -139,10 +140,11 @@ private fun ElementCardLightPreview() {
     }
 }
 
-@Preview(name = "Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Light - Fe", showBackground = true)
+@Preview(name = "Dark - Fe", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun ElementCardDarkPreview() {
-    PeriodicProTheme(darkTheme = true) {
+private fun ElementCardIronPreview() {
+    PeriodicProTheme {
         ElementCard(
             element = sampleIron,
             onClick = {},

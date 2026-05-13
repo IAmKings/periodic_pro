@@ -11,3 +11,6 @@ val Shapes = Shapes(
     large = RoundedCornerShape(16.dp),
     extraLarge = RoundedCornerShape(24.dp),
 )
+
+/** 20.dp 圆角 — 用于 GlassSurface 等大卡片场景（M3 Shapes 1.3.x 无 extraExtraLarge，独立定义）。 */
+val ShapeXXLarge = RoundedCornerShape(20.dp)

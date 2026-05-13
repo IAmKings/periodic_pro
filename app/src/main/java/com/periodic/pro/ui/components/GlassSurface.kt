@@ -4,6 +4,7 @@ package com.periodic.pro.ui.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -23,13 +24,13 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.periodic.pro.theme.PeriodicProTheme
 import dev.chrisbanes.haze.ExperimentalHazeApi
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.HazeTint
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
-import com.periodic.pro.theme.PeriodicProTheme
 
 /**
  * 全局 HazeState CompositionLocal。
@@ -81,7 +82,11 @@ fun AppGlassProvider(
 fun GlassSurface(
     modifier: Modifier = Modifier,
     blurRadius: Dp = 24.dp,
-    tint: Color = MaterialTheme.colorScheme.surface.copy(alpha = 0.3f),
+    tint: Color = if (isSystemInDarkTheme()) {
+        Color.Black.copy(alpha = 0.25f)
+    } else {
+        Color.White.copy(alpha = 0.15f)
+    },
     shape: Shape = RoundedCornerShape(20.dp),
     content: @Composable () -> Unit,
 ) {

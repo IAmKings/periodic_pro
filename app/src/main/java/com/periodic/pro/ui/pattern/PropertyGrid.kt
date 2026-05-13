@@ -1,5 +1,6 @@
 package com.periodic.pro.ui.pattern
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,11 +14,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.PeriodicProTheme
-import android.content.res.Configuration
 
 /**
  * 2 列属性网格。
@@ -39,6 +39,7 @@ fun PropertyGrid(
                 HorizontalDivider(
                     modifier = Modifier.padding(horizontal = Dimensions.Dp16),
                     thickness = 0.5.dp,
+                    color = MaterialTheme.colorScheme.outline,
                 )
             }
             Row(
