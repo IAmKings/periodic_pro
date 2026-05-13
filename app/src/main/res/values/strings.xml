@@ -91,10 +91,10 @@
     <string name="screen_learn">学习</string>
     <string name="learn_level_core">核心元素</string>
     <string name="learn_level_important">重点元素</string>
-    <string name="learn_level_normal">普通元素</string>
+    <string name="learn_level_normal">其他元素</string>
     <string name="learn_badge_core">核心</string>
     <string name="learn_badge_important">重点</string>
-    <string name="learn_badge_normal">普通</string>
+    <string name="learn_badge_normal">其他</string>
     <string name="learn_element_label">#%d %s 号元素</string>
     <string name="learn_detail_title">#%d %s 学习资料</string>
     <string name="learn_detail_not_found">学习资料未找到</string>

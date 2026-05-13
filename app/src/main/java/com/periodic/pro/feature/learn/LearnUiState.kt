@@ -36,5 +36,5 @@ data class LearnUiState(
     /** 按等级分组：核心 / 重点 / 普通 */
     val coreItems: List<LearnItem> get() = items.filter { it.level == "core" }
     val importantItems: List<LearnItem> get() = items.filter { it.level == "important" }
-    val normalItems: List<LearnItem> get() = items.filter { it.level == "normal" }
+    val otherItems: List<LearnItem> get() = items.filter { it.level == "other" }
 }

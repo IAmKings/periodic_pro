@@ -58,11 +58,11 @@ import org.koin.androidx.compose.koinViewModel
 // ===== Level badge colors =====
 private val CoreBadgeColor = Color(0xFFE03131)
 private val ImportantBadgeColor = Color(0xFFF08C00)
-private val NormalBadgeColor = Color(0xFF2F9E44)
+private val OtherBadgeColor = Color(0xFF2F9E44)
 
 private val CoreBadgeBg = Color(0xFFFFE8E8)
 private val ImportantBadgeBg = Color(0xFFFFF3D6)
-private val NormalBadgeBg = Color(0xFFE6F9E8)
+private val OtherBadgeBg = Color(0xFFE6F9E8)
 
 /**
  * Learn 屏入口。
@@ -158,7 +158,7 @@ private fun LearnListContent(
         } else {
             val hasCore = state.coreItems.isNotEmpty()
             val hasImportant = state.importantItems.isNotEmpty()
-            val hasNormal = state.normalItems.isNotEmpty()
+            val hasOther = state.otherItems.isNotEmpty()
 
             LazyColumn(
                 modifier = Modifier
@@ -207,15 +207,15 @@ private fun LearnListContent(
                     }
                 }
 
-                // Normal section
-                if (hasNormal) {
-                    item(key = "section_normal") {
+                // Other section
+                if (hasOther) {
+                    item(key = "section_other") {
                         LevelSectionHeader(
                             title = stringResource(R.string.learn_level_normal),
-                            badgeColor = NormalBadgeColor,
+                            badgeColor = OtherBadgeColor,
                         )
                     }
-                    items(state.normalItems, key = { "normal_${it.atomicNumber}" }) { item ->
+                    items(state.otherItems, key = { "other_${it.atomicNumber}" }) { item ->
                         LearnListItem(
                             item = item,
                             symbol = state.symbolMap[item.atomicNumber] ?: "?",
@@ -276,12 +276,12 @@ private fun LearnListItem(
     val badgeColor = when (item.level) {
         "core" -> CoreBadgeColor
         "important" -> ImportantBadgeColor
-        else -> NormalBadgeColor
+        else -> OtherBadgeColor
     }
     val badgeBg = when (item.level) {
         "core" -> CoreBadgeBg
         "important" -> ImportantBadgeBg
-        else -> NormalBadgeBg
+        else -> OtherBadgeBg
     }
     val badgeText = when (item.level) {
         "core" -> stringResource(R.string.learn_badge_core)

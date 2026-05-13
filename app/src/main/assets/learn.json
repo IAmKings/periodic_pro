@@ -707,441 +707,441 @@
   },
   {
     "atomicNumber": 3,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "锂是 1817 年由瑞典化学家阿尔费特松（Johan August Arfwedson）在分析透锂长石时发现的。他以希腊语 lithos（石头）命名为 Lithium。1818 年，戴维和布兰德通过电解氧化锂首次制得单质锂。锂是密度最小的金属（0.534 g/cm³），轻到能浮在水面。",
     "applications": ["锂离子电池：锂是电池领域的关键元素，锂离子电池能量密度高、循环寿命长，广泛应用于手机、笔记本电脑和电动汽车"],
     "funFacts": []
   },
   {
     "atomicNumber": 4,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "铍的化合物在古代就被使用——绿柱石（祖母绿和海蓝宝石）是含铍的硅酸盐矿物。1798 年，法国化学家沃克兰（Louis Nicolas Vauquelin）在分析绿柱石时发现了一种新元素的氧化物。最初被称为 glucinium（希腊语「甜的」），因其盐有甜味，后以绿柱石（beryl）重新命名为 Beryllium。1828 年，维勒和比西分别独立制得单质铍。",
     "applications": ["铍铜合金：含铍 2% 的铜合金强度高、不产生火花，用于石油钻井平台和煤矿中的安全工具及精密弹簧"],
     "funFacts": []
   },
   {
     "atomicNumber": 43,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "锝是第一个用人工方法合成的元素，填补了周期表中第 43 号空位。1937 年，意大利物理学家佩列（Emilio Segre）和佩里耶（Carlo Perrier）在美国用回旋加速器轰击钼靶制得了这种元素。他们以希腊语 technetos（人造的）命名为 Technetium。锝是元素周期表中原子序数最小的放射性元素，半衰期最长的同位素 Tc-98 仅 420 万年。",
     "applications": ["核医学示踪剂：锝-99m 半衰期仅 6 小时，释放易于检测的伽马射线，是全球最常用的医用放射性同位素——每年用于数千万次诊断扫描"],
     "funFacts": []
   },
   {
     "atomicNumber": 44,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "钌是 1844 年由俄国化学家克劳斯（Karl Ernst Claus）在喀山大学发现的。他在研究铂矿的残余物时，分离出了一种新金属。克劳斯以俄罗斯的拉丁名 Ruthenia 命名为 Ruthenium。钌是铂族金属中最稀有的元素之一，也是最硬的铂族金属，常以细小的晶体形式伴生于其他铂族金属矿石中。",
     "applications": ["电子工业：钌是硬盘驱动器磁记录层的关键材料，钌薄膜用于提高存储密度的磁记录介质"],
     "funFacts": []
   },
   {
     "atomicNumber": 45,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "铑是 1803 年由英国化学家沃拉斯顿（William Hyde Wollaston）在研究铂矿时发现的。他将铂矿溶解在王水中，通过选择性沉淀法分离出了一种玫瑰红色的盐，加热后获得银白色的金属。他以希腊语 rhodon（玫瑰）命名为 Rhodium。尽管发现时间早，但铑的全球年产量仅为铂的十分之一，是最稀有的贵金属之一。",
     "applications": ["汽车催化剂：铑是最有效的氮氧化物（NOx）还原催化剂，尽管用量极少（每辆车约 0.2-0.5 克），却是汽油车尾气净化不可替代的关键元素"],
     "funFacts": []
   },
   {
     "atomicNumber": 52,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "碲的发现可追溯到 1782 年——匈牙利矿物学家赖肯施泰因（Franz-Joseph Muller von Reichenstein）在分析一种来自特兰西瓦尼亚的金矿时，发现其中含有一种未知金属。1798 年，德国化学家克拉普罗特确认并命名了这种元素，以拉丁语 tellus（地球）命名为 Tellurium。碲是典型的准金属，具有金属光泽但性能较脆。",
     "applications": ["热电材料：碲化铋（Bi₂Te₃）是室温下性能最好的热电材料，用于半导体致冷片和便携式冰箱"],
     "funFacts": []
   },
   {
     "atomicNumber": 54,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "氙是 1898 年由英国化学家拉姆齐和特拉弗斯发现的第五种稀有气体。他们在分馏液态空气分离出氪之后，继续加热残渣，从光谱中观察到了新的蓝色谱线。拉姆齐以希腊语 xenos（陌生的）命名为 Xenon。氙气在空气中含量极低（约 0.000009%），需要处理大量空气才能获得少量纯氙。",
     "applications": ["照明技术：氙气放电产生接近日光的高亮度白光，广泛用于汽车 HID 大灯和 IMAX 影院放映机的高压氙灯"],
     "funFacts": []
   },
   {
     "atomicNumber": 55,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "铯是 1860 年由德国化学家本生和基尔霍夫用他们新发明的光谱仪发现的。他们在分析杜尔海姆矿泉水的光谱时，看到了两条明亮的蓝色谱线。二人以拉丁语 caesius（天蓝色）命名为 Cesium。铯是化学性质最活泼的碱金属，熔点仅 28.5°C，是所有金属中熔点第二低的（仅次于汞）。",
     "applications": ["铯原子钟：铯-133 原子钟是国际秒的定义基准——1 秒 = 9,192,631,770 个铯-133 原子基态跃迁周期，精度可达 1 亿年只差 1 秒"],
     "funFacts": []
   },
   {
     "atomicNumber": 57,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "镧是 1839 年由瑞典化学家莫桑德（Carl Gustaf Mosander）发现的。他在分析硝酸铈样品时，分离出了另一种稀土元素的氧化物。他以希腊语 lanthanein（隐藏的）命名为 Lanthanum，意为「被隐藏的元素」。镧是镧系元素的第一个成员，也是稀土中最活泼的金属之一，在空气中表面迅速氧化变暗。",
     "applications": ["光学玻璃：含氧化镧的光学玻璃折射率高、色散低，是高性能照相机镜头和显微镜物镜的重要材料"],
     "funFacts": []
   },
   {
     "atomicNumber": 58,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "铈是 1803 年由瑞典化学家贝采利乌斯和希辛格（Wilhelm Hisinger）以及德国化学家克拉普罗特几乎同时发现的。他们从瑞典伊特比的一种矿石中分离出了一种新的稀土氧化物。铈以当时刚发现的小行星谷神星（Ceres）命名。铈是镧系元素中丰度最高的，比铜、锌在地壳中的含量更丰富。",
     "applications": ["抛光材料：二氧化铈（CeO₂）是玻璃抛光的标准材料，广泛用于光学镜片、手机屏幕和半导体晶圆的精密抛光"],
     "funFacts": []
   },
   {
     "atomicNumber": 59,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "镨是 1885 年由奥地利化学家威斯巴赫（Carl Auer von Welsbach）从当时被称为「镨钕混合物」的稀土混合物中分离出来的。他将混合物反复进行分步结晶，得到了两种不同的盐——绿色的一种命名为 Praseodymium（希腊语「绿色的双生子」）。镨的化合物呈现出鲜明的黄绿色，这与其名称的希腊语含义相呼应。",
     "applications": ["永磁材料：镨是钕铁硼永磁材料的重要添加元素，适量镨替代钕可以提高磁体的矫顽力和热稳定性"],
     "funFacts": []
   },
   {
     "atomicNumber": 60,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "钕与镨同时于 1885 年被威斯巴赫分离出来——粉红色的盐对应着 Didymium 混合物中的另一个成分。他将其命名为 Neodymium（希腊语「新的双生子」）。钕是镧系元素中最具应用价值的稀土之一，具有独特的粉红色盐类化合物。在分离之前，镨和钕曾被长期误认为是一种元素。",
     "applications": ["钕铁硼磁体：钕铁硼（NdFeB）是迄今为止性能最强的永磁材料，磁能积是铁氧体磁铁的 10 倍，广泛应用于风力发电机、电动汽车电机和耳机"],
     "funFacts": []
   },
   {
     "atomicNumber": 61,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "钷是元素周期表中唯一一种没有稳定同位素的镧系元素。1945 年，美国化学家马林斯基（Jacob Marinsky）、格伦登宁（Lawrence Glendenin）和科里尔（Charles Coryell）在橡树岭国家实验室分析铀裂变产物时，通过离子交换色谱法分离出了钷-147。他们以希腊神话中盗火的普罗米修斯（Prometheus）命名为 Promethium。",
     "applications": ["荧光涂料：钷-147 衰变释放的 β 射线激发荧光粉发出可见光，用于发光涂料和夜光仪表盘"],
     "funFacts": []
   },
   {
     "atomicNumber": 62,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "钐是 1879 年由法国化学家布瓦博德朗（Paul-Emile Lecoq de Boisbaudran）在分析一种来自乌拉尔山脉的稀土矿物——铌钇矿时发现的。他以发现这种矿物的俄罗斯矿业官员萨马尔斯基（Vasili Samarsky-Bykhovets）的姓氏命名为 Samarium。这是第一个以人名命名的元素，开创了元素命名的新传统。",
     "applications": ["钐钴磁体：钐钴（SmCo）磁体可在 350°C 高温下保持磁性，是高温环境下电机和传感器不可替代的永磁材料"],
     "funFacts": []
   },
   {
     "atomicNumber": 63,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "铕是 1901 年由法国化学家德马尔赛（Eugene-Anatole Demarcay）从当时称为「钐」的样品中分离出来的。他通过反复的分步结晶法获得了一种全新的稀土氧化物。他以欧洲大陆（Europe）命名为 Europium。铕是稀土中最活泼、最难还原为金属的元素之一，自然丰度处于镧系元素的中等水平。",
     "applications": ["荧光粉激活剂：三价铕离子（Eu³⁺）是红色荧光粉的核心激活剂，用于 CRT 显示器、节能灯和 LED 照明中的红色发光成分"],
     "funFacts": []
   },
   {
     "atomicNumber": 64,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "钆的发现与化学史上著名的谱线分析法有关。1880 年，瑞士化学家马里尼亚克（Jean Charles Galissard de Marignac）从钐的样品中发现了新的谱线。1886 年，布瓦博德朗确认这是一种新元素，并以芬兰化学家加多林（Johan Gadolin）——稀土化学的先驱——命名为 Gadolinium。加多林的名字也体现在矿物「硅铍钇矿」上。",
     "applications": ["磁共振成像（MRI）造影剂：钆离子（Gd³⁺）有 7 个不成对电子，能强烈缩短水质子的弛豫时间，是 MRI 增强造影剂的核心成分"],
     "funFacts": []
   },
   {
     "atomicNumber": 65,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "铽是 1843 年由瑞典化学家莫桑德（Carl Gustaf Mosander）发现的。他在研究钇土时，通过分步沉淀分离出了三种不同的氧化物——其中一种就包含铽。他以瑞典伊特比（Ytterby）小镇命名，铽的化学符号 Tb 也源于这个地名。铽在空气中的稳定性优于其他稀土，是最不易氧化的镧系元素之一。",
     "applications": ["绿色荧光粉：三价铽离子（Tb³⁺）发出明亮的绿色荧光——作为节能灯中的绿粉激活剂，也是 LED 和显示屏幕绿色荧光粉的关键成分"],
     "funFacts": []
   },
   {
     "atomicNumber": 66,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "镝是 1886 年由法国化学家布瓦博德朗在霍姆柏亚（Holmia）样品中发现的新元素。他以希腊语 dysprositos（难以获得的）命名为 Dysprosium，因为分离和提纯镝的过程极其困难。在稀土元素中，镝直到 1950 年代才通过离子交换法获得高纯度样品。镝的颜色呈银白色金属光泽，在空气中表面缓慢氧化。",
     "applications": ["永磁添加剂：镝是钕铁硼磁体中提升高温性能的关键添加元素——添加镝可大幅提高磁体的矫顽力，确保电动汽车电机在高温下不退磁"],
     "funFacts": []
   },
   {
     "atomicNumber": 67,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "钬是 1878 年由瑞士化学家索雷特（Marc Delafontaine）和瑞士化学家马里尼亚克分别独立发现的。马里尼亚克在分析铒土的吸收光谱时，发现了不属于铒的吸收带。他以瑞典首都斯德哥尔摩的拉丁名 Holmia 命名为 Holmium。钬是稀土中磁性最强的元素之一，具有所有元素中最高的磁矩。",
     "applications": ["激光晶体：掺钬钇铝石榴石（Ho:YAG）激光器波长 2.1 微米，对内窥镜软组织手术十分理想，广泛用于泌尿外科和耳鼻喉科手术"],
     "funFacts": []
   },
   {
     "atomicNumber": 68,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "铒是 1843 年由瑞典化学家莫桑德在伊特比矿石中发现的第二种稀土氧化物。他将其命名为 Erbium，也是以伊特比（Ytterby）小镇命名的。铒与铽、钇的分离过程非常困难，是稀土化学早期发展史中的重要课题。铒的氧化物呈粉红色，这是镧系元素中较为少见的颜色特征。",
     "applications": ["光纤放大器：掺铒光纤放大器（EDFA）是光纤通信的关键器件——铒离子在 1550nm 波长处具有优异的放大性能，是现代互联网骨干网的支柱技术"],
     "funFacts": []
   },
   {
     "atomicNumber": 69,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "铥是 1879 年由瑞典化学家克莱韦（Per Teodor Cleve）在研究铒土时发现的。他从铒土中分离出三种新元素——除了已有的铒外，还发现了钬和另一种元素，他以斯堪的纳维亚的古名 Thule 命名为 Thulium。铥是镧系中丰度最低的元素之一（仅次于钷），在自然界中极其稀有。",
     "applications": ["便携式 X 光源：铥-170 受高能电子轰击产生 X 射线，用于便携式医疗 X 光机和工业无损检测设备"],
     "funFacts": []
   },
   {
     "atomicNumber": 70,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "镱是 1878 年由瑞士化学家马里尼亚克（Jean Charles Galissard de Marignac）在分析铒土时发现的一种新稀土元素。他以伊特比（Ytterby）小镇命名为 Ytterbium——这是第四种以伊特比命名的元素（之前已有钇、铒、铽）。镱是镧系元素中唯一在低温下有超导特性的常压元素（约 1 毫开尔文）。",
     "applications": ["激光设备：掺镱光纤激光器功率高、效率好，用于工业激光切割和焊接——镱离子吸收光谱宽、荧光寿命长，是高功率光纤激光器的理想增益介质"],
     "funFacts": []
   },
   {
     "atomicNumber": 71,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "镥是 1907 年由法国化学家乌尔班（Georges Urbain）和奥地利化学家威斯巴赫几乎同时独立发现的。乌尔班以他的出生地——巴黎的拉丁名 Lutetia 命名为 Lutetium。镥是镧系元素中最重的一个，也是最后一个被发现的自然界存在的镧系元素。它的化学性质与其他镧系元素略有不同，更接近钪和钇。",
     "applications": ["石油催化裂化：镥掺杂的沸石催化剂在石油精炼中用于催化裂化（FCC）工艺，提高汽油和丙烯的产率"],
     "funFacts": []
   },
   {
     "atomicNumber": 72,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "铪是化学史上因原子结构理论预测而成功发现的元素之一。门捷列夫曾将锆和铪混淆，但 1913 年莫塞莱（Henry Moseley）的 X 射线光谱实验指出第 72 号元素应独立存在。1923 年，匈牙利化学家赫维西（George de Hevesy）和荷兰物理学家科斯特（Dirk Coster）在哥本哈根通过对锆矿的 X 射线分析发现了铪，以哥本哈根的拉丁名 Hafnia 命名为 Hafnium。",
     "applications": ["核反应堆控制棒：铪的热中子吸收截面比锆大 600 倍——用于核反应堆的控制棒材料，能有效调节反应速率"],
     "funFacts": []
   },
   {
     "atomicNumber": 73,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "钽是 1802 年由瑞典化学家埃克伯格（Anders Gustaf Ekeberg）发现的。他以希腊神话中坦塔罗斯（Tantalus）的痛苦命名——因为钽的化合物不溶于酸，令他深感苦恼（如坦塔罗斯的折磨）。由于钽和铌的化学性质极其相似，它们被长期误认为是同一种元素，直到 1844 年才由罗泽彻底澄清。",
     "applications": ["钽电容器：钽的氧化膜介电常数高，钽电容器的电容密度高、稳定性好，广泛用于手机、电脑和军工电子设备中"],
     "funFacts": []
   },
   {
     "atomicNumber": 75,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "铼是最后一个被发现的稳定元素，也是门捷列夫预言的元素之一。1925 年，德国化学家诺达克夫妇（Walter Noddack, Ida Tacke）和贝格（Otto Berg）在分析铂矿和铌铁矿时，用 X 射线光谱发现了铼。他们以德国莱茵河（Rhein）命名为 Rhenium。铼是地壳中最稀有的稳定元素之一，平均含量仅 0.0004 ppm。",
     "applications": ["高温合金：铼的熔点仅次于钨（3180°C），添加铼可显著提高镍基高温合金的高温蠕变强度，是喷气发动机涡轮叶片的关键添加元素"],
     "funFacts": []
   },
   {
     "atomicNumber": 76,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "锇是 1803 年由英国化学家坦南特（Smithson Tennant）在研究铂矿的王水不溶残渣时发现的。他将残渣与碱共熔后分离出了两种新金属，其中一种产生有刺激性气味的挥发性氧化物。他以希腊语 osme（气味）命名为 Osmium——因为四氧化锇（OsO₄）具有强烈的刺鼻气味。锇是所有金属中密度最大的（22.59 g/cm³）。",
     "applications": ["合金硬化：锇是天然最硬的金属之一，微量锇添加到铂合金中可大幅提高硬度，用于精密仪器轴承和电触头"],
     "funFacts": []
   },
   {
     "atomicNumber": 77,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "铱也是在 1803 年由坦南特发现的，与锇同源。他从铂矿的王水不溶残渣中分离出了一种颜色丰富的金属——其化合物呈现红、蓝、紫等多种色彩。坦南特以希腊神话中的彩虹女神伊里斯（Iris）命名为 Iridium。铱是抗腐蚀性最强的金属之一，即使在王水中也几乎不溶解。",
     "applications": ["铱星通信：铱的化学稳定性极高，用于火箭发动机喷管和航天器部件；「铱星」卫星通信系统即以铱命名——原计划使用 77 颗卫星（铱的原子序数），最终实际为 66 颗"],
     "funFacts": []
   },
   {
     "atomicNumber": 81,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "铊是 1861 年由英国化学家克鲁克斯（William Crookes）在分析某硫酸工厂的废渣时，用光谱仪观察到一条明亮的绿色谱线后发现的。他以希腊语 thallos（绿色嫩枝）命名为 Thallium——因为其特征光谱线是鲜艳的绿色。克鲁克斯是元素发现的先驱之一，但他的发现过程充满戏剧性——铊的光谱线在他眼中「像春天的嫩芽一样」。",
     "applications": ["红外透射玻璃：溴碘化铊（KRS-5）对红外光有优异的透射率，用于红外光谱仪的窗口材料和透镜"],
     "funFacts": []
   },
   {
     "atomicNumber": 83,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "铋在古代常与锡和铅混淆，因其脆性和低熔点（271°C）在古代炼金术中颇受关注。1753 年，法国化学家埃洛（Claude Geoffroy the Younger）通过严格的实验证明了铋是一种独立的元素。铋的英文名 Bismuth 源自德语 Wismut。铋是获得超导性的元素单质中原子序数最大的，也是所有金属中天然抗磁性最强的。",
     "applications": ["医药领域：次水杨酸铋是胃药的主要活性成分，用于治疗胃溃疡、腹泻和消化不良——安全无毒，是替代含铅化合物的常用绿色金属"],
     "funFacts": []
   },
   {
     "atomicNumber": 84,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "钋是 1898 年由居里夫人（Marie Curie）和皮埃尔·居里（Pierre Curie）从沥青铀矿中发现的第一个新元素。他们经过艰苦的提纯工作，从数吨铀矿中提取了极微量的钋。居里夫人以她的祖国波兰（Poland）命名为 Polonium。钋是少数几种在室温下因自辐射而发光的元素之一。",
     "applications": ["太空热源：钋-210 的功率密度达 140 W/g，是理想的太空热源——用于苏联月球车的保温装置，也是制造中子源的 α 放射源材料"],
     "funFacts": []
   },
   {
     "atomicNumber": 85,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "砹是 1940 年由美国化学家科森（Dale Corson）、麦肯齐（Kenneth MacKenzie）和西格雷（Emilio Segre）在加州大学伯克利分校用回旋加速器轰击铋靶首次人工合成的。他们以希腊语 astatos（不稳定的）命名为 Astatine。砹是天然存在中最稀有的元素——地球地壳中任何时候最多只有约 28 克砹。",
     "applications": ["放射性治疗研究：砹-211 释放 α 粒子能量高、射程短，理论上可用于靶向 α 放射治疗，但目前尚处于实验研究阶段"],
     "funFacts": []
   },
   {
     "atomicNumber": 86,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "氡是 1900 年由德国物理学家多恩（Friedrich Ernst Dorn）在镭的放射性衰变产物中发现的——他称这种气体为「镭射气」。后因从镭中释放的特性被命名为 Radon（镭的衍生词）。氡是唯一的天然放射性稀有气体，无色无味，但衰变产物是固体，可附着在尘埃上被吸入人体肺部。",
     "applications": ["地震预警研究：地下水中氡浓度的异常升高被认为与地壳应力变化有关，用于地震前兆监测和研究"],
     "funFacts": []
   },
   {
     "atomicNumber": 87,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "钫是自然界中最后被发现的元素（1939 年）。法国化学家佩雷（Marguerite Perey）在提纯锕-227 样品时，观察到新的放射性，经分析确认为第 87 号元素。她以祖国法国（France）命名为 Francium。钫是最不稳定的天然元素——其最长寿命的同位素 Fr-223 半衰期仅 22 分钟。据估计整个地壳中任何时候只有不到 30 克钫。",
     "applications": ["基础研究：钫用于研究原子核结构和超精细相互作用，但其极短半衰期和极低丰度限制了实际应用"],
     "funFacts": []
   },
   {
     "atomicNumber": 88,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "镭是 1898 年由居里夫妇（Marie and Pierre Curie）在沥青铀矿中发现的。他们从数吨铀矿废渣中经过反复结晶分离出纯镭盐，并测定了其原子量。居里夫人以拉丁语 radius（射线）命名为 Radium——用以表彰其强烈的放射性。镭的放射性比铀强数百万倍，在黑暗中发出蓝绿色的荧光。",
     "applications": ["早期放疗：镭-226 的伽马射线曾广泛用于癌症放射治疗——直到钴-60 和直线加速器在 1960 年代后取代了它"],
     "funFacts": []
   },
   {
     "atomicNumber": 89,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "锕是 1899 年由法国化学家德比埃尔内（Andre-Louis Debierne）在居里夫妇的实验室中从沥青铀矿残渣中发现的。他以希腊语 aktis（射线）命名为 Actinium。锕的放射性很强，在暗处发出淡蓝色的荧光。锕是锕系元素的第一个成员，锕系概念由美国化学家西博格在 1944 年提出。",
     "applications": ["中子源材料：锕-227 与铍混合可制成强中子源，用于中子活化分析和石油测井中的中子探测器"],
     "funFacts": []
   },
   {
     "atomicNumber": 90,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "钍是 1828 年由瑞典化学家贝采利乌斯发现的一种天然放射性元素。他从挪威的一种黑色矿物中分离出了钍的氧化物，并以北欧神话中的雷神托尔（Thor）命名为 Thorium。钍是自然界中丰度最高的锕系元素，地壳中含量约为铀的 3 倍。钍-232 的放射性极弱，安全可手持操作。",
     "applications": ["钍基核能：钍-232 吸收中子可转化为可裂变的铀-233——钍基熔盐堆（MSR）比传统铀堆更安全、核废料更少，中国在甘肃已建成实验堆"],
     "funFacts": []
   },
   {
     "atomicNumber": 91,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "镤是 1917 年由德国化学家哈恩（Otto Hahn）和迈特纳（Lise Meitner）以及英国化学家索迪（Frederick Soddy）和克兰斯顿（John Cranston）几乎同时独立发现的。它以拉丁语 proto（前）和 actinium（锕）命名，因为它是锕的「前身」——镤-231 衰变为锕-227。镤在自然界中极其稀散，是地壳中最稀有的天然元素之一。",
     "applications": ["地质定年：镤-231（半衰期 32760 年）与钍-230 的比值用于海洋沉积物定年，帮助研究古气候和海洋环流历史"],
     "funFacts": []
   },
   {
     "atomicNumber": 93,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "镎是 1940 年由美国化学家麦克米伦（Edwin McMillan）和艾贝尔森（Philip Abelson）在加州大学伯克利分校用中子轰击铀-238 时发现的。它以海王星（Neptune）命名为 Neptunium，因其紧随铀（天王星）之后。镎-239 半衰期仅 2.35 天——但它是合成钚-239 的关键中间体，在核燃料循环中有特殊意义。",
     "applications": ["核燃料循环：镎-237 是核反应堆中铀-235 裂变和中子俘获的产物，可从乏燃料中提取，用于制备镎-238 热源"],
     "funFacts": []
   },
   {
     "atomicNumber": 95,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "镅是 1944 年由美国化学家西博格团队在芝加哥大学冶金实验室（曼哈顿计划的一部分）用中子轰击钚-239 时合成的。它以美洲（Americas）命名为 Americium，类似于铕以欧洲命名的传统。镅的发现一度属于军事机密，直到 1945 年才公布。镅-241 是最常用的同位素，半衰期 432 年。",
     "applications": ["烟雾报警器：镅-241 释放 α 粒子使空气电离——烟雾进入电离室后电流减小触发警报，全球数十亿只烟雾报警器中有镅的身影"],
     "funFacts": []
   },
   {
     "atomicNumber": 96,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "锔是 1944 年由西博格团队在芝加哥用回旋加速器轰击钚-239 时合成的人工元素。他们以居里夫妇（Pierre and Marie Curie）命名为 Curium——这是对放射化学先驱的崇高致敬。锔的发现是曼哈顿计划核化学研究的副产品。锔在暗处发出强烈的蓝紫色荧光，肉眼可见其放射性自发光。",
     "applications": ["航天热源：锔-244 半衰期 18.1 年，功率密度较高，用于太空探测器的放射性同位素热电发生器（RTG）"],
     "funFacts": []
   },
   {
     "atomicNumber": 97,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "锫是 1949 年由西博格团队在加州大学伯克利分校用 α 粒子轰击镅-241 时合成的第五个超铀元素。他们以加州大学伯克利分校所在城市伯克利（Berkeley）命名为 Berkelium——其对称性类似于铽以伊特比命名的传统。锫的首次合成仅获得了约 5000 个原子（约 10⁻¹⁵ 克），通过离子交换色谱法分离鉴定。",
     "applications": ["超铀化学研究：锫是研究锕系元素化学键和电子结构的模型元素，用于验证相对论效应对超重元素化学性质的影响"],
     "funFacts": []
   },
   {
     "atomicNumber": 98,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "锎是 1950 年由西博格团队在伯克利用 α 粒子轰击锔-242 时合成的人工元素。他们以发现地加州大学伯克利分校所在的加利福尼亚州（California）命名为 Californium。锎-252 是最著名的同位素——每次裂变释放约 4 个中子，是极强的中子发射源。",
     "applications": ["中子活化分析：锎-252 作为便携式中子源用于机场行李安检、石油测井和金矿品位现场分析——1 微克锎-252 每秒可释放 230 万个中子"],
     "funFacts": []
   },
   {
     "atomicNumber": 99,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "锿是 1952 年在太平洋上「常春藤麦克」氢弹试验的放射性沉降物中首次发现的。美国加州大学伯克利分校的吉奥索（Albert Ghiorso）团队从爆炸后的珊瑚灰中分离出了这种新元素。他们以理论物理学家爱因斯坦（Albert Einstein）命名为 Einsteinium。最初仅获得了约 200 个原子，通过联合分析确认了存在。",
     "applications": ["基础核物理：锿用于研究锕系元素核结构和超重元素的合成——锿-254 的靶材可用于合成 119 号和 120 号新元素"],
     "funFacts": []
   },
   {
     "atomicNumber": 100,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "镄也是 1952 年在「常春藤麦克」氢弹试验的沉降物中发现的，与锿同时被吉奥索团队鉴定。多次中子俘获使铀-238 连续吸收 15 个中子后经 β 衰变链生成镄。他们以核物理学家费米（Enrico Fermi）命名为 Fermium。镄的半衰期最长的同位素 Fm-257 约 100 天，限制了其大规模研究。",
     "applications": ["超重元素合成：镄是合成更重元素（如 102 号、103 号）的中间靶材，用于研究核稳定岛理论"],
     "funFacts": []
   },
   {
     "atomicNumber": 101,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "钔是 1955 年由吉奥索团队在伯克利用 α 粒子轰击锿-253 首次合成的人工元素。他们以元素周期表的创始人门捷列夫（Dmitri Mendeleev）命名为 Mendelevium。最初的实验仅获得了 17 个钔原子——但这些足以证明新元素的存在。钔的合成验证了超铀元素研究的成熟方法。",
     "applications": ["基础研究：钔用于验证锕系元素在周期表中的定位和电子结构理论——其化学性质实验证实了元素 101 属于锕系"],
     "funFacts": []
   },
   {
     "atomicNumber": 102,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "锘是 1958 年左右由吉奥索团队在伯克利和苏联弗廖罗夫团队在杜布纳分别独立合成的。1957 年曾有一个国际团队声称发现并以诺贝尔（Alfred Nobel）命名为 Nobelium，但后被否定。最终在 1965 年，苏联杜布纳团队用碳离子轰击铀-238 获得了可信的结果。锘的命名致敬诺贝尔在科学界的贡献。",
     "applications": ["基础核化学研究：锘用于验证相对论效应对锕系元素电子结构和化学键的影响"],
     "funFacts": []
   },
   {
     "atomicNumber": 103,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "劳是 1961 年由吉奥索团队在伯克利用硼离子轰击锎靶首次合成的。他们以核物理学家劳伦斯（Ernest Lawrence）——回旋加速器的发明者——命名为 Lawrencium。劳伦斯发明的回旋加速器使人工合成超铀元素成为可能。关于劳的合成，伯克利和杜布纳之间曾有过优先权争议，但最终国际纯粹与应用化学联合会（IUPAC）确认了伯克利团队的命名。",
     "applications": ["基础研究：劳是锕系最后一个元素，对研究相对论效应对电子构型的影响具有重要理论意义"],
     "funFacts": []
   },
   {
     "atomicNumber": 104,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "𬬻是 1964 年由苏联杜布纳联合核子研究所的弗廖罗夫团队用氖离子轰击钚-242 首次合成的。1969 年，美国伯克利的吉奥索团队用碳离子轰击锎-249 也合成了该元素。经多年争议后，IUPAC 于 1997 年将其命名为 Rutherfordium，致敬新西兰物理学家卢瑟福（Ernest Rutherford）。卢瑟福曾提出原子核模型，是核物理之父。",
     "applications": ["基础核科学研究：𬬻用于研究超重元素的化学性质——实验证实其化学行为类似铪，属于 4 族元素"],
     "funFacts": []
   },
   {
     "atomicNumber": 105,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "𬭊是 1968 年由苏联杜布纳团队用氖离子轰击镅-243 首次合成的。1970 年，美国伯克利团队用氮离子轰击锎-249 也得到了确认。经 IUPAC 仲裁，1997 年以杜布纳联合核子研究所所在地——俄罗斯杜布纳（Dubna）命名为 Dubnium。𬭊的化学性质研究表明其行为类似钽，属于 5 族过渡金属。",
     "applications": ["基础研究：𬭊用于确认超重元素周期表位置的化学实验——从水溶液中的萃取行为分析证实其属于 5 族"],
     "funFacts": []
   },
   {
     "atomicNumber": 106,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "𬭳是 1974 年由美国伯克利吉奥索团队用氧离子轰击锎-249 和苏联杜布纳团队用铬离子轰击铅-207 分别独立合成的。1997 年 IUPAC 以美国核化学家西博格（Glenn T. Seaborg）命名为 Seaborgium。这是首次以在世科学家的姓名命名元素——西博格参与了 10 种超铀元素的发现，是核化学领域的巨匠。",
     "applications": ["基础研究：𬭳的化学性质实验表明其类似钼和钨，确认了元素周期表中 6 族的位置"],
     "funFacts": []
   },
   {
     "atomicNumber": 107,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "𬭛是 1981 年由德国达姆施塔特重离子研究所（GSI）的明岑贝格（Gottfried Munzenberg）团队用铬离子轰击铋-209 首次合成的。GSI 以丹麦物理学家玻尔（Niels Bohr）——量子力学和原子结构理论的奠基人——命名为 Bohrium。玻尔提出的原子轨道模型是现代化学键理论的基础。",
     "applications": ["基础核物理研究：𬭛用于验证核壳层模型对超重元素稳定性的预言——𬭛-267 的半衰期约 17 秒，远长于早期预测"],
     "funFacts": []
   },
   {
     "atomicNumber": 108,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "𬭶是 1984 年由德国 GSI 团队用铁离子轰击铅-208 首次合成的。GSI 以德意志联邦共和国黑森州（Hesse）的拉丁名 Hassia 命名为 Hassium。这是 GSI 发现的一系列超重元素之一。𬭶-270 是双幻数核（质子 108 个、中子 162 个），理论预测具有相对较高的稳定性。",
     "applications": ["基础研究：𬭶用于研究相对论效应对超重元素化学键的影响——实验证实其形成挥发性四氧化物，与同族的锇化学行为相似"],
     "funFacts": []
   },
   {
     "atomicNumber": 109,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "鿏是 1982 年由德国 GSI 的明岑贝格团队用铁离子轰击铋-209 首次合成的。GSI 以奥地利-瑞典物理学家迈特纳（Lise Meitner）命名为 Meitnerium。迈特纳是核裂变的理论解释者之一，与哈恩合作发现了镤，但因犹太血统被迫逃离纳粹德国。𬭛、𬭶、鿏的发现使 GSI 在全球超重元素合成领域与伯克利和杜布纳齐名。",
     "applications": ["基础研究：鿏用于验证超重元素化学性质的周期性——实验表明其形成与金类似的金属键"],
     "funFacts": []
   },
   {
     "atomicNumber": 110,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "𫟼是 1994 年由德国 GSI 的霍夫曼（Sigurd Hofmann）团队用镍离子轰击铅-208 首次合成的。GSI 以德国重离子研究中心所在地达姆施塔特（Darmstadt）命名为 Darmstadtium。GSI 在 1994-1996 年间接连合成了 110-112 号三种元素，展现了超重元素合成领域的领先地位。",
     "applications": ["基础核物理研究：𫟼用于研究超重核的衰变模式和壳层结构——𫟼-281 的半衰期约 11 秒，通过 α 衰变链可追踪至已知核素"],
     "funFacts": []
   },
   {
     "atomicNumber": 111,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "𬬭是 1994 年由德国 GSI 的霍夫曼团队用镍离子轰击铋-209 首次合成的。GSI 以德国物理学家伦琴（Wilhelm Rontgen）——X 射线的发现者——命名为 Roentgenium。伦琴发现 X 射线后仅用 12 天就发表了论文，开创了医学影像时代。𬬭的首个原子是通过发射 α 粒子的特征能量鉴定的。",
     "applications": ["基础研究：𬬭用于研究相对论效应对超重元素化学性质的影响——实验数据表明其化学行为类似金和银"],
     "funFacts": []
   },
   {
     "atomicNumber": 112,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "鿔是 1996 年由德国 GSI 的霍夫曼团队用锌离子轰击铅-208 首次合成的。GSI 以天文学家哥白尼（Nicolaus Copernicus）命名为 Copernicium。哥白尼的日心说改变了人类对宇宙的认知。鿔是 12 族元素中最重的成员，理论预测其可能呈现惰性气体般的化学性质。",
     "applications": ["基础核化学研究：鿔用于验证相对论效应——理论预测 6s 电子轨道的相对论收缩可能使鿔的化学性质与类气体而非传统金属相似"],
     "funFacts": []
   },
   {
     "atomicNumber": 113,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "鿭是 2004 年由日本理化学研究所（RIKEN）的森田浩介团队用锌离子轰击铋-209 首次合成的，是第一个由亚洲国家发现并命名的新元素。RIKEN 以日本的日语发音 Nihon（日本）命名为 Nihonium。历经 9 年多的反复实验，团队在 2012 年确认了 3 个原子的事件后，IUPAC 在 2016 年正式批准了命名。",
     "applications": ["基础研究：鿭用于研究超重元素周期表的位置——实验表明其化学行为倾向于形成金属键而非惰性气体"],
     "funFacts": []
   },
   {
     "atomicNumber": 114,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "𫓧是 1999 年由俄罗斯杜布纳联合核子研究所和劳伦斯利弗莫尔国家实验室的联合团队用钙离子轰击钚-244 首次合成的。他们以俄罗斯核物理学家弗廖罗夫（Georgy Flyorov）——杜布纳的创始人——命名为 Flerovium。𫓧-289 的半衰期约 2.6 秒，是超重元素中相对较长的同位素。",
     "applications": ["基础核物理研究：𫓧用于探索超重核稳定岛——𫓧-289 接近理论预言的双幻数核（质子 114、中子 184），为核物理提供了重要实验数据"],
     "funFacts": []
   },
   {
     "atomicNumber": 115,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "镆是 2003 年由俄罗斯杜布纳和美国劳伦斯利弗莫尔实验室的联合团队用钙离子轰击镅-243 首次合成的。他们以莫斯科州（Moscow Oblast）命名为 Moscovium。2013 年，瑞典隆德大学的实验重复了这个合成路径并验证了结果。镆的 α 衰变链最终指向𬬭-268，构成了一条完整的衰变证据链。",
     "applications": ["基础研究：镆用于研究超重元素核结构——其 α 衰变链的精细结构为核壳层模型提供了检验数据"],
     "funFacts": []
   },
   {
     "atomicNumber": 116,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "𫟷是 2000 年由俄罗斯杜布纳和美国劳伦斯利弗莫尔实验室的联合团队用钙离子轰击锔-248 首次合成的。他们以美国劳伦斯利弗莫尔实验室的所在地——加利福尼亚州利弗莫尔（Livermore）——命名为 Livermorium。𫟷的发现是锕系靶材合成技术的重大突破，因为锔-248 靶的制备极为困难。",
     "applications": ["基础核物理研究：𫟷用于探索超重元素的合成极限——其合成方法为后续 117、118 号元素的发现奠定了基础"],
     "funFacts": []
   },
   {
     "atomicNumber": 117,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "石田是 2010 年由俄罗斯杜布纳联合团队用钙离子轰击锫-249 首次合成的。锫-249 靶材由美国橡树岭国家实验室的高通量同位素反应堆（HFIR）经 18 个月照射生产。他们以田纳西州（Tennessee）——橡树岭实验室所在地——命名为 Tennessine。石田是倒数第二个被发现的元素，填补了周期表的第 117 号空位。",
     "applications": ["基础研究：石田的合成完成了第七周期卤素元素的拼图——确认了周期表第七周期的完整性"],
     "funFacts": []
   },
   {
     "atomicNumber": 118,
-    "level": "normal",
+    "level": "other",
     "discoveryStory": "气奥是 2002 年由俄罗斯杜布纳和美国劳伦斯利弗莫尔实验室的联合团队用钙离子轰击锎-249 首次合成的。他们以俄美联合团队的领导者、核物理学家奥加涅相（Yuri Oganessian）命名为 Oganesson。这是首次以在世科学家命名的元素——奥加涅相是超重元素合成领域的泰斗。气奥填充了周期表的最后一位，完成了第七周期。",
     "applications": ["基础物理研究：气奥用于验证相对论效应对惰性气体化学性质的影响——理论预测其并非完全惰性，在特定条件下可能形成化合物"],
     "funFacts": []
