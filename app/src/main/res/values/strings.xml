@@ -144,4 +144,19 @@
     <string name="profile_attribution">数据署名</string>
     <string name="profile_attribution_desc">元素数据来源于 Wikipedia，基于 CC BY-SA 3.0 许可协议提供。</string>
     <string name="profile_attribution_license">CC BY-SA 3.0</string>
+
+    <!-- Auto Update -->
+    <string name="profile_check_update">检查更新</string>
+    <string name="profile_checking_update">正在检查更新...</string>
+    <string name="update_up_to_date">已是最新版本</string>
+    <string name="update_check_error">检查更新失败：%s</string>
+    <string name="update_dialog_title">发现新版本</string>
+    <string name="update_dialog_new_version">最新版本：%s</string>
+    <string name="update_dialog_current_version">当前版本：%s</string>
+    <string name="update_dialog_file_size">文件大小：%s</string>
+    <string name="update_dialog_release_notes">更新内容</string>
+    <string name="update_dialog_confirm">立即更新</string>
+    <string name="update_dialog_dismiss">稍后再说</string>
+    <string name="update_download_title">下载更新</string>
+    <string name="update_download_desc">正在下载 %s</string>
 </resources>

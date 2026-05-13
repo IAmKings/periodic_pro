@@ -7,6 +7,8 @@ import com.periodic.pro.data.favorites.favoritesDataStore
 import com.periodic.pro.data.lab.LabRepository
 import com.periodic.pro.data.learn.LearnRepository
 import com.periodic.pro.data.theme.ThemePreferenceRepository
+import com.periodic.pro.data.update.ApkInstaller
+import com.periodic.pro.data.update.UpdateRepository
 import com.periodic.pro.feature.category.CategoryViewModel
 import com.periodic.pro.feature.compare.CompareViewModel
 import com.periodic.pro.feature.detail.DetailViewModel
@@ -35,7 +37,9 @@ val appModule = module {
     single { LearnRepository(androidContext()) }
     single { LabRepository(androidContext()) }
     viewModel { CategoryViewModel(get()) }
-    viewModel { ProfileViewModel(get()) }
+    single { UpdateRepository() }
+    single { ApkInstaller(androidContext()) }
+    viewModel { ProfileViewModel(get(), get(), get()) }
     viewModel { DiscoverViewModel(get(), get()) }
     viewModel { LearnViewModel(get(), get()) }
     viewModel { LabViewModel(get(), get()) }
