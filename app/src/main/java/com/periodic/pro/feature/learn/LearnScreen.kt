@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -81,9 +83,15 @@ fun LearnScreen(
         }
     }
 
+    val listState = rememberLazyListState(
+        initialFirstVisibleItemIndex = state.listScrollIndex,
+        initialFirstVisibleItemScrollOffset = state.listScrollOffset,
+    )
+
     when (state.navMode) {
         LearnNavMode.LIST -> LearnListContent(
             state = state,
+            listState = listState,
             onIntent = vm::handle,
             modifier = modifier,
         )
@@ -104,6 +112,7 @@ fun LearnScreen(
 @Composable
 private fun LearnListContent(
     state: LearnUiState,
+    listState: LazyListState,
     onIntent: (LearnIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -154,6 +163,7 @@ private fun LearnListContent(
             val hasOther = state.otherItems.isNotEmpty()
 
             LazyColumn(
+                state = listState,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding),
@@ -175,7 +185,10 @@ private fun LearnListContent(
                         LearnListItem(
                             item = item,
                             symbol = state.symbolMap[item.atomicNumber] ?: "?",
-                            onClick = { onIntent(LearnIntent.SelectElement(item.atomicNumber)) },
+                            onClick = {
+                                onIntent(LearnIntent.SaveScroll(listState.firstVisibleItemIndex, listState.firstVisibleItemScrollOffset))
+                                onIntent(LearnIntent.SelectElement(item.atomicNumber))
+                            },
                         )
                     }
                 }
@@ -195,7 +208,10 @@ private fun LearnListContent(
                         LearnListItem(
                             item = item,
                             symbol = state.symbolMap[item.atomicNumber] ?: "?",
-                            onClick = { onIntent(LearnIntent.SelectElement(item.atomicNumber)) },
+                            onClick = {
+                                onIntent(LearnIntent.SaveScroll(listState.firstVisibleItemIndex, listState.firstVisibleItemScrollOffset))
+                                onIntent(LearnIntent.SelectElement(item.atomicNumber))
+                            },
                         )
                     }
                 }
@@ -212,7 +228,10 @@ private fun LearnListContent(
                         LearnListItem(
                             item = item,
                             symbol = state.symbolMap[item.atomicNumber] ?: "?",
-                            onClick = { onIntent(LearnIntent.SelectElement(item.atomicNumber)) },
+                            onClick = {
+                                onIntent(LearnIntent.SaveScroll(listState.firstVisibleItemIndex, listState.firstVisibleItemScrollOffset))
+                                onIntent(LearnIntent.SelectElement(item.atomicNumber))
+                            },
                         )
                     }
                 }
@@ -622,6 +641,7 @@ private fun LearnListPreview() {
                 items = previewItems,
                 isLoading = false,
             ),
+            listState = rememberLazyListState(),
             onIntent = {},
         )
     }

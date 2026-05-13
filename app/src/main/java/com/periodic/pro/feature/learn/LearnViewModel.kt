@@ -37,6 +37,7 @@ class LearnViewModel(
             LearnIntent.LoadData -> loadData()
             is LearnIntent.SelectElement -> selectElement(intent.atomicNumber)
             is LearnIntent.NavigateToDetail -> navigateToDetail(intent.atomicNumber)
+            is LearnIntent.SaveScroll -> saveScroll(intent.index, intent.offset)
             LearnIntent.BackToList -> backToList()
         }
     }
@@ -81,6 +82,10 @@ class LearnViewModel(
         viewModelScope.launch {
             _effect.send(LearnEffect.NavigateToDetail(atomicNumber))
         }
+    }
+
+    private fun saveScroll(index: Int, offset: Int) {
+        _state.update { it.copy(listScrollIndex = index, listScrollOffset = offset) }
     }
 
     private fun backToList() {

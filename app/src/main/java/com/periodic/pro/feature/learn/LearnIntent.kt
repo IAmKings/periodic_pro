@@ -13,6 +13,9 @@ sealed interface LearnIntent {
     /** 点击「查看元素详情」按钮，跳转到元素详情 */
     data class NavigateToDetail(val atomicNumber: Int) : LearnIntent
 
+    /** 保存滚动位置（离开列表前调用） */
+    data class SaveScroll(val index: Int, val offset: Int) : LearnIntent
+
     /** 返回元素学习列表 */
     data object BackToList : LearnIntent
 }

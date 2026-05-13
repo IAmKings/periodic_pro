@@ -30,6 +30,9 @@ data class LearnUiState(
     val errorMessage: String? = null,
     /** 原子序数 → 元素符号映射 */
     val symbolMap: Map<Int, String> = emptyMap(),
+    /** LazyColumn 滚动位置（返回列表时恢复） */
+    val listScrollIndex: Int = 0,
+    val listScrollOffset: Int = 0,
 ) {
     val isReady: Boolean get() = !isLoading && errorMessage == null
 
