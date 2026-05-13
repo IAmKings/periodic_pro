@@ -1,6 +1,8 @@
 package com.periodic.pro.data.update
 
 import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 
 /**
@@ -39,7 +41,9 @@ class UpdateRepository {
     suspend fun checkUpdate(currentVersion: String): UpdateResult {
         return try {
             val urlString = GITHUB_API_URL
-            val response = java.net.URL(urlString).readText()
+            val response = withContext(Dispatchers.IO) {
+                java.net.URL(urlString).readText()
+            }
             val release = json.decodeFromString<GitHubRelease>(response)
 
             val remoteTag = release.tagName.removePrefix("v")
