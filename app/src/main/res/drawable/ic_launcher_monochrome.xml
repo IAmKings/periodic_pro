@@ -4,37 +4,37 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- 大写 P — 元素符号风格，evenOdd 挖空右上碗部 -->
+    <!-- Monochrome 版 — 纯白色形状，系统会自动应用主题色 -->
     <path
-        android:fillColor="#6650A4"
+        android:fillColor="#FFFFFF"
         android:fillType="evenOdd"
         android:pathData="M34,34 L56,34 A12,12 0 1,1 56,58 L44,58 L44,74 L34,74 Z M44,41 L56,41 A5,5 0 1,0 56,51 L44,51 Z" />
     <!-- 数字 1 — 顶部横条 -->
     <path
-        android:fillColor="#6650A4"
+        android:fillColor="#FFFFFF"
         android:pathData="M58,60 L63,60 L63,62 L58,62 Z" />
     <!-- 数字 1 — 竖条 -->
     <path
-        android:fillColor="#6650A4"
+        android:fillColor="#FFFFFF"
         android:pathData="M60,62 L63,62 L63,75 L60,75 Z" />
     <!-- 数字 5 — 顶部横条 -->
     <path
-        android:fillColor="#6650A4"
+        android:fillColor="#FFFFFF"
         android:pathData="M64,60 L74,60 L74,62 L64,62 Z" />
     <!-- 数字 5 — 左上竖条 -->
     <path
-        android:fillColor="#6650A4"
+        android:fillColor="#FFFFFF"
         android:pathData="M64,62 L67,62 L67,66 L64,66 Z" />
     <!-- 数字 5 — 中间横条 -->
     <path
-        android:fillColor="#6650A4"
+        android:fillColor="#FFFFFF"
         android:pathData="M64,66 L74,66 L74,68 L64,68 Z" />
     <!-- 数字 5 — 右下竖条 -->
     <path
-        android:fillColor="#6650A4"
+        android:fillColor="#FFFFFF"
         android:pathData="M70,68 L74,68 L74,73 L70,73 Z" />
     <!-- 数字 5 — 底部横条 -->
     <path
-        android:fillColor="#6650A4"
+        android:fillColor="#FFFFFF"
         android:pathData="M64,73 L74,73 L74,75 L64,75 Z" />
 </vector>
