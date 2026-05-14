@@ -4,6 +4,8 @@ import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import java.net.HttpURLConnection
+import java.net.URL
 
 /**
  * 更新检查结果。
@@ -26,7 +28,7 @@ sealed interface UpdateResult {
  * GitHub Release 更新检查仓库。
  *
  * 通过 GitHub API 获取最新 Release 信息，与本地版本号比较。
- * 使用 java.net.URL 进行 HTTP 请求，不引入额外网络库。
+ * 使用 HttpURLConnection 发起请求，必须携带 User-Agent（GitHub API 强制要求）。
  */
 class UpdateRepository {
 
@@ -40,9 +42,22 @@ class UpdateRepository {
      */
     suspend fun checkUpdate(currentVersion: String): UpdateResult {
         return try {
-            val urlString = GITHUB_API_URL
             val response = withContext(Dispatchers.IO) {
-                java.net.URL(urlString).readText()
+                val connection = URL(GITHUB_API_URL).openConnection() as HttpURLConnection
+                connection.apply {
+                    requestMethod = "GET"
+                    connectTimeout = 10_000
+                    readTimeout = 10_000
+                    setRequestProperty("User-Agent", "PeriodicPro/$currentVersion")
+                    setRequestProperty("Accept", "application/vnd.github+json")
+                }
+                val code = connection.responseCode
+                if (code != HttpURLConnection.HTTP_OK) {
+                    val errorBody = connection.errorStream?.bufferedReader()?.readText() ?: ""
+                    Log.w(TAG, "GitHub API returned $code: $errorBody")
+                    throw java.io.IOException("HTTP $code${if (code == 403) "（GitHub API 限流或拒绝访问）" else ""}")
+                }
+                connection.inputStream.bufferedReader().readText()
             }
             val release = json.decodeFromString<GitHubRelease>(response)
 
