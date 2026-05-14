@@ -122,11 +122,16 @@ class UpdateRepository(
      * 检查设备当前网络是否可用。
      */
     private fun isNetworkAvailable(): Boolean {
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
-            ?: return true // 无法获取服务时放过，交由实际请求决定
-        val network = cm.activeNetwork ?: return false
-        val caps = cm.getNetworkCapabilities(network) ?: return false
-        return caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        return try {
+            val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+                ?: return true // 无法获取服务时放过，交由实际请求决定
+            val network = cm.activeNetwork ?: return false
+            val caps = cm.getNetworkCapabilities(network) ?: return false
+            caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        } catch (_: SecurityException) {
+            // 缺少 ACCESS_NETWORK_STATE 权限时放过，交由实际请求决定
+            true
+        }
     }
 
     /**
