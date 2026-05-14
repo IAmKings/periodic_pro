@@ -312,3 +312,39 @@ data/update(GitHubRelease+UpdateRepository+ApkInstaller), UpdateDialog组件, Pr
 ### Next Steps
 
 - None - task complete
+
+
+## Session 10: 修复更新检查功能报错及设置页图标同步
+
+**Date**: 2026-05-14
+**Task**: 修复更新检查功能报错及设置页图标同步
+**Branch**: `master`
+
+### Summary
+
+排查修复GitHub API更新检查故障：HttpURLConnection+User-Agent替换readText解决403，加入ConnectivityManager网络预检+异常分类（UnknownHost/SocketTimeout/HTTP错误码），补充ACCESS_NETWORK_STATE权限+SecurityException防御。同步设置页关于区图标为ic_launcher_foreground。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `618bfa5` | (see git log) |
+| `0dc11f9` | (see git log) |
+| `b340e79` | (see git log) |
+| `43351f8` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
