@@ -37,7 +37,7 @@ val appModule = module {
     single { LearnRepository(androidContext()) }
     single { LabRepository(androidContext()) }
     viewModel { CategoryViewModel(get()) }
-    single { UpdateRepository() }
+    single { UpdateRepository(androidContext()) }
     single { ApkInstaller(androidContext()) }
     viewModel { ProfileViewModel(get(), get(), get()) }
     viewModel { DiscoverViewModel(get(), get()) }
