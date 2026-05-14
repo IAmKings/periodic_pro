@@ -2,6 +2,7 @@ package com.periodic.pro.feature.profile
 
 import android.content.res.Configuration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,6 +42,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -360,25 +362,12 @@ private fun AboutSection() {
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            // 图标占位符：用 primary 色的圆角方块
-            Card(
-                shape = RoundedCornerShape(Dimensions.Dp12),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                ),
+            // 应用图标
+            Image(
+                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                contentDescription = stringResource(R.string.app_name),
                 modifier = Modifier.size(Dimensions.Dp56),
-            ) {
-                Text(
-                    text = "P",
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(Dimensions.Dp8),
-                )
-            }
+            )
 
             Spacer(modifier = Modifier.width(Dimensions.Dp16))
 
