@@ -129,8 +129,8 @@ fun PeriodicTableGrid(
                                 PointerEventType.Press -> isMoving = false
                                 PointerEventType.Move -> {
                                     val change = event.changes.firstOrNull() ?: continue
-                                    val dx = change.positionChange().x
-                                    val dy = change.positionChange().y
+                                    val dx = change.position.x - change.previousPosition.x
+                                    val dy = change.position.y - change.previousPosition.y
                                     if (sqrt(dx * dx + dy * dy) > 20f) {
                                         isMoving = true
                                     }
