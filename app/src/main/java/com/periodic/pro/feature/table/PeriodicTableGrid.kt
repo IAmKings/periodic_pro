@@ -3,42 +3,45 @@ package com.periodic.pro.feature.table
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.data.element.model.ElementZh
 import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.forCategory
-import me.saket.telephoto.zoomable.ZoomSpec
-import me.saket.telephoto.zoomable.rememberZoomableState
-import me.saket.telephoto.zoomable.zoomable
+import kotlin.math.roundToInt
 
 /**
  * 周期表 18×9 网格布局。
@@ -96,50 +99,83 @@ fun PeriodicTableGrid(
     val density = LocalDensity.current
 
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
-        val containerWidthPx = with(density) { maxWidth.toPx() }
+        val viewportWidthPx = with(density) { maxWidth.toPx() }
+        val viewportHeightPx = with(density) { maxHeight.toPx() }
         val minCellPx = with(density) { 48.dp.toPx() }
         val maxCellPx = with(density) { 72.dp.toPx() }
-        val cellPx = containerWidthPx / 18f
+        val cellPx = viewportWidthPx / 18f
         val clampedCellPx = cellPx.coerceIn(minCellPx, maxCellPx)
         val cellDp = with(density) { clampedCellPx.toDp() }
 
-        // 第 6/7 周期 Group 3 的位置：F-block 标记
-        val fBlockMarkerRow6 = Pair(5, 2) // (period-1, group-1)
-        val fBlockMarkerRow7 = Pair(6, 2)
+        // 内容总尺寸
+        val contentWidthPx = 18 * clampedCellPx
+        val contentHeightPx = maxOf(10 * clampedCellPx, viewportHeightPx)
 
-        val zoomableState = rememberZoomableState(
-            zoomSpec = ZoomSpec(maxZoomFactor = 3f),
-        )
-
-        val contentWidthDp = with(density) { (18 * clampedCellPx).toDp() }
-        val contentHeightDp = with(density) { (10 * clampedCellPx).toDp() }
+        // 缩放/平移状态
+        var scale by remember { mutableFloatStateOf(1f) }
+        var offsetX by remember { mutableFloatStateOf(0f) }
+        var offsetY by remember { mutableFloatStateOf(0f) }
 
         Box(
             modifier = Modifier
-                .requiredSize(width = contentWidthDp, height = maxOf(contentHeightDp, with(density) { maxHeight }))
-                .zoomable(
-                    state = zoomableState,
-                    onClick = { offset ->
-                        val cell = hitTest(offset, clampedCellPx)
-                        if (cell != null) {
-                            val element = gridMap[cell]
-                            if (element != null) {
-                                onElementClick(element.atomicNumber)
+                .fillMaxSize()
+                // Tap/长按手势
+                .pointerInput(gridMap, clampedCellPx) {
+                    detectTapGestures(
+                        onTap = { viewportOffset ->
+                            val cell = hitTestWithTransform(
+                                viewportOffset, clampedCellPx, scale, offsetX, offsetY
+                            )
+                            if (cell != null) {
+                                val element = gridMap[cell]
+                                if (element != null) {
+                                    onElementClick(element.atomicNumber)
+                                }
                             }
-                        }
-                    },
-                    onLongClick = { offset ->
-                        val cell = hitTest(offset, clampedCellPx)
-                        if (cell != null) {
-                            val element = gridMap[cell]
-                            if (element != null) {
-                                onElementLongClick(element.atomicNumber)
+                        },
+                        onLongPress = { viewportOffset ->
+                            val cell = hitTestWithTransform(
+                                viewportOffset, clampedCellPx, scale, offsetX, offsetY
+                            )
+                            if (cell != null) {
+                                val element = gridMap[cell]
+                                if (element != null) {
+                                    onElementLongClick(element.atomicNumber)
+                                }
                             }
-                        }
-                    },
-                ),
-            contentAlignment = Alignment.TopStart,
+                        },
+                    )
+                }
+                // 缩放/平移手势
+                .pointerInput(Unit) {
+                    detectTransformGestures { _, pan, zoom, _ ->
+                        val newScale = (scale * zoom).coerceIn(1f, 3f)
+                        scale = newScale
+                        offsetX = (offsetX + pan.x).coerceIn(
+                            -(contentWidthPx * newScale - viewportWidthPx).coerceAtLeast(0f),
+                            0f,
+                        )
+                        offsetY = (offsetY + pan.y).coerceIn(
+                            -(contentHeightPx * newScale - viewportHeightPx).coerceAtLeast(0f),
+                            0f,
+                        )
+                    }
+                },
         ) {
+            Box(
+                modifier = Modifier
+                    .graphicsLayer {
+                        scaleX = scale
+                        scaleY = scale
+                        translationX = offsetX
+                        translationY = offsetY
+                        transformOrigin = TransformOrigin(0f, 0f)
+                    }
+                    .requiredSize(
+                        width = with(density) { contentWidthPx.roundToInt().toDp() },
+                        height = with(density) { contentHeightPx.roundToInt().toDp() },
+                    ),
+            ) {
             // 使用 offset 定位每个元素
             elements.forEach { element ->
                 val (row, col) = getGridPosition(element)
@@ -223,15 +259,20 @@ private fun buildGridMap(elements: List<Element>): Map<Pair<Int, Int>, Element> 
 }
 
 /**
- * 命中检测：将 Telephoto 的 Offset（content 坐标）映射到网格 (row, col)。
+ * 命中检测：将视口坐标（缩放/平移后）映射到内容网格 (row, col)。
  */
-private fun hitTest(
-    offset: Offset,
+private fun hitTestWithTransform(
+    viewportOffset: Offset,
     cellPx: Float,
+    scale: Float,
+    offsetX: Float,
+    offsetY: Float,
 ): Pair<Int, Int>? {
-    val col = (offset.x / cellPx).toInt()
-    val row = (offset.y / cellPx).toInt()
-    return if (col in 0..17 && row in 0..8) {
+    val contentX = (viewportOffset.x - offsetX) / scale
+    val contentY = (viewportOffset.y - offsetY) / scale
+    val col = (contentX / cellPx).toInt()
+    val row = (contentY / cellPx).toInt()
+    return if (col in 0..17 && row in 0..9) {
         Pair(row, col)
     } else {
         null
