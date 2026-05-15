@@ -2,12 +2,9 @@ package com.periodic.pro.feature.table
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.calculateCentroid
-import androidx.compose.foundation.gestures.calculatePan
-import androidx.compose.foundation.gestures.calculateZoom
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -16,22 +13,18 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,29 +36,11 @@ import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.data.element.model.ElementZh
 import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.forCategory
-import kotlin.math.roundToInt
 
 /**
- * 周期表 18×9 网格布局。
+ * 周期表 18×10 网格布局。
  *
- * 使用自定义 [Layout] 将 118 个元素定位到标准周期表网格位置。
- * 集成 Telephoto [Modifier.zoomable] 实现缩放/平移手势。
- *
- * 布局映射：
- * - 常规元素：位置 = (period - 1, group - 1)
- * - 镧系 (57-71)：行 8，列 3-17
- * - 锕系 (89-103)：行 9，列 3-17
- * - Period 6/7 的 Group 3 显示 * / ** 占位标记
- *
- * @param elements 全部 118 个元素
- * @param zhMap 中文名映射
- * @param selectedCategory 选中分类（null=全部）
- * @param searchQuery 搜索关键词
- * @param isMultiSelectMode 是否多选模式
- * @param selectedIds 已选原子序号集合
- * @param onElementClick 点击元素回调
- * @param onElementLongClick 长按元素回调
- * @param modifier Modifier
+ * 水平可滚动，每个元素单元格独立处理点击/长按。
  */
 @Composable
 fun PeriodicTableGrid(
@@ -79,211 +54,100 @@ fun PeriodicTableGrid(
     onElementLongClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // 构建行/列 → 元素的映射（用于 Telephoto 命中检测）
     val gridMap = remember(elements) { buildGridMap(elements) }
 
-    // 搜索匹配集合
     val query = searchQuery.trim().lowercase()
     val matchedIds = remember(elements, zhMap, query) {
-        if (query.isEmpty()) {
-            null // null 表示全部匹配
-        } else {
-            elements.filter { element ->
-                element.symbol.lowercase().contains(query) ||
-                    element.name.lowercase().contains(query) ||
-                    (query.toIntOrNull() != null && element.atomicNumber.toString().contains(query)) ||
-                    zhMap[element.atomicNumber]?.nameZh?.contains(query) == true ||
-                    zhMap[element.atomicNumber]?.pinyin?.contains(query) == true
-            }.map { it.atomicNumber }.toSet()
-        }
+        if (query.isEmpty()) null
+        else elements.filter { element ->
+            element.symbol.lowercase().contains(query) ||
+                element.name.lowercase().contains(query) ||
+                (query.toIntOrNull() != null && element.atomicNumber.toString().contains(query)) ||
+                zhMap[element.atomicNumber]?.nameZh?.contains(query) == true ||
+                zhMap[element.atomicNumber]?.pinyin?.contains(query) == true
+        }.map { it.atomicNumber }.toSet()
     }
 
     val density = LocalDensity.current
 
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
-        val viewportWidthPx = with(density) { maxWidth.toPx() }
-        val viewportHeightPx = with(density) { maxHeight.toPx() }
         val minCellPx = with(density) { 48.dp.toPx() }
         val maxCellPx = with(density) { 72.dp.toPx() }
-        val cellPx = viewportWidthPx / 18f
+        val cellPx = with(density) { maxWidth.toPx() / 18f }
         val clampedCellPx = cellPx.coerceIn(minCellPx, maxCellPx)
         val cellDp = with(density) { clampedCellPx.toDp() }
 
-        // 第 6/7 周期 Group 3 的位置：F-block 标记
-        val fBlockMarkerRow6 = Pair(5, 2) // (period-1, group-1)
+        val fBlockMarkerRow6 = Pair(5, 2)
         val fBlockMarkerRow7 = Pair(6, 2)
 
-        // 内容总尺寸
-        val contentWidthPx = 18 * clampedCellPx
-        val contentHeightPx = maxOf(10 * clampedCellPx, viewportHeightPx)
+        val contentWidthDp = with(density) { (18 * clampedCellPx).toDp() }
+        val contentHeightPx = maxOf(10 * clampedCellPx, with(density) { maxHeight.toPx() })
+        val contentHeightDp = with(density) { contentHeightPx.toDp() }
 
-        // 缩放/平移状态（visualOffset 为视口像素偏移）
-        var scale by remember { mutableFloatStateOf(1f) }
-        var visualOffsetX by remember { mutableFloatStateOf(0f) }
-        var visualOffsetY by remember { mutableFloatStateOf(0f) }
-        // pre-scale 内容偏移（Modifier.offset 用）
-        fun preOffsetX() = if (scale > 0f) visualOffsetX / scale else 0f
-        fun preOffsetY() = if (scale > 0f) visualOffsetY / scale else 0f
-
-        // 长按阈值（ms）
-        val longPressTimeout = 400L
+        val scrollState = rememberScrollState()
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                // 统一手势处理：缩放/平移 + 点击/长按
-                .pointerInput(gridMap, clampedCellPx) {
-                    awaitEachGesture {
-                        val down = awaitFirstDown(requireUnconsumed = false)
-                        val downPos = down.position
-                        val downTime = System.currentTimeMillis()
-                        var totalPan = Offset.Zero
-                        var longPressFired = false
-
-                        while (true) {
-                            val event = awaitPointerEvent()
-                            val changes = event.changes
-                            val allUp = changes.all { !it.pressed }
-
-                            if (allUp) {
-                                if (!longPressFired && totalPan.getDistance() < 20f) {
-                                    val cell = hitTestWithTransform(
-                                        downPos, clampedCellPx, scale,
-                                        preOffsetX(), preOffsetY()
-                                    )
-                                    if (cell != null) {
-                                        val el = gridMap[cell]
-                                        if (el != null) onElementClick(el.atomicNumber)
-                                    }
-                                }
-                                break
-                            }
-
-                            if (changes.size >= 2) {
-                                // 双指 → 缩放+平移
-                                val zoom = event.calculateZoom()
-                                val pan = event.calculatePan()
-                                val newScale = (scale * zoom).coerceIn(1f, 3f)
-                                visualOffsetX = (visualOffsetX + pan.x).coerceIn(
-                                    -(contentWidthPx * newScale - viewportWidthPx).coerceAtLeast(0f), 0f
-                                )
-                                visualOffsetY = (visualOffsetY + pan.y).coerceIn(
-                                    -(contentHeightPx * newScale - viewportHeightPx).coerceAtLeast(0f), 0f
-                                )
-                                scale = newScale
-                                continue
-                            }
-
-                            // 单指
-                            val change = changes.firstOrNull() ?: continue
-                            val posDelta = Offset(
-                                change.position.x - change.previousPosition.x,
-                                change.position.y - change.previousPosition.y
-                            )
-                            totalPan += posDelta
-
-                            // 长按
-                            if (!longPressFired && change.pressed &&
-                                System.currentTimeMillis() - downTime > longPressTimeout &&
-                                totalPan.getDistance() < 20f) {
-                                longPressFired = true
-                                val cell = hitTestWithTransform(
-                                    downPos, clampedCellPx, scale,
-                                    preOffsetX(), preOffsetY()
-                                )
-                                if (cell != null) {
-                                    val el = gridMap[cell]
-                                    if (el != null) onElementLongClick(el.atomicNumber)
-                                }
-                            }
-
-                            // 平移
-                            if (totalPan.getDistance() >= 20f) {
-                                visualOffsetX = (visualOffsetX + posDelta.x).coerceIn(
-                                    -(contentWidthPx * scale - viewportWidthPx).coerceAtLeast(0f), 0f
-                                )
-                                visualOffsetY = (visualOffsetY + posDelta.y).coerceIn(
-                                    -(contentHeightPx * scale - viewportHeightPx).coerceAtLeast(0f), 0f
-                                )
-                            }
-                            change.consume()
-                        }
-                    }
-                },
+                .horizontalScroll(scrollState),
         ) {
             Box(
                 modifier = Modifier
-                    .offset { IntOffset(preOffsetX().roundToInt(), preOffsetY().roundToInt()) }
-                    .scale(scale)
-                    .requiredSize(
-                        width = with(density) { contentWidthPx.roundToInt().toDp() },
-                        height = with(density) { contentHeightPx.roundToInt().toDp() },
-                    ),
+                    .requiredSize(width = contentWidthDp, height = contentHeightDp),
             ) {
-            // 使用 offset 定位每个元素
-            elements.forEach { element ->
-                val (row, col) = getGridPosition(element)
-                val isSelected = element.atomicNumber in selectedIds
-                val isInSearch = matchedIds == null || element.atomicNumber in matchedIds
+                elements.forEach { element ->
+                    val (row, col) = getGridPosition(element)
+                    val isSelected = element.atomicNumber in selectedIds
+                    val isInSearch = matchedIds == null || element.atomicNumber in matchedIds
 
-                val alphaValue = when {
-                    // 搜索模式：未匹配降低透明度
-                    matchedIds != null && !isInSearch -> 0.2f
-                    // 分类筛选模式
-                    selectedCategory != null && element.category != selectedCategory -> 0.2f
-                    // 多选模式：未选中降低透明度
-                    isMultiSelectMode && !isSelected -> 0.5f
-                    else -> 1.0f
+                    val alphaValue = when {
+                        matchedIds != null && !isInSearch -> 0.2f
+                        selectedCategory != null && element.category != selectedCategory -> 0.2f
+                        isMultiSelectMode && !isSelected -> 0.5f
+                        else -> 1.0f
+                    }
+
+                    PeriodicTableCell(
+                        element = element,
+                        zhName = zhMap[element.atomicNumber]?.nameZh,
+                        isSelected = isSelected,
+                        alpha = alphaValue,
+                        onClick = { onElementClick(element.atomicNumber) },
+                        onLongClick = { onElementLongClick(element.atomicNumber) },
+                        modifier = Modifier
+                            .offset { IntOffset(col * clampedCellPx.toInt(), row * clampedCellPx.toInt()) }
+                            .size(cellDp),
+                    )
                 }
 
-                PeriodicTableCell(
-                    element = element,
-                    zhName = zhMap[element.atomicNumber]?.nameZh,
-                    isSelected = isSelected,
-                    alpha = alphaValue,
-                    modifier = Modifier
-                        .offset { IntOffset(col * clampedCellPx.toInt(), row * clampedCellPx.toInt()) }
-                        .size(cellDp),
-                )
+                // F-block 标记
+                if (gridMap[fBlockMarkerRow6] == null) {
+                    FBlockMarker(
+                        text = "*",
+                        onClick = { onElementClick(57) },
+                        modifier = Modifier
+                            .offset { IntOffset(fBlockMarkerRow6.second * clampedCellPx.toInt(), fBlockMarkerRow6.first * clampedCellPx.toInt()) }
+                            .size(cellDp),
+                    )
+                }
+                if (gridMap[fBlockMarkerRow7] == null) {
+                    FBlockMarker(
+                        text = "**",
+                        onClick = { onElementClick(89) },
+                        modifier = Modifier
+                            .offset { IntOffset(fBlockMarkerRow7.second * clampedCellPx.toInt(), fBlockMarkerRow7.first * clampedCellPx.toInt()) }
+                            .size(cellDp),
+                    )
+                }
             }
+        }
+    }
+}
 
-            // F-block 入口标记：Period 6 Group 3 的 *
-            if (gridMap[fBlockMarkerRow6] == null) {
-                FBlockMarker(
-                    text = "*",
-                    onClick = { onElementClick(57) }, // La 为镧系入口
-                    modifier = Modifier
-                        .offset { IntOffset(fBlockMarkerRow6.second * clampedCellPx.toInt(), fBlockMarkerRow6.first * clampedCellPx.toInt()) }
-                        .size(cellDp),
-                )
-            }
-
-            if (gridMap[fBlockMarkerRow7] == null) {
-                FBlockMarker(
-                    text = "**",
-                    onClick = { onElementClick(89) }, // Ac 为锕系入口
-                    modifier = Modifier
-                        .offset { IntOffset(fBlockMarkerRow7.second * clampedCellPx.toInt(), fBlockMarkerRow7.first * clampedCellPx.toInt()) }
-                        .size(cellDp),
-                )
-            }
-        } // graphicsLayer Box
-    } // outer gesture Box
-} // BoxWithConstraints
-} // PeriodicTableGrid
-
-/**
- * 获取元素在 0-based 网格中的位置。
- *
- * @return Pair(行, 列)，均为 0-based
- */
 private fun getGridPosition(element: Element): Pair<Int, Int> {
     return when (element.atomicNumber) {
-        // 镧系 (57-71)：第 8 行（0-based=7），列 3-17（0-based=2-16）
         in 57..71 -> Pair(7, element.atomicNumber - 57 + 2)
-        // 锕系 (89-103)：第 9 行（0-based=8），列 3-17（0-based=2-16）
         in 89..103 -> Pair(8, element.atomicNumber - 89 + 2)
-        // 常规元素
         else -> Pair(
             (element.period ?: 1) - 1,
             (element.group ?: 1) - 1,
@@ -291,9 +155,6 @@ private fun getGridPosition(element: Element): Pair<Int, Int> {
     }
 }
 
-/**
- * 构建 (行, 列) → Element 的映射。
- */
 private fun buildGridMap(elements: List<Element>): Map<Pair<Int, Int>, Element> {
     val map = mutableMapOf<Pair<Int, Int>, Element>()
     for (element in elements) {
@@ -303,39 +164,14 @@ private fun buildGridMap(elements: List<Element>): Map<Pair<Int, Int>, Element> 
     return map
 }
 
-/**
- * 命中检测：将视口坐标（缩放/平移后）映射到内容网格 (row, col)。
- */
-private fun hitTestWithTransform(
-    viewportOffset: Offset,
-    cellPx: Float,
-    scale: Float,
-    offsetX: Float,
-    offsetY: Float,
-): Pair<Int, Int>? {
-    // offset { ox, oy }.scale(s) — 视图坐标→内容坐标反算
-    val contentX = viewportOffset.x / scale - offsetX
-    val contentY = viewportOffset.y / scale - offsetY
-    val col = (contentX / cellPx).toInt()
-    val row = (contentY / cellPx).toInt()
-    return if (col in 0..17 && row in 0..9) {
-        Pair(row, col)
-    } else {
-        null
-    }
-}
-
-/**
- * 周期表网格中的元素单元格。
- *
- * 仅渲染视觉内容，不处理点击事件——点击由父级 Telephoto [zoomable] 统一处理。
- */
 @Composable
 private fun PeriodicTableCell(
     element: Element,
     zhName: String?,
     isSelected: Boolean,
     alpha: Float,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val categoryColor = LocalCategoryColors.current.forCategory(element.category)
@@ -349,14 +185,14 @@ private fun PeriodicTableCell(
             .alpha(alpha)
             .then(
                 if (isSelected) {
-                    Modifier.border(
-                        width = 2.dp,
-                        color = MaterialTheme.colorScheme.primary,
-                        shape = shape,
-                    )
-                } else {
-                    Modifier
-                }
+                    Modifier.border(2.dp, MaterialTheme.colorScheme.primary, shape)
+                } else Modifier
+            )
+            .combinedClickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() },
+                onClick = onClick,
+                onLongClick = onLongClick,
             ),
         contentAlignment = Alignment.Center,
     ) {
@@ -364,7 +200,6 @@ private fun PeriodicTableCell(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(horizontal = 2.dp, vertical = 1.dp),
         ) {
-            // 原子序号
             Text(
                 text = "${element.atomicNumber}",
                 style = MaterialTheme.typography.labelSmall,
@@ -372,17 +207,13 @@ private fun PeriodicTableCell(
                 textAlign = TextAlign.Center,
                 maxLines = 1,
             )
-            // 元素符号
             Text(
                 text = element.symbol,
-                style = MaterialTheme.typography.labelMedium.copy(
-                    fontWeight = FontWeight.Bold,
-                ),
+                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
                 maxLines = 1,
             )
-            // 中文名
             if (zhName != null) {
                 Text(
                     text = zhName,
@@ -396,10 +227,6 @@ private fun PeriodicTableCell(
     }
 }
 
-/**
- * F-block 入口标记（`*` / `**`）。
- * 点击跳转到镧系/锕系首元素。
- */
 @Composable
 private fun FBlockMarker(
     text: String,
@@ -407,7 +234,6 @@ private fun FBlockMarker(
     modifier: Modifier = Modifier,
 ) {
     val shape = RoundedCornerShape(4.dp)
-
     Box(
         modifier = modifier
             .padding(1.dp)
