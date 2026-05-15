@@ -15,19 +15,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.pointerInput
-import kotlin.math.sqrt
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -115,32 +109,9 @@ fun PeriodicTableGrid(
             zoomSpec = ZoomSpec(maxZoomFactor = 3f),
         )
 
-        // 跟踪手指移动状态：滑动超过阈值时抑制长按，防止平移误触发多选模式
-        var isMoving by remember { mutableStateOf(false) }
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .pointerInput(Unit) {
-                    awaitPointerEventScope {
-                        while (true) {
-                            val event = awaitPointerEvent(PointerEventPass.Initial)
-                            when (event.type) {
-                                PointerEventType.Press -> isMoving = false
-                                PointerEventType.Move -> {
-                                    val change = event.changes.firstOrNull() ?: continue
-                                    val dx = change.position.x - change.previousPosition.x
-                                    val dy = change.position.y - change.previousPosition.y
-                                    if (sqrt(dx * dx + dy * dy) > 20f) {
-                                        isMoving = true
-                                    }
-                                }
-                                PointerEventType.Release -> isMoving = false
-                                else -> {}
-                            }
-                        }
-                    }
-                }
                 .zoomable(
                     state = zoomableState,
                     onClick = { offset ->
@@ -153,8 +124,6 @@ fun PeriodicTableGrid(
                         }
                     },
                     onLongClick = { offset ->
-                        // 手指滑动超过阈值时忽略长按，防止平移误触发多选
-                        if (isMoving) return@zoomable
                         val cell = hitTest(offset, clampedCellPx)
                         if (cell != null) {
                             val element = gridMap[cell]
