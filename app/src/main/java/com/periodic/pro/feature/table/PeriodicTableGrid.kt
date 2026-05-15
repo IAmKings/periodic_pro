@@ -107,6 +107,10 @@ fun PeriodicTableGrid(
         val clampedCellPx = cellPx.coerceIn(minCellPx, maxCellPx)
         val cellDp = with(density) { clampedCellPx.toDp() }
 
+        // 第 6/7 周期 Group 3 的位置：F-block 标记
+        val fBlockMarkerRow6 = Pair(5, 2) // (period-1, group-1)
+        val fBlockMarkerRow7 = Pair(6, 2)
+
         // 内容总尺寸
         val contentWidthPx = 18 * clampedCellPx
         val contentHeightPx = maxOf(10 * clampedCellPx, viewportHeightPx)
