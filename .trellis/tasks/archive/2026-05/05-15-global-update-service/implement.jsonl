@@ -1,0 +1,6 @@
+{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python3 .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file": "design/design-spec.md", "reason": "Design System颜色规范（Primary/PrimaryContainer色值用于红点Badge）"}
+{"file": "app/src/main/java/com/periodic/pro/data/update/UpdateRepository.kt", "reason": "现有GitHub API更新检查，需保留并复用"}
+{"file": "app/src/main/java/com/periodic/pro/ui/components/UpdateDialog.kt", "reason": "现有弹窗组件，需改造为2+1布局"}
+{"file": "app/src/main/java/com/periodic/pro/ui/navigation/PeriodicNavSuite.kt", "reason": "导航Scaffold，需加Badge参数"}
+{"file": "app/src/main/java/com/periodic/pro/data/theme/ThemePreferenceRepository.kt", "reason": "DataStore持久化参考模式"}
