@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -161,6 +162,14 @@ fun PeriodicTableGrid(
                         .size(cellDp),
                 )
             }
+
+            // 隐形撑宽层：使内容总宽 = 18 列，确保 Telephoto zoomable 在小屏幕上启用水平平移
+            Box(
+                modifier = Modifier
+                    .offset { IntOffset(0, 0) }
+                    .size(width = with(density) { (18 * clampedCellPx).toDp() }, height = 1.dp)
+                    .alpha(0f),
+            )
 
             // F-block 入口标记：Period 6 Group 3 的 *
             if (gridMap[fBlockMarkerRow6] == null) {
