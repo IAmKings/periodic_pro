@@ -348,3 +348,38 @@ data/update(GitHubRelease+UpdateRepository+ApkInstaller), UpdateDialog组件, Pr
 ### Next Steps
 
 - None - task complete
+
+
+## Session 11: 更新功能升级为全局服务——弹窗2+1布局、设置联动红点、并发去重
+
+**Date**: 2026-05-15
+**Task**: 更新功能升级为全局服务——弹窗2+1布局、设置联动红点、并发去重
+**Branch**: `master`
+
+### Summary
+
+UpdateService Koin单例全局状态管理(StateFlow)，DataStore持久化skippedVersion+lastPromptDate。UpdateDialog改造2+1布局(跳过此版本/稍后提示+立即更新)。PeriodicNavSuite加Badge红点，设置页按钮文案联动(检查更新→版本升级)。MainActivity AutoUpdateHost改用UpdateService。并发去重：全局检查中→设置页点击→cancel重发。版本号0.2.0→0.2.1。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `63a069f` | (see git log) |
+| `63350c4` | (see git log) |
+| `723ec73` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
