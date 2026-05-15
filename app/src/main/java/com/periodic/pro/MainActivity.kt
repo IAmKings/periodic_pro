@@ -17,9 +17,9 @@ import androidx.compose.ui.Modifier
 import com.periodic.pro.BuildConfig
 import com.periodic.pro.data.update.ApkInstaller
 import com.periodic.pro.data.update.GitHubRelease
-import com.periodic.pro.data.update.UpdateRepository
-import com.periodic.pro.data.update.UpdateResult
+import com.periodic.pro.data.update.UpdateService
 import com.periodic.pro.theme.PeriodicProTheme
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.ui.components.UpdateDialog
 import com.periodic.pro.ui.navigation.PeriodicNavSuite
 import org.koin.java.KoinJavaComponent.get
@@ -51,47 +51,33 @@ private fun AutoUpdateHost(
     context: Context,
     content: @Composable () -> Unit,
 ) {
-    val updateRepo = remember { get<UpdateRepository>(UpdateRepository::class.java) }
+    val updateService = remember { get<UpdateService>(UpdateService::class.java) }
     val apkInstaller = remember { get<ApkInstaller>(ApkInstaller::class.java) }
+    val updateState by updateService.state.collectAsStateWithLifecycle()
 
-    var updateRelease by remember { mutableStateOf<GitHubRelease?>(null) }
-    var currentVersion by remember { mutableStateOf("") }
-
+    // 启动时自动检查
     LaunchedEffect(Unit) {
-        val prefs = context.getSharedPreferences("auto_update", Context.MODE_PRIVATE)
-        val lastCheckDate = prefs.getString("last_check_date", "") ?: ""
-        val today = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
-            .format(java.util.Date())
-
-        // 一天内不重复弹窗
-        if (lastCheckDate == today) return@LaunchedEffect
-
-        // 等待 2 秒后检测
         kotlinx.coroutines.delay(2000L)
-
-        val localVersion = BuildConfig.VERSION_NAME
-        val result = updateRepo.checkUpdate(localVersion)
-
-        if (result is com.periodic.pro.data.update.UpdateResult.Available) {
-            updateRelease = result.release
-            currentVersion = result.currentVersion
-
-            // 记录本次检测日期
-            prefs.edit().putString("last_check_date", today).apply()
-        }
+        updateService.onAppStart(BuildConfig.VERSION_NAME)
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
         content()
 
-        updateRelease?.let { release ->
+        // 全局弹窗
+        if (updateState.shouldShowDialog && updateState.result is com.periodic.pro.data.update.UpdateResult.Available) {
+            val result = updateState.result as com.periodic.pro.data.update.UpdateResult.Available
             UpdateDialog(
-                release = release,
-                currentVersion = currentVersion,
-                onDismiss = { updateRelease = null },
+                release = result.release,
+                currentVersion = result.currentVersion,
+                onDismiss = { updateService.dismissDialog() },
+                onSnooze = { updateService.snooze() },
+                onSkipVersion = {
+                    updateService.skipVersion(result.release.tagName.removePrefix("v"))
+                },
                 onUpdate = {
-                    updateRelease = null
-                    apkInstaller.downloadAndInstall(release)
+                    updateService.dismissDialog()
+                    apkInstaller.downloadAndInstall(result.release)
                 },
             )
         }

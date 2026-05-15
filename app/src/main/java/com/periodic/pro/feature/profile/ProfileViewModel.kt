@@ -7,7 +7,7 @@ import com.periodic.pro.data.theme.ThemeMode
 import com.periodic.pro.data.theme.ThemePreferenceRepository
 import com.periodic.pro.data.update.ApkInstaller
 import com.periodic.pro.data.update.GitHubRelease
-import com.periodic.pro.data.update.UpdateRepository
+import com.periodic.pro.data.update.UpdateService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
  */
 class ProfileViewModel(
     private val themeRepo: ThemePreferenceRepository,
-    private val updateRepo: UpdateRepository,
+    private val updateService: UpdateService,
     private val apkInstaller: ApkInstaller,
 ) : ViewModel() {
 
@@ -30,12 +30,27 @@ class ProfileViewModel(
 
     init {
         observeTheme()
+        observeUpdateService()
     }
 
     private fun observeTheme() {
         viewModelScope.launch {
             themeRepo.themeMode.collect { mode ->
                 _state.update { it.copy(themeMode = mode) }
+            }
+        }
+    }
+
+    private fun observeUpdateService() {
+        viewModelScope.launch {
+            updateService.state.collect { serviceState ->
+                _state.update {
+                    it.copy(
+                        isChecking = serviceState.isChecking,
+                        updateResult = serviceState.result,
+                        hasNewVersion = serviceState.hasNewVersion,
+                    )
+                }
             }
         }
     }
@@ -56,15 +71,15 @@ class ProfileViewModel(
     }
 
     private fun checkUpdate() {
-        viewModelScope.launch {
-            _state.update { it.copy(isChecking = true, updateResult = null) }
-            val result = updateRepo.checkUpdate(BuildConfig.VERSION_NAME)
-            _state.update { it.copy(isChecking = false, updateResult = result) }
-        }
+        updateService.checkUpdate(BuildConfig.VERSION_NAME)
     }
 
     private fun clearUpdateResult() {
-        _state.update { it.copy(updateResult = null) }
+        updateService.clearResult()
+    }
+
+    fun skipVersion(version: String) {
+        updateService.skipVersion(version)
     }
 
     private fun downloadAndInstall(release: GitHubRelease) {

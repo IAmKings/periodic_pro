@@ -98,12 +98,19 @@ fun ProfileScreen(
     // UpdateDialog
     val updateResult = state.updateResult
     if (updateResult is UpdateResult.Available) {
+        val currentVersion = updateResult.currentVersion
+        val release = updateResult.release
         UpdateDialog(
-            release = updateResult.release,
-            currentVersion = updateResult.currentVersion,
+            release = release,
+            currentVersion = currentVersion,
             onDismiss = { onIntent(ProfileIntent.ClearUpdateResult) },
+            onSnooze = { onIntent(ProfileIntent.ClearUpdateResult) },
+            onSkipVersion = {
+                viewModel.skipVersion(release.tagName.removePrefix("v"))
+                onIntent(ProfileIntent.ClearUpdateResult)
+            },
             onUpdate = {
-                onIntent(ProfileIntent.DownloadAndInstall(updateResult.release))
+                onIntent(ProfileIntent.DownloadAndInstall(release))
             },
         )
     }
@@ -174,6 +181,7 @@ private fun ProfileContent(
             // === 2. 更新检查区 ===
             UpdateSection(
                 isChecking = state.isChecking,
+                hasNewVersion = state.hasNewVersion,
                 onCheckUpdate = { onIntent(ProfileIntent.CheckUpdate) },
             )
 
@@ -303,6 +311,7 @@ private fun ThemeOption(
 @Composable
 private fun UpdateSection(
     isChecking: Boolean,
+    hasNewVersion: Boolean,
     onCheckUpdate: () -> Unit,
 ) {
     Column(
@@ -332,7 +341,11 @@ private fun UpdateSection(
         } else {
             PeriodicButton(
                 onClick = onCheckUpdate,
-                text = stringResource(R.string.profile_check_update),
+                text = if (hasNewVersion) {
+                    stringResource(R.string.profile_upgrade)
+                } else {
+                    stringResource(R.string.profile_check_update)
+                },
                 modifier = Modifier.fillMaxWidth(),
             )
         }

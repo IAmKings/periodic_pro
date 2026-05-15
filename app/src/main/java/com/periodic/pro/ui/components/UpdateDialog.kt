@@ -23,22 +23,27 @@ import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.PeriodicProTheme
 
 /**
- * 更新弹窗。
+ * 更新弹窗 — 2+1 按钮布局。
  *
- * 显示新版本信息、当前版本、文件大小和 Release 说明。
- * 提供「稍后再说」和「立即更新」两个操作按钮。
+ * ```
+ *      跳过此版本            ← 底部独立 TextButton
+ *   [稍后提示]  [立即更新]   ← dismissButton + confirmButton
+ * ```
  *
  * @param release GitHub Release 信息
  * @param currentVersion 当前版本号
- * @param onDismiss 关闭弹窗
+ * @param onDismiss 外部点击/X关闭弹窗
+ * @param onSnooze 稍后提示（当天不再弹）
+ * @param onSkipVersion 跳过此版本（永久忽略）
  * @param onUpdate 立即更新
- * @param modifier Modifier
  */
 @Composable
 fun UpdateDialog(
     release: GitHubRelease,
     currentVersion: String,
     onDismiss: () -> Unit,
+    onSnooze: () -> Unit,
+    onSkipVersion: () -> Unit,
     onUpdate: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -110,6 +115,14 @@ fun UpdateDialog(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+
+                Spacer(modifier = Modifier.height(Dimensions.Dp16))
+
+                // 跳过此版本 — 内嵌在内容区底部，按钮上方
+                PeriodicTextButton(
+                    onClick = onSkipVersion,
+                    text = stringResource(R.string.update_dialog_skip_version),
+                )
             }
         },
         confirmButton = {
@@ -120,8 +133,8 @@ fun UpdateDialog(
         },
         dismissButton = {
             PeriodicOutlinedButton(
-                onClick = onDismiss,
-                text = stringResource(R.string.update_dialog_dismiss),
+                onClick = onSnooze,
+                text = stringResource(R.string.update_dialog_snooze),
             )
         },
     )
@@ -170,6 +183,8 @@ private fun UpdateDialogPreview() {
             release = previewRelease,
             currentVersion = "0.1.1",
             onDismiss = {},
+            onSnooze = {},
+            onSkipVersion = {},
             onUpdate = {},
         )
     }

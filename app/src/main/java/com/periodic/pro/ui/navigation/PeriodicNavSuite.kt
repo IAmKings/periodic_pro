@@ -15,7 +15,9 @@ import androidx.compose.material.icons.outlined.Science
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material.icons.outlined.TableChart
+import androidx.compose.material3.Badge
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
@@ -23,16 +25,20 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.periodic.pro.R
+import com.periodic.pro.data.update.UpdateService
 import com.periodic.pro.ui.components.AppGlassProvider
+import org.koin.java.KoinJavaComponent.get
 
 /**
  * 导航 suite 条目数据
@@ -71,6 +77,9 @@ fun PeriodicNavSuite() {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStackEntry?.destination
 
+    val updateService = remember { get<UpdateService>(UpdateService::class.java) }
+    val updateState by updateService.state.collectAsStateWithLifecycle()
+
     val adaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo()
     val windowWidthClass = adaptiveInfo.windowSizeClass.windowWidthSizeClass
     val customNavSuiteType = when (windowWidthClass) {
@@ -84,6 +93,7 @@ fun PeriodicNavSuite() {
                 navItems.forEach { item ->
                     val selected = currentDestination?.hierarchy
                         ?.any { it.route == item.route } == true
+                    val showBadge = item.route == Routes.PROFILE && updateState.hasNewVersion
                     item(
                         selected = selected,
                         onClick = {
@@ -102,6 +112,9 @@ fun PeriodicNavSuite() {
                             )
                         },
                         label = { Text(stringResource(item.labelRes)) },
+                        badge = if (showBadge) {
+                            { Badge(containerColor = MaterialTheme.colorScheme.error) }
+                        } else null,
                     )
                 }
             },
