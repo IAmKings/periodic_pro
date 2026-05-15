@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculateCentroid
 import androidx.compose.foundation.gestures.calculatePan
 import androidx.compose.foundation.gestures.calculateZoom
@@ -116,12 +117,13 @@ fun PeriodicTableGrid(
         val contentWidthPx = 18 * clampedCellPx
         val contentHeightPx = maxOf(10 * clampedCellPx, viewportHeightPx)
 
-        // 缩放/平移状态（visual 为视口坐标，offset 为 pre-scale 内容坐标）
+        // 缩放/平移状态（visualOffset 为视口像素偏移）
         var scale by remember { mutableFloatStateOf(1f) }
         var visualOffsetX by remember { mutableFloatStateOf(0f) }
         var visualOffsetY by remember { mutableFloatStateOf(0f) }
-        val offsetX get() = if (scale > 0f) visualOffsetX / scale else 0f
-        val offsetY get() = if (scale > 0f) visualOffsetY / scale else 0f
+        // pre-scale 内容偏移（Modifier.offset 用）
+        fun preOffsetX() = if (scale > 0f) visualOffsetX / scale else 0f
+        fun preOffsetY() = if (scale > 0f) visualOffsetY / scale else 0f
 
         // 长按阈值（ms）
         val longPressTimeout = 400L
@@ -129,16 +131,15 @@ fun PeriodicTableGrid(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                // 统一手势处理：缩放/平移 + 点击/长按，避免双pointerInput事件冲突
+                // 统一手势处理：缩放/平移 + 点击/长按
                 .pointerInput(gridMap, clampedCellPx) {
                     awaitEachGesture {
-                        val down = awaitFirstDown()
+                        val down = awaitFirstDown(requireUnconsumed = false)
                         val downPos = down.position
                         val downTime = System.currentTimeMillis()
                         var totalPan = Offset.Zero
                         var longPressFired = false
 
-                        // 单指逻辑：等待 UP 或 超时（长按）或 移动（平移）
                         while (true) {
                             val event = awaitPointerEvent()
                             val changes = event.changes
@@ -146,9 +147,9 @@ fun PeriodicTableGrid(
 
                             if (allUp) {
                                 if (!longPressFired && totalPan.getDistance() < 20f) {
-                                    // 轻触（tap）
                                     val cell = hitTestWithTransform(
-                                        downPos, clampedCellPx, scale, offsetX, offsetY
+                                        downPos, clampedCellPx, scale,
+                                        preOffsetX(), preOffsetY()
                                     )
                                     if (cell != null) {
                                         val el = gridMap[cell]
@@ -160,9 +161,8 @@ fun PeriodicTableGrid(
 
                             if (changes.size >= 2) {
                                 // 双指 → 缩放+平移
-                                val centroid = changes.calculateCentroid()
-                                val zoom = changes.calculateZoom()
-                                val pan = changes.calculatePan()
+                                val zoom = event.calculateZoom()
+                                val pan = event.calculatePan()
                                 val newScale = (scale * zoom).coerceIn(1f, 3f)
                                 visualOffsetX = (visualOffsetX + pan.x).coerceIn(
                                     -(contentWidthPx * newScale - viewportWidthPx).coerceAtLeast(0f), 0f
@@ -174,17 +174,22 @@ fun PeriodicTableGrid(
                                 continue
                             }
 
-                            // 单指移动
+                            // 单指
                             val change = changes.firstOrNull() ?: continue
-                            totalPan += change.positionChange()
+                            val posDelta = Offset(
+                                change.position.x - change.previousPosition.x,
+                                change.position.y - change.previousPosition.y
+                            )
+                            totalPan += posDelta
 
-                            // 长按检测
-                            if (!longPressFired && !change.pressed.not() &&
+                            // 长按
+                            if (!longPressFired && change.pressed &&
                                 System.currentTimeMillis() - downTime > longPressTimeout &&
                                 totalPan.getDistance() < 20f) {
                                 longPressFired = true
                                 val cell = hitTestWithTransform(
-                                    downPos, clampedCellPx, scale, offsetX, offsetY
+                                    downPos, clampedCellPx, scale,
+                                    preOffsetX(), preOffsetY()
                                 )
                                 if (cell != null) {
                                     val el = gridMap[cell]
@@ -192,12 +197,12 @@ fun PeriodicTableGrid(
                                 }
                             }
 
-                            // 单指平移
+                            // 平移
                             if (totalPan.getDistance() >= 20f) {
-                                visualOffsetX = (visualOffsetX + change.positionChange().x).coerceIn(
+                                visualOffsetX = (visualOffsetX + posDelta.x).coerceIn(
                                     -(contentWidthPx * scale - viewportWidthPx).coerceAtLeast(0f), 0f
                                 )
-                                visualOffsetY = (visualOffsetY + change.positionChange().y).coerceIn(
+                                visualOffsetY = (visualOffsetY + posDelta.y).coerceIn(
                                     -(contentHeightPx * scale - viewportHeightPx).coerceAtLeast(0f), 0f
                                 )
                             }
@@ -208,7 +213,7 @@ fun PeriodicTableGrid(
         ) {
             Box(
                 modifier = Modifier
-                    .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
+                    .offset { IntOffset(preOffsetX().roundToInt(), preOffsetY().roundToInt()) }
                     .scale(scale)
                     .requiredSize(
                         width = with(density) { contentWidthPx.roundToInt().toDp() },
