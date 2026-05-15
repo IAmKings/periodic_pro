@@ -25,10 +25,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -115,10 +114,12 @@ fun PeriodicTableGrid(
         val contentWidthPx = 18 * clampedCellPx
         val contentHeightPx = maxOf(10 * clampedCellPx, viewportHeightPx)
 
-        // 缩放/平移状态
+        // 缩放/平移状态（visual 为视口坐标，offset 为 pre-scale 内容坐标）
         var scale by remember { mutableFloatStateOf(1f) }
-        var offsetX by remember { mutableFloatStateOf(0f) }
-        var offsetY by remember { mutableFloatStateOf(0f) }
+        var visualOffsetX by remember { mutableFloatStateOf(0f) }
+        var visualOffsetY by remember { mutableFloatStateOf(0f) }
+        val offsetX get() = if (scale > 0f) visualOffsetX / scale else 0f
+        val offsetY get() = if (scale > 0f) visualOffsetY / scale else 0f
 
         Box(
             modifier = Modifier
@@ -127,15 +128,15 @@ fun PeriodicTableGrid(
                 .pointerInput(Unit) {
                     detectTransformGestures { _, pan, zoom, _ ->
                         val newScale = (scale * zoom).coerceIn(1f, 3f)
-                        scale = newScale
-                        offsetX = (offsetX + pan.x).coerceIn(
+                        visualOffsetX = (visualOffsetX + pan.x).coerceIn(
                             -(contentWidthPx * newScale - viewportWidthPx).coerceAtLeast(0f),
                             0f,
                         )
-                        offsetY = (offsetY + pan.y).coerceIn(
+                        visualOffsetY = (visualOffsetY + pan.y).coerceIn(
                             -(contentHeightPx * newScale - viewportHeightPx).coerceAtLeast(0f),
                             0f,
                         )
+                        scale = newScale
                     }
                 }
                 // Tap/长按（内层后写=靠内容，tap取消后释放给外层transform）
@@ -168,13 +169,8 @@ fun PeriodicTableGrid(
         ) {
             Box(
                 modifier = Modifier
-                    .graphicsLayer {
-                        scaleX = scale
-                        scaleY = scale
-                        translationX = offsetX
-                        translationY = offsetY
-                        transformOrigin = TransformOrigin(0f, 0f)
-                    }
+                    .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
+                    .scale(scale)
                     .requiredSize(
                         width = with(density) { contentWidthPx.roundToInt().toDp() },
                         height = with(density) { contentHeightPx.roundToInt().toDp() },
@@ -273,8 +269,9 @@ private fun hitTestWithTransform(
     offsetX: Float,
     offsetY: Float,
 ): Pair<Int, Int>? {
-    val contentX = (viewportOffset.x - offsetX) / scale
-    val contentY = (viewportOffset.y - offsetY) / scale
+    // offset { ox, oy }.scale(s) — 视图坐标→内容坐标反算
+    val contentX = viewportOffset.x / scale - offsetX
+    val contentY = viewportOffset.y / scale - offsetY
     val col = (contentX / cellPx).toInt()
     val row = (contentY / cellPx).toInt()
     return if (col in 0..17 && row in 0..9) {
