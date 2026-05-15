@@ -383,3 +383,38 @@ UpdateService Koin单例全局状态管理(StateFlow)，DataStore持久化skippe
 ### Next Steps
 
 - None - task complete
+
+
+## Session 12: 修复周期表长按误触收藏及滑动/交互问题
+
+**Date**: 2026-05-15
+**Task**: 修复周期表长按误触收藏及滑动/交互问题
+**Branch**: `master`
+
+### Summary
+
+TableViewModel移除长按自动收藏(favoritesRepo.toggle)。PeriodicTableGrid经历多次迭代：Telephoto→原生手势→horizontalScroll最终方案。最终用horizontalScroll+combinedClickable实现水平滚动和点击/长按，requiredSize(18×cellPx)确保内容宽于视口，第1列左对齐，滑动到第18列自动停止。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `c8f840b` | (see git log) |
+| `e226eb4` | (see git log) |
+| `9e2134f` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
