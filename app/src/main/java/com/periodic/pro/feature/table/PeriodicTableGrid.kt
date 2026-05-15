@@ -123,7 +123,22 @@ fun PeriodicTableGrid(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                // Tap/长按手势
+                // 缩放/平移（外层先写=内层先执行；双指缩放+明显拖动消费事件）
+                .pointerInput(Unit) {
+                    detectTransformGestures { _, pan, zoom, _ ->
+                        val newScale = (scale * zoom).coerceIn(1f, 3f)
+                        scale = newScale
+                        offsetX = (offsetX + pan.x).coerceIn(
+                            -(contentWidthPx * newScale - viewportWidthPx).coerceAtLeast(0f),
+                            0f,
+                        )
+                        offsetY = (offsetY + pan.y).coerceIn(
+                            -(contentHeightPx * newScale - viewportHeightPx).coerceAtLeast(0f),
+                            0f,
+                        )
+                    }
+                }
+                // Tap/长按（内层后写=靠内容，tap取消后释放给外层transform）
                 .pointerInput(gridMap, clampedCellPx) {
                     detectTapGestures(
                         onTap = { viewportOffset ->
@@ -149,21 +164,6 @@ fun PeriodicTableGrid(
                             }
                         },
                     )
-                }
-                // 缩放/平移手势
-                .pointerInput(Unit) {
-                    detectTransformGestures { _, pan, zoom, _ ->
-                        val newScale = (scale * zoom).coerceIn(1f, 3f)
-                        scale = newScale
-                        offsetX = (offsetX + pan.x).coerceIn(
-                            -(contentWidthPx * newScale - viewportWidthPx).coerceAtLeast(0f),
-                            0f,
-                        )
-                        offsetY = (offsetY + pan.y).coerceIn(
-                            -(contentHeightPx * newScale - viewportHeightPx).coerceAtLeast(0f),
-                            0f,
-                        )
-                    }
                 },
         ) {
             Box(
