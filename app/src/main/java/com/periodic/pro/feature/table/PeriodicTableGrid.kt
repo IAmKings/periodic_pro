@@ -223,9 +223,10 @@ fun PeriodicTableGrid(
                         .size(cellDp),
                 )
             }
-        }
-    }
-}
+        } // graphicsLayer Box
+    } // outer gesture Box
+} // BoxWithConstraints
+} // PeriodicTableGrid
 
 /**
  * 获取元素在 0-based 网格中的位置。
