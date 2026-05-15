@@ -3,8 +3,10 @@ package com.periodic.pro.feature.table
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.calculateCentroid
+import androidx.compose.foundation.gestures.calculatePan
+import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -121,50 +123,87 @@ fun PeriodicTableGrid(
         val offsetX get() = if (scale > 0f) visualOffsetX / scale else 0f
         val offsetY get() = if (scale > 0f) visualOffsetY / scale else 0f
 
+        // 长按阈值（ms）
+        val longPressTimeout = 400L
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                // 缩放/平移（外层先写=内层先执行；双指缩放+明显拖动消费事件）
-                .pointerInput(Unit) {
-                    detectTransformGestures { _, pan, zoom, _ ->
-                        val newScale = (scale * zoom).coerceIn(1f, 3f)
-                        visualOffsetX = (visualOffsetX + pan.x).coerceIn(
-                            -(contentWidthPx * newScale - viewportWidthPx).coerceAtLeast(0f),
-                            0f,
-                        )
-                        visualOffsetY = (visualOffsetY + pan.y).coerceIn(
-                            -(contentHeightPx * newScale - viewportHeightPx).coerceAtLeast(0f),
-                            0f,
-                        )
-                        scale = newScale
-                    }
-                }
-                // Tap/长按（内层后写=靠内容，tap取消后释放给外层transform）
+                // 统一手势处理：缩放/平移 + 点击/长按，避免双pointerInput事件冲突
                 .pointerInput(gridMap, clampedCellPx) {
-                    detectTapGestures(
-                        onTap = { viewportOffset ->
-                            val cell = hitTestWithTransform(
-                                viewportOffset, clampedCellPx, scale, offsetX, offsetY
-                            )
-                            if (cell != null) {
-                                val element = gridMap[cell]
-                                if (element != null) {
-                                    onElementClick(element.atomicNumber)
+                    awaitEachGesture {
+                        val down = awaitFirstDown()
+                        val downPos = down.position
+                        val downTime = System.currentTimeMillis()
+                        var totalPan = Offset.Zero
+                        var longPressFired = false
+
+                        // 单指逻辑：等待 UP 或 超时（长按）或 移动（平移）
+                        while (true) {
+                            val event = awaitPointerEvent()
+                            val changes = event.changes
+                            val allUp = changes.all { !it.pressed }
+
+                            if (allUp) {
+                                if (!longPressFired && totalPan.getDistance() < 20f) {
+                                    // 轻触（tap）
+                                    val cell = hitTestWithTransform(
+                                        downPos, clampedCellPx, scale, offsetX, offsetY
+                                    )
+                                    if (cell != null) {
+                                        val el = gridMap[cell]
+                                        if (el != null) onElementClick(el.atomicNumber)
+                                    }
+                                }
+                                break
+                            }
+
+                            if (changes.size >= 2) {
+                                // 双指 → 缩放+平移
+                                val centroid = changes.calculateCentroid()
+                                val zoom = changes.calculateZoom()
+                                val pan = changes.calculatePan()
+                                val newScale = (scale * zoom).coerceIn(1f, 3f)
+                                visualOffsetX = (visualOffsetX + pan.x).coerceIn(
+                                    -(contentWidthPx * newScale - viewportWidthPx).coerceAtLeast(0f), 0f
+                                )
+                                visualOffsetY = (visualOffsetY + pan.y).coerceIn(
+                                    -(contentHeightPx * newScale - viewportHeightPx).coerceAtLeast(0f), 0f
+                                )
+                                scale = newScale
+                                continue
+                            }
+
+                            // 单指移动
+                            val change = changes.firstOrNull() ?: continue
+                            totalPan += change.positionChange()
+
+                            // 长按检测
+                            if (!longPressFired && !change.pressed.not() &&
+                                System.currentTimeMillis() - downTime > longPressTimeout &&
+                                totalPan.getDistance() < 20f) {
+                                longPressFired = true
+                                val cell = hitTestWithTransform(
+                                    downPos, clampedCellPx, scale, offsetX, offsetY
+                                )
+                                if (cell != null) {
+                                    val el = gridMap[cell]
+                                    if (el != null) onElementLongClick(el.atomicNumber)
                                 }
                             }
-                        },
-                        onLongPress = { viewportOffset ->
-                            val cell = hitTestWithTransform(
-                                viewportOffset, clampedCellPx, scale, offsetX, offsetY
-                            )
-                            if (cell != null) {
-                                val element = gridMap[cell]
-                                if (element != null) {
-                                    onElementLongClick(element.atomicNumber)
-                                }
+
+                            // 单指平移
+                            if (totalPan.getDistance() >= 20f) {
+                                visualOffsetX = (visualOffsetX + change.positionChange().x).coerceIn(
+                                    -(contentWidthPx * scale - viewportWidthPx).coerceAtLeast(0f), 0f
+                                )
+                                visualOffsetY = (visualOffsetY + change.positionChange().y).coerceIn(
+                                    -(contentHeightPx * scale - viewportHeightPx).coerceAtLeast(0f), 0f
+                                )
                             }
-                        },
-                    )
+                            change.consume()
+                        }
+                    }
                 },
         ) {
             Box(
