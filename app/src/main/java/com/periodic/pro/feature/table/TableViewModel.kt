@@ -82,16 +82,12 @@ class TableViewModel(
     }
 
     private fun onElementLongClick(atomicNumber: Int) {
-        // 进入多选模式 + 选中该元素 + 收藏
+        // 进入多选模式 + 选中该元素（收藏由用户手动操作，不在此触发）
         _state.update {
             it.copy(
                 isMultiSelectMode = true,
                 selectedIds = it.selectedIds + atomicNumber,
             )
-        }
-        // 异步收藏
-        viewModelScope.launch {
-            favoritesRepo.toggle(atomicNumber)
         }
     }
 
