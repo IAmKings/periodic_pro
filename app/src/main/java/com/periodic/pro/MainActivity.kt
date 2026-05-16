@@ -8,12 +8,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.periodic.pro.BuildConfig
 import com.periodic.pro.data.update.ApkInstaller
 import com.periodic.pro.data.update.GitHubRelease
@@ -59,6 +61,18 @@ private fun AutoUpdateHost(
     LaunchedEffect(Unit) {
         kotlinx.coroutines.delay(2000L)
         updateService.onAppStart(BuildConfig.VERSION_NAME)
+    }
+
+    // 从设置页返回后恢复挂起的下载任务
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                apkInstaller.tryResumePending()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {

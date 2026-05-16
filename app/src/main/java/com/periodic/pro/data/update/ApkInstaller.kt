@@ -25,10 +25,15 @@ class ApkInstaller(
     private val context: Context,
 ) {
 
+    /** 权限未就绪时缓存待下载的 Release，权限就绪后自动继续 */
+    private var pendingRelease: GitHubRelease? = null
+
     /**
      * 下载并安装指定 Release 的 APK。
      *
-     * 下载前预检安装未知来源权限，无权限时弹引导窗而非直接下载。
+     * 下载前预检安装未知来源权限，无权限时缓存 Release 并弹引导窗。
+     * 调用方在 onResume / LaunchedEffect 中应调用 [tryResumePending]
+     * 以在用户授权后自动继续下载。
      *
      * @param release GitHub Release 信息
      * @return true=权限已就绪开始下载，false=权限未就绪已弹引导窗
@@ -38,7 +43,8 @@ class ApkInstaller(
         // 下载前预检：Android 8+ 检查安装未知来源权限
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (!context.packageManager.canRequestPackageInstalls()) {
-                Log.w(TAG, "Install permission not granted, showing settings")
+                Log.w(TAG, "Install permission not granted, caching release and showing settings")
+                pendingRelease = release
                 val settingsIntent = Intent(
                     android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
                     Uri.parse("package:${context.packageName}"),
@@ -48,6 +54,28 @@ class ApkInstaller(
             }
         }
 
+        return startDownload(release)
+    }
+
+    /**
+     * 尝试恢复因权限未就绪而挂起的下载。
+     * 应在 Activity onResume 或 LaunchedEffect 中调用。
+     *
+     * @return true=已恢复下载，false=无挂起任务或权限仍未就绪
+     */
+    fun tryResumePending(): Boolean {
+        val release = pendingRelease ?: return false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (!context.packageManager.canRequestPackageInstalls()) return false
+        }
+        pendingRelease = null
+        return startDownload(release)
+    }
+
+    /** 是否还有挂起的下载任务 */
+    fun hasPending(): Boolean = pendingRelease != null
+
+    private fun startDownload(release: GitHubRelease): Boolean {
         val apkAsset = release.assets.firstOrNull { it.name.endsWith(".apk") }
             ?: run {
                 Log.e(TAG, "No APK asset found in release: ${release.tagName}")
