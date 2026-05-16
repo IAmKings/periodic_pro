@@ -130,6 +130,7 @@ class ApkInstaller(
                 IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
             )
         }
+        return true
     }
 
     /**
