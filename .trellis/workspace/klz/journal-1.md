@@ -418,3 +418,39 @@ TableViewModel移除长按自动收藏(favoritesRepo.toggle)。PeriodicTableGrid
 ### Next Steps
 
 - None - task complete
+
+
+## Session 13: 设计权限弹窗系统+修复安装权限检查
+
+**Date**: 2026-05-17
+**Task**: 设计权限弹窗系统+修复安装权限检查
+**Branch**: `master`
+
+### Summary
+
+PermissionDef+PermissionsManager+PermissionDialog三层架构，数据驱动可扩展。ApkInstaller下载前预检安装未知来源权限，pendingRelease缓存+Lifecycle ON_RESUME自动续传。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `4bd5e5f` | (see git log) |
+| `cd53ba9` | (see git log) |
+| `6b904c3` | (see git log) |
+| `e754843` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
