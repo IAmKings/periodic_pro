@@ -28,14 +28,30 @@ class ApkInstaller(
     /**
      * 下载并安装指定 Release 的 APK。
      *
+     * 下载前预检安装未知来源权限，无权限时弹引导窗而非直接下载。
+     *
      * @param release GitHub Release 信息
+     * @return true=权限已就绪开始下载，false=权限未就绪已弹引导窗
      */
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
-    fun downloadAndInstall(release: GitHubRelease) {
+    fun downloadAndInstall(release: GitHubRelease): Boolean {
+        // 下载前预检：Android 8+ 检查安装未知来源权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (!context.packageManager.canRequestPackageInstalls()) {
+                Log.w(TAG, "Install permission not granted, showing settings")
+                val settingsIntent = Intent(
+                    android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                    Uri.parse("package:${context.packageName}"),
+                ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(settingsIntent)
+                return false
+            }
+        }
+
         val apkAsset = release.assets.firstOrNull { it.name.endsWith(".apk") }
             ?: run {
                 Log.e(TAG, "No APK asset found in release: ${release.tagName}")
-                return
+                return false
             }
 
         val versionTag = release.tagName.removePrefix("v")
