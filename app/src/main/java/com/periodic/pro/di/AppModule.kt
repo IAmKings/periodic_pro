@@ -8,6 +8,7 @@ import com.periodic.pro.data.lab.LabRepository
 import com.periodic.pro.data.learn.LearnRepository
 import com.periodic.pro.data.theme.ThemePreferenceRepository
 import com.periodic.pro.data.update.ApkInstaller
+import com.periodic.pro.data.permission.PermissionsManager
 import com.periodic.pro.data.update.UpdatePreferences
 import com.periodic.pro.data.update.UpdateRepository
 import com.periodic.pro.data.update.UpdateService
@@ -42,6 +43,7 @@ val appModule = module {
     single { UpdateRepository(androidContext()) }
     single { UpdatePreferences(androidContext()) }
     single { UpdateService(get(), get()) }
+    single { PermissionsManager(androidContext()) }
     single { ApkInstaller(androidContext()) }
     viewModel { ProfileViewModel(get(), get(), get()) }
     viewModel { DiscoverViewModel(get(), get()) }
