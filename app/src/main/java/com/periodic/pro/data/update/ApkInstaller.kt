@@ -25,6 +25,9 @@ class ApkInstaller(
     /** 权限未就绪时缓存待下载的 Release */
     private var pendingRelease: GitHubRelease? = null
 
+    @Volatile
+    private var cancelled = false
+
     /**
      * 下载并安装 APK。
      *
@@ -63,6 +66,7 @@ class ApkInstaller(
 
         if (apkFile.exists()) apkFile.delete()
 
+        cancelled = false
         Thread {
             try {
                 val url = URL(apkAsset.browserDownloadUrl)
@@ -82,6 +86,15 @@ class ApkInstaller(
                 var bytes: Int
 
                 while (input.read(buffer).also { bytes = it } != -1) {
+                    if (cancelled) {
+                        Log.w(TAG, "Download cancelled")
+                        onProgress(-1f)
+                        output.close()
+                        input.close()
+                        conn.disconnect()
+                        apkFile.delete()
+                        return@Thread
+                    }
                     output.write(buffer, 0, bytes)
                     downloaded += bytes
                     if (total > 0) {
@@ -111,6 +124,8 @@ class ApkInstaller(
         pendingRelease = null
         return downloadAndInstall(release) { /* 恢复下载不使用进度回调 */ }
     }
+
+    fun cancelDownload() { cancelled = true }
 
     fun hasPending(): Boolean = pendingRelease != null
 

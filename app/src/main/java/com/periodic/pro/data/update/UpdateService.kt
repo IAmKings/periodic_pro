@@ -24,8 +24,8 @@ data class UpdateState(
     val result: UpdateResult? = null,
     val shouldShowDialog: Boolean = false,
     val hasNewVersion: Boolean = false,
-    /** APK下载进度 0f-1f，-1f 表示失败，其他表示未在下载 */
     val downloadProgress: Float = -1f,
+    val downloadFailed: Boolean = false,
 )
 
 /**
@@ -137,10 +137,21 @@ class UpdateService(
         _state.update { it.copy(shouldShowDialog = false) }
     }
 
-    /** 更新下载进度。>=1 或 -1 时自动重置为 -1 */
+    /** 更新下载进度。>=1 或 -1（失败）时自动重置 */
     fun setDownloadProgress(progress: Float) {
-        val reset = progress >= 1f || progress == -1f
-        _state.update { it.copy(downloadProgress = if (reset) -1f else progress) }
+        val failed = progress == -1f
+        val done = progress >= 1f || failed
+        _state.update {
+            it.copy(
+                downloadProgress = if (done) -1f else progress,
+                downloadFailed = if (done) failed else it.downloadFailed,
+            )
+        }
+    }
+
+    /** 清除下载失败状态 */
+    fun clearDownloadFailed() {
+        _state.update { it.copy(downloadFailed = false) }
     }
 
     /** 清除手动检查结果 */

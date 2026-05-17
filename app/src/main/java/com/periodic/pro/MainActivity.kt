@@ -85,12 +85,18 @@ private fun AutoUpdateHost(
                 release = result.release,
                 currentVersion = result.currentVersion,
                 downloadProgress = updateState.downloadProgress,
+                downloadFailed = updateState.downloadFailed,
+                onCancelDownload = {
+                    apkInstaller.cancelDownload()
+                    updateService.setDownloadProgress(-1f)
+                },
                 onDismiss = { updateService.dismissDialog() },
                 onSnooze = { updateService.snooze() },
                 onSkipVersion = {
                     updateService.skipVersion(result.release.tagName.removePrefix("v"))
                 },
                 onUpdate = {
+                    updateService.clearDownloadFailed()
                     apkInstaller.downloadAndInstall(result.release) { progress ->
                         updateService.setDownloadProgress(progress)
                     }

@@ -49,7 +49,8 @@ class ProfileViewModel(
                         isChecking = serviceState.isChecking,
                         updateResult = serviceState.result,
                         hasNewVersion = serviceState.hasNewVersion,
-                        downloadProgress = if (serviceState.downloadProgress >= 0f) serviceState.downloadProgress else it.downloadProgress,
+                        downloadProgress = serviceState.downloadProgress,
+                        downloadFailed = serviceState.downloadFailed,
                     )
                 }
             }
@@ -84,15 +85,22 @@ class ProfileViewModel(
         updateService.skipVersion(version)
     }
 
+    fun cancelDownload() {
+        apkInstaller.cancelDownload()
+        _state.update { it.copy(isDownloading = false, downloadProgress = -1f) }
+        updateService.setDownloadProgress(-1f)
+    }
+
     private fun downloadAndInstall(release: GitHubRelease) {
-        _state.update { it.copy(isDownloading = true, downloadProgress = 0f) }
+        _state.update { it.copy(isDownloading = true, downloadProgress = 0f, downloadFailed = false) }
+        updateService.clearDownloadFailed()
         apkInstaller.downloadAndInstall(release) { progress ->
-            // >=1f 完成，-1f 失败 → 重置状态
             val done = progress >= 1f || progress == -1f
             _state.update {
                 it.copy(
                     downloadProgress = progress,
                     isDownloading = !done,
+                    downloadFailed = progress == -1f,
                 )
             }
             updateService.setDownloadProgress(progress)

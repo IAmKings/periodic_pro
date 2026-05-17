@@ -105,6 +105,11 @@ fun ProfileScreen(
             release = release,
             currentVersion = currentVersion,
             downloadProgress = state.downloadProgress,
+            downloadFailed = state.downloadFailed,
+            onCancelDownload = {
+                viewModel.cancelDownload()
+                onIntent(ProfileIntent.ClearUpdateResult)
+            },
             onDismiss = { onIntent(ProfileIntent.ClearUpdateResult) },
             onSnooze = { onIntent(ProfileIntent.ClearUpdateResult) },
             onSkipVersion = {

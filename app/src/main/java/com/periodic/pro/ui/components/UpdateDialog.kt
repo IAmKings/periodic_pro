@@ -47,6 +47,8 @@ fun UpdateDialog(
     onSkipVersion: () -> Unit,
     onUpdate: () -> Unit,
     downloadProgress: Float = -1f,
+    downloadFailed: Boolean = false,
+    onCancelDownload: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val isDownloading = downloadProgress >= 0f && downloadProgress < 1f
@@ -77,52 +79,8 @@ fun UpdateDialog(
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState()),
             ) {
-                // 版本信息
-                Text(
-                    text = stringResource(R.string.update_dialog_new_version, release.tagName),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.SemiBold,
-                )
-
-                Spacer(modifier = Modifier.height(Dimensions.Dp8))
-
-                Text(
-                    text = stringResource(R.string.update_dialog_current_version, currentVersion),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-
-                if (apkSize.isNotEmpty()) {
-                    Text(
-                        text = stringResource(R.string.update_dialog_file_size, apkSize),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(Dimensions.Dp16))
-
-                // Release 说明
-                Text(
-                    text = stringResource(R.string.update_dialog_release_notes),
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-
-                Spacer(modifier = Modifier.height(Dimensions.Dp8))
-
-                Text(
-                    text = releaseNotes,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-
-                Spacer(modifier = Modifier.height(Dimensions.Dp16))
-
-                // 下载进度
-                if (downloadProgress >= 0f) {
+                if (isDownloading) {
+                    // === 下载中：只显示进度 ===
                     LinearProgressIndicator(
                         progress = { downloadProgress },
                         modifier = Modifier.fillMaxWidth(),
@@ -133,27 +91,90 @@ fun UpdateDialog(
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
+                } else if (downloadFailed) {
+                    // === 下载失败 ===
+                    Text(
+                        text = "下载失败，请检查网络后重试",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                } else {
+                    // === 正常状态：版本信息 ===
+                    Text(
+                        text = stringResource(R.string.update_dialog_new_version, release.tagName),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                     Spacer(modifier = Modifier.height(Dimensions.Dp8))
+                    Text(
+                        text = stringResource(R.string.update_dialog_current_version, currentVersion),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    if (apkSize.isNotEmpty()) {
+                        Text(
+                            text = stringResource(R.string.update_dialog_file_size, apkSize),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(Dimensions.Dp16))
+                    Text(
+                        text = stringResource(R.string.update_dialog_release_notes),
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                    Spacer(modifier = Modifier.height(Dimensions.Dp8))
+                    Text(
+                        text = releaseNotes,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Spacer(modifier = Modifier.height(Dimensions.Dp16))
+                    PeriodicTextButton(
+                        onClick = onSkipVersion,
+                        text = stringResource(R.string.update_dialog_skip_version),
+                    )
                 }
-
-                // 跳过此版本 — 内嵌在内容区底部，按钮上方
-                PeriodicTextButton(
-                    onClick = onSkipVersion,
-                    text = stringResource(R.string.update_dialog_skip_version),
-                )
             }
         },
         confirmButton = {
-            PeriodicButton(
-                onClick = onUpdate,
-                text = stringResource(R.string.update_dialog_confirm),
-            )
+            if (isDownloading) {
+                PeriodicButton(
+                    onClick = onCancelDownload,
+                    text = "取消下载",
+                )
+            } else if (downloadFailed) {
+                PeriodicButton(
+                    onClick = onUpdate,
+                    text = "重试",
+                )
+            } else {
+                PeriodicButton(
+                    onClick = onUpdate,
+                    text = stringResource(R.string.update_dialog_confirm),
+                )
+            }
         },
         dismissButton = {
-            PeriodicOutlinedButton(
-                onClick = onSnooze,
-                text = stringResource(R.string.update_dialog_snooze),
-            )
+            if (!isDownloading) {
+                if (downloadFailed) {
+                    // 失败时：跳过此版本
+                    PeriodicTextButton(
+                        onClick = onSkipVersion,
+                        text = stringResource(R.string.update_dialog_skip_version),
+                    )
+                } else {
+                    // 正常：稍后提示
+                    PeriodicOutlinedButton(
+                        onClick = onSnooze,
+                        text = stringResource(R.string.update_dialog_snooze),
+                    )
+                }
+            }
+            // 下载中不显示 dismissButton
         },
     )
 }
