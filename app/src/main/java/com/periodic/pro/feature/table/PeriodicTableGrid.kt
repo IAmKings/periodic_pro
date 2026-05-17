@@ -147,8 +147,9 @@ fun PeriodicTableGrid(
 
             // === 主体：行号 + 元素区 ===
             Row(modifier = Modifier.weight(1f)) {
-                // 左侧行号列（固定，使用显式 Spacer 间隔匹配元素区的 gap）
+                // 左侧行号列（固定，顶部留白对齐元素区的列号行）
                 Column(modifier = Modifier.width(rowLabelWidthDp)) {
+                    Spacer(modifier = Modifier.height(headerHeightDp))
                     for (i in 0..6) {
                         Box(modifier = Modifier.size(width = rowLabelWidthDp, height = cellDp), contentAlignment = Alignment.Center) {
                             Text(rowLabels[i], style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
