@@ -182,6 +182,7 @@ private fun ProfileContent(
             // === 2. 更新检查区 ===
             UpdateSection(
                 isChecking = state.isChecking,
+                isDownloading = state.isDownloading,
                 hasNewVersion = state.hasNewVersion,
                 onCheckUpdate = { onIntent(ProfileIntent.CheckUpdate) },
             )
@@ -312,6 +313,7 @@ private fun ThemeOption(
 @Composable
 private fun UpdateSection(
     isChecking: Boolean,
+    isDownloading: Boolean,
     hasNewVersion: Boolean,
     onCheckUpdate: () -> Unit,
 ) {
@@ -329,7 +331,15 @@ private fun UpdateSection(
 
         Spacer(modifier = Modifier.height(Dimensions.Dp12))
 
-        if (isChecking) {
+        if (isDownloading) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.height(Dimensions.Dp8))
+            Text(
+                text = "更新中...",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        } else if (isChecking) {
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth(),
             )

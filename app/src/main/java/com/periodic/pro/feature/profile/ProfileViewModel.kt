@@ -84,7 +84,7 @@ class ProfileViewModel(
     }
 
     private fun downloadAndInstall(release: GitHubRelease) {
-        // 不清除 updateResult，保持弹窗可见，下载进度由系统通知栏展示
+        _state.update { it.copy(isDownloading = true) }
         apkInstaller.downloadAndInstall(release)
     }
 }

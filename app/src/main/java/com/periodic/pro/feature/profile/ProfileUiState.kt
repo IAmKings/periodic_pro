@@ -13,6 +13,7 @@ import com.periodic.pro.data.update.UpdateResult
 data class ProfileUiState(
     val themeMode: ThemeMode = ThemeMode.SYSTEM,
     val isChecking: Boolean = false,
+    val isDownloading: Boolean = false,
     val updateResult: UpdateResult? = null,
     val hasNewVersion: Boolean = false,
 )
