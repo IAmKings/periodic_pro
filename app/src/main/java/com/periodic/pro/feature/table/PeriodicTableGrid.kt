@@ -7,14 +7,18 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -78,68 +82,140 @@ fun PeriodicTableGrid(
         val cellPx = with(density) { maxWidth.toPx() / 18f }
         val clampedCellPx = cellPx.coerceIn(minCellPx, maxCellPx)
         val cellDp = with(density) { clampedCellPx.toDp() }
+        val cellPxInt = clampedCellPx.toInt()
+
+        // 镧系/锕系间隔
+        val gapPx = with(density) { 8.dp.toPx() }.toInt()
+
+        // 行标签列宽
+        val rowLabelWidthDp = with(density) { 24.dp }
+
+        // 列号行高
+        val headerHeightDp = with(density) { 20.dp }
+
+        // 计算 y 偏移（含间隔）
+        fun yOffset(row: Int): Int {
+            var y = headerHeightDp.toPx().toInt() + row * cellPxInt
+            if (row >= 7) y += gapPx // 镧系前加间隔
+            if (row >= 8) y += gapPx // 锕系前加间隔
+            return y
+        }
+
+        val contentWidthDp = with(density) { (18 * clampedCellPx).toDp() }
+        val lastRow = 9 // rows 0-9 (including La/Ac)
+        val totalHeightPx = yOffset(lastRow) + cellPxInt
+        val totalHeightDp = with(density) { totalHeightPx.toDp() }
+
+        val scrollState = rememberScrollState()
+        val gapDp = with(density) { 8.dp }
+        val rowLabels = listOf("1", "2", "3", "4", "5", "6", "7", "La", "Ac")
 
         val fBlockMarkerRow6 = Pair(5, 2)
         val fBlockMarkerRow7 = Pair(6, 2)
 
-        val contentWidthDp = with(density) { (18 * clampedCellPx).toDp() }
-        val contentHeightPx = maxOf(10 * clampedCellPx, with(density) { maxHeight.toPx() })
-        val contentHeightDp = with(density) { contentHeightPx.toDp() }
-
-        val scrollState = rememberScrollState()
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .horizontalScroll(scrollState),
-        ) {
-            Box(
-                modifier = Modifier
-                    .requiredSize(width = contentWidthDp, height = contentHeightDp),
-            ) {
-                elements.forEach { element ->
-                    val (row, col) = getGridPosition(element)
-                    val isSelected = element.atomicNumber in selectedIds
-                    val isInSearch = matchedIds == null || element.atomicNumber in matchedIds
-
-                    val alphaValue = when {
-                        matchedIds != null && !isInSearch -> 0.2f
-                        selectedCategory != null && element.category != selectedCategory -> 0.2f
-                        isMultiSelectMode && !isSelected -> 0.5f
-                        else -> 1.0f
+        Column(modifier = Modifier.fillMaxSize()) {
+            // === 顶部列号行 ===
+            Row(modifier = Modifier.height(headerHeightDp)) {
+                Spacer(modifier = Modifier.width(rowLabelWidthDp))
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .horizontalScroll(scrollState),
+                ) {
+                    Row(
+                        modifier = Modifier.requiredSize(width = contentWidthDp, height = headerHeightDp),
+                    ) {
+                        for (col in 1..18) {
+                            Box(
+                                modifier = Modifier.size(width = cellDp, height = headerHeightDp),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Text(
+                                    text = "$col",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    textAlign = TextAlign.Center,
+                                )
+                            }
+                        }
                     }
+                }
+            }
 
-                    PeriodicTableCell(
-                        element = element,
-                        zhName = zhMap[element.atomicNumber]?.nameZh,
-                        isSelected = isSelected,
-                        alpha = alphaValue,
-                        onClick = { onElementClick(element.atomicNumber) },
-                        onLongClick = { onElementLongClick(element.atomicNumber) },
-                        modifier = Modifier
-                            .offset { IntOffset(col * clampedCellPx.toInt(), row * clampedCellPx.toInt()) }
-                            .size(cellDp),
-                    )
+            // === 主体：行号 + 元素区 ===
+            Row(modifier = Modifier.weight(1f)) {
+                // 左侧行号列（固定，使用显式 Spacer 间隔匹配元素区的 gap）
+                Column(modifier = Modifier.width(rowLabelWidthDp)) {
+                    for (i in 0..6) {
+                        Box(modifier = Modifier.size(width = rowLabelWidthDp, height = cellDp), contentAlignment = Alignment.Center) {
+                            Text(rowLabels[i], style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                    Spacer(modifier = Modifier.size(width = rowLabelWidthDp, height = gapDp))
+                    Box(modifier = Modifier.size(width = rowLabelWidthDp, height = cellDp), contentAlignment = Alignment.Center) {
+                        Text(rowLabels[7], style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    Spacer(modifier = Modifier.size(width = rowLabelWidthDp, height = gapDp))
+                    Box(modifier = Modifier.size(width = rowLabelWidthDp, height = cellDp), contentAlignment = Alignment.Center) {
+                        Text(rowLabels[8], style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
                 }
 
-                // F-block 标记
-                if (gridMap[fBlockMarkerRow6] == null) {
-                    FBlockMarker(
-                        text = "*",
-                        onClick = { onElementClick(57) },
+                // 右侧元素区（可水平滚动）
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .horizontalScroll(scrollState),
+                ) {
+                    Box(
                         modifier = Modifier
-                            .offset { IntOffset(fBlockMarkerRow6.second * clampedCellPx.toInt(), fBlockMarkerRow6.first * clampedCellPx.toInt()) }
-                            .size(cellDp),
-                    )
-                }
-                if (gridMap[fBlockMarkerRow7] == null) {
-                    FBlockMarker(
-                        text = "**",
-                        onClick = { onElementClick(89) },
-                        modifier = Modifier
-                            .offset { IntOffset(fBlockMarkerRow7.second * clampedCellPx.toInt(), fBlockMarkerRow7.first * clampedCellPx.toInt()) }
-                            .size(cellDp),
-                    )
+                            .requiredSize(width = contentWidthDp, height = totalHeightDp),
+                    ) {
+                        elements.forEach { element ->
+                            val (row, col) = getGridPosition(element)
+                            val isSelected = element.atomicNumber in selectedIds
+                            val isInSearch = matchedIds == null || element.atomicNumber in matchedIds
+
+                            val alphaValue = when {
+                                matchedIds != null && !isInSearch -> 0.2f
+                                selectedCategory != null && element.category != selectedCategory -> 0.2f
+                                isMultiSelectMode && !isSelected -> 0.5f
+                                else -> 1.0f
+                            }
+
+                            PeriodicTableCell(
+                                element = element,
+                                zhName = zhMap[element.atomicNumber]?.nameZh,
+                                isSelected = isSelected,
+                                alpha = alphaValue,
+                                onClick = { onElementClick(element.atomicNumber) },
+                                onLongClick = { onElementLongClick(element.atomicNumber) },
+                                modifier = Modifier
+                                    .offset { IntOffset(col * cellPxInt, yOffset(row)) }
+                                    .size(cellDp),
+                            )
+                        }
+
+                        // F-block 标记
+                        if (gridMap[fBlockMarkerRow6] == null) {
+                            FBlockMarker(
+                                text = "*",
+                                onClick = { onElementClick(57) },
+                                modifier = Modifier
+                                    .offset { IntOffset(fBlockMarkerRow6.second * cellPxInt, yOffset(fBlockMarkerRow6.first)) }
+                                    .size(cellDp),
+                            )
+                        }
+                        if (gridMap[fBlockMarkerRow7] == null) {
+                            FBlockMarker(
+                                text = "**",
+                                onClick = { onElementClick(89) },
+                                modifier = Modifier
+                                    .offset { IntOffset(fBlockMarkerRow7.second * cellPxInt, yOffset(fBlockMarkerRow7.first)) }
+                                    .size(cellDp),
+                            )
+                        }
+                    }
                 }
             }
         }
