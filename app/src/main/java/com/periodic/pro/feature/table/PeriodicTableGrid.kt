@@ -93,11 +93,13 @@ fun PeriodicTableGrid(
         // 列号行高
         val headerHeightDp = with(density) { 20.dp }
 
+        val headerHeightPx = with(density) { headerHeightDp.toPx().toInt() }
+
         // 计算 y 偏移（含间隔）
         fun yOffset(row: Int): Int {
-            var y = headerHeightDp.toPx().toInt() + row * cellPxInt
-            if (row >= 7) y += gapPx // 镧系前加间隔
-            if (row >= 8) y += gapPx // 锕系前加间隔
+            var y = headerHeightPx + row * cellPxInt
+            if (row >= 7) y += gapPx
+            if (row >= 8) y += gapPx
             return y
         }
 
