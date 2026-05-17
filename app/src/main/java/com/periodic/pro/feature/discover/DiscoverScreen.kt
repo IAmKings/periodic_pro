@@ -38,7 +38,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.R
 import com.periodic.pro.data.discover.model.DiscoverItem
-import com.periodic.pro.theme.CategoryColors
+import androidx.compose.ui.graphics.Color
+import com.periodic.pro.data.element.model.Category
+import com.periodic.pro.theme.LocalCategoryColors
+import com.periodic.pro.theme.forCategory
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.Elevation
 import com.periodic.pro.theme.PeriodicProTheme
@@ -115,6 +118,7 @@ fun DiscoverScreen(
                 items = state.items,
                 dailyRecommend = state.dailyRecommend,
                 symbolMap = state.symbolMap,
+                categoryMap = state.categoryMap,
                 onItemClick = { vm.handle(DiscoverIntent.SelectItem(it)) },
                 modifier = Modifier.padding(padding),
             )
@@ -132,6 +136,7 @@ private fun DiscoverContent(
     items: List<DiscoverItem>,
     dailyRecommend: DiscoverItem?,
     symbolMap: Map<Int, String>,
+    categoryMap: Map<Int, Category>,
     onItemClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -149,6 +154,9 @@ private fun DiscoverContent(
                 DailyRecommendSection(
                     item = dailyRecommend,
                     symbol = symbolMap[dailyRecommend.atomicNumber] ?: "?",
+                    categoryColor = LocalCategoryColors.current.forCategory(
+                        categoryMap[dailyRecommend.atomicNumber] ?: Category.TRANSITION_METAL
+                    ),
                     onClick = { onItemClick(dailyRecommend.atomicNumber) },
                 )
             }
@@ -170,6 +178,9 @@ private fun DiscoverContent(
             DiscoverFeedCard(
                 item = item,
                 symbol = symbolMap[item.atomicNumber] ?: "?",
+                categoryColor = LocalCategoryColors.current.forCategory(
+                    categoryMap[item.atomicNumber] ?: Category.TRANSITION_METAL
+                ),
                 onClick = { onItemClick(item.atomicNumber) },
             )
         }
@@ -190,11 +201,10 @@ private fun DiscoverContent(
 private fun DailyRecommendSection(
     item: DiscoverItem,
     symbol: String,
+    categoryColor: Color,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // 默认使用过渡金属色，因为可能不知道元素分类
-    val elementColor = CategoryColors().metalloid
 
     Card(
         onClick = onClick,
@@ -211,7 +221,7 @@ private fun DailyRecommendSection(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(6.dp)
-                    .background(elementColor),
+                    .background(categoryColor),
             )
 
             Box(
@@ -224,7 +234,7 @@ private fun DailyRecommendSection(
                     Text(
                         text = stringResource(R.string.discover_daily_recommend),
                         style = MaterialTheme.typography.labelMedium,
-                        color = elementColor,
+                        color = categoryColor,
                         fontWeight = FontWeight.Bold,
                     )
 
@@ -235,7 +245,7 @@ private fun DailyRecommendSection(
                         text = symbol,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = elementColor,
+                        color = categoryColor,
                     )
 
                     Spacer(modifier = Modifier.height(Dimensions.Dp4))
@@ -273,6 +283,7 @@ private fun DailyRecommendSection(
 private fun DiscoverFeedCard(
     item: DiscoverItem,
     symbol: String,
+    categoryColor: Color,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -296,7 +307,7 @@ private fun DiscoverFeedCard(
                 modifier = Modifier
                     .size(44.dp)
                     .background(
-                        color = CategoryColors().metalloid.copy(alpha = 0.15f),
+                        color = categoryColor.copy(alpha = 0.15f),
                         shape = RoundedCornerShape(22.dp),
                     ),
                 contentAlignment = Alignment.Center,
@@ -305,7 +316,7 @@ private fun DiscoverFeedCard(
                     text = item.atomicNumber.toString(),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = CategoryColors().metalloid,
+                    color = categoryColor,
                 )
             }
 
@@ -375,6 +386,7 @@ private fun DiscoverContentPreview() {
             items = previewDiscoverItems,
             dailyRecommend = previewDaily,
             symbolMap = emptyMap(),
+            categoryMap = emptyMap(),
             onItemClick = {},
         )
     }

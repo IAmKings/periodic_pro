@@ -1,6 +1,7 @@
 package com.periodic.pro.feature.discover
 
 import com.periodic.pro.data.discover.model.DiscoverItem
+import com.periodic.pro.data.element.model.Category
 
 /**
  * Discover 屏 UI 状态。
@@ -15,8 +16,9 @@ data class DiscoverUiState(
     val dailyRecommend: DiscoverItem? = null,
     val isLoading: Boolean = true,
     val errorMessage: String? = null,
-    /** 原子序数 → 元素符号映射 */
     val symbolMap: Map<Int, String> = emptyMap(),
+    /** 原子序数 → 元素分类映射 */
+    val categoryMap: Map<Int, Category> = emptyMap(),
 ) {
     val isReady: Boolean get() = !isLoading && errorMessage == null
 }

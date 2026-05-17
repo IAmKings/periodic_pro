@@ -49,13 +49,15 @@ class DiscoverViewModel(
             try {
                 val items = discoverRepo.loadAll()
                 val daily = discoverRepo.getDailyRecommend()
-                val symbolMap = elementRepo.getAll()
-                    .associate { it.atomicNumber to it.symbol }
+                val elements = elementRepo.getAll()
+                val symbolMap = elements.associate { it.atomicNumber to it.symbol }
+                val categoryMap = elements.associate { it.atomicNumber to it.category }
                 _state.update {
                     it.copy(
                         items = items,
                         dailyRecommend = daily,
                         symbolMap = symbolMap,
+                        categoryMap = categoryMap,
                         isLoading = false,
                     )
                 }
