@@ -20,8 +20,8 @@ android {
         applicationId = "com.periodic.pro"
         minSdk = 24
         targetSdk = 35
-        versionCode = 8
-        versionName = "0.2.5"
+        versionCode = 9
+        versionName = "0.2.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
