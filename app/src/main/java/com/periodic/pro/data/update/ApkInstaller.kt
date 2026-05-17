@@ -131,7 +131,10 @@ class ApkInstaller(
         return downloadAndInstall(release) { /* 恢复下载不使用进度回调 */ }
     }
 
-    fun cancelDownload() { cancelled = true }
+    fun cancelDownload() {
+        cancelled = true
+        currentDownloadId++ // 阻止旧线程的回调污染
+    }
 
     fun hasPending(): Boolean = pendingRelease != null
 
