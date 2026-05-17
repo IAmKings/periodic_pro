@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -109,21 +110,22 @@ fun PeriodicTableGrid(
         val totalHeightPx = yOffset(lastRow) + cellPxInt
         val totalHeightDp = with(density) { totalHeightPx.toDp() }
 
-        val scrollState = rememberScrollState()
+        val hScrollState = rememberScrollState()
+        val vScrollState = rememberScrollState()
         val gapDp = with(density) { 8.dp }
         val rowLabels = listOf("1", "2", "3", "4", "5", "6", "7", "La", "Ac")
 
         val fBlockMarkerRow6 = Pair(5, 2)
         val fBlockMarkerRow7 = Pair(6, 2)
 
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize().verticalScroll(vScrollState)) {
             // === 顶部列号行 ===
             Row(modifier = Modifier.height(headerHeightDp)) {
                 Spacer(modifier = Modifier.width(rowLabelWidthDp))
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .horizontalScroll(scrollState),
+                        .horizontalScroll(hScrollState),
                 ) {
                     Row(
                         modifier = Modifier.requiredSize(width = contentWidthDp, height = headerHeightDp),
@@ -146,7 +148,7 @@ fun PeriodicTableGrid(
             }
 
             // === 主体：行号 + 元素区 ===
-            Row(modifier = Modifier.weight(1f)) {
+            Row {
                 // 左侧行号列（固定，顶部留白对齐元素区的列号行）
                 Column(modifier = Modifier.width(rowLabelWidthDp)) {
                     Spacer(modifier = Modifier.height(headerHeightDp))
@@ -168,7 +170,7 @@ fun PeriodicTableGrid(
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .horizontalScroll(scrollState),
+                        .horizontalScroll(hScrollState),
                 ) {
                     Box(
                         modifier = Modifier
