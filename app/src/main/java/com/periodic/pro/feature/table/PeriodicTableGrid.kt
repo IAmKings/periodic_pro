@@ -97,16 +97,15 @@ fun PeriodicTableGrid(
 
         val headerHeightPx = with(density) { headerHeightDp.toPx().toInt() }
 
-        // 计算 y 偏移（含间隔）
+        // 计算 y 偏移（含间隔）：镧系前 gapPx*2，镧锕之间无额外间隔
         fun yOffset(row: Int): Int {
             var y = headerHeightPx + row * cellPxInt
-            if (row >= 7) y += gapPx
-            if (row >= 8) y += gapPx
+            if (row >= 7) y += gapPx * 2 // 镧系前翻倍间隔
             return y
         }
 
         val contentWidthDp = with(density) { (18 * clampedCellPx).toDp() }
-        val lastRow = 9 // rows 0-9 (including La/Ac)
+        val lastRow = 8
         val totalHeightPx = yOffset(lastRow) + cellPxInt
         val totalHeightDp = with(density) { totalHeightPx.toDp() }
 
@@ -156,11 +155,10 @@ fun PeriodicTableGrid(
                             Text(rowLabels[i], style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
-                    Spacer(modifier = Modifier.size(width = rowLabelWidthDp, height = gapDp))
+                    Spacer(modifier = Modifier.size(width = rowLabelWidthDp, height = gapDp * 2))
                     Box(modifier = Modifier.size(width = rowLabelWidthDp, height = cellDp), contentAlignment = Alignment.Center) {
                         Text(rowLabels[7], style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
-                    Spacer(modifier = Modifier.size(width = rowLabelWidthDp, height = gapDp))
                     Box(modifier = Modifier.size(width = rowLabelWidthDp, height = cellDp), contentAlignment = Alignment.Center) {
                         Text(rowLabels[8], style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
