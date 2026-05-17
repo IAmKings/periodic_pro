@@ -59,6 +59,7 @@ fun PeriodicTableGrid(
     selectedIds: Set<Int>,
     onElementClick: (Int) -> Unit,
     onElementLongClick: (Int) -> Unit,
+    onSelectSeries: (List<Int>) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val gridMap = remember(elements) { buildGridMap(elements) }
@@ -204,7 +205,7 @@ fun PeriodicTableGrid(
                         if (gridMap[fBlockMarkerRow6] == null) {
                             FBlockMarker(
                                 text = "*",
-                                onClick = { onElementClick(57) },
+                                onClick = { onSelectSeries((57..71).toList()) },
                                 modifier = Modifier
                                     .offset { IntOffset(fBlockMarkerRow6.second * cellPxInt, yOffset(fBlockMarkerRow6.first)) }
                                     .size(cellDp),
@@ -213,7 +214,7 @@ fun PeriodicTableGrid(
                         if (gridMap[fBlockMarkerRow7] == null) {
                             FBlockMarker(
                                 text = "**",
-                                onClick = { onElementClick(89) },
+                                onClick = { onSelectSeries((89..103).toList()) },
                                 modifier = Modifier
                                     .offset { IntOffset(fBlockMarkerRow7.second * cellPxInt, yOffset(fBlockMarkerRow7.first)) }
                                     .size(cellDp),

@@ -228,6 +228,7 @@ fun TableScreen(
                         selectedIds = state.selectedIds,
                         onElementClick = { viewModel.handle(TableIntent.OnElementClick(it)) },
                         onElementLongClick = { viewModel.handle(TableIntent.OnElementLongClick(it)) },
+                        onSelectSeries = { viewModel.handle(TableIntent.SelectSeries(it)) },
                     )
                 }
             }

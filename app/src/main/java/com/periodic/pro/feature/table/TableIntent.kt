@@ -30,6 +30,9 @@ sealed interface TableIntent {
     /** 点击元素（非多选模式下跳详情） */
     data class OnElementClick(val atomicNumber: Int) : TableIntent
 
-    /** 长按元素（进入多选 + 收藏） */
+    /** 长按元素（进入多选模式） */
     data class OnElementLongClick(val atomicNumber: Int) : TableIntent
+
+    /** 选择整个系列（进入多选 + 全选指定元素） */
+    data class SelectSeries(val atomicNumbers: List<Int>) : TableIntent
 }

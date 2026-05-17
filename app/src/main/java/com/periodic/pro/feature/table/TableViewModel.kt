@@ -47,6 +47,7 @@ class TableViewModel(
             TableIntent.ConfirmCompare -> confirmCompare()
             is TableIntent.OnElementClick -> onElementClick(intent.atomicNumber)
             is TableIntent.OnElementLongClick -> onElementLongClick(intent.atomicNumber)
+            is TableIntent.SelectSeries -> selectSeries(intent.atomicNumbers)
         }
     }
 
@@ -87,6 +88,15 @@ class TableViewModel(
             it.copy(
                 isMultiSelectMode = true,
                 selectedIds = it.selectedIds + atomicNumber,
+            )
+        }
+    }
+
+    private fun selectSeries(atomicNumbers: List<Int>) {
+        _state.update {
+            it.copy(
+                isMultiSelectMode = true,
+                selectedIds = it.selectedIds + atomicNumbers.toSet(),
             )
         }
     }
