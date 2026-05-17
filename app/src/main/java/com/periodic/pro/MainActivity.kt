@@ -88,7 +88,6 @@ private fun AutoUpdateHost(
                 downloadFailed = updateState.downloadFailed,
                 onCancelDownload = {
                     apkInstaller.cancelDownload()
-                    updateService.setDownloadProgress(-1f)
                 },
                 onDismiss = { updateService.dismissDialog() },
                 onSnooze = { updateService.snooze() },

@@ -28,6 +28,10 @@ class ApkInstaller(
     @Volatile
     private var cancelled = false
 
+    /** 当前下载 ID，用于回调去重 */
+    @Volatile
+    private var currentDownloadId = 0
+
     /**
      * 下载并安装 APK。
      *
@@ -67,8 +71,10 @@ class ApkInstaller(
         if (apkFile.exists()) apkFile.delete()
 
         cancelled = false
+        val downloadId = ++currentDownloadId
         Thread {
             try {
+                if (downloadId != currentDownloadId) return@Thread // 已有新下载
                 val url = URL(apkAsset.browserDownloadUrl)
                 val conn = url.openConnection() as HttpURLConnection
                 conn.apply {
@@ -88,7 +94,7 @@ class ApkInstaller(
                 while (input.read(buffer).also { bytes = it } != -1) {
                     if (cancelled) {
                         Log.w(TAG, "Download cancelled")
-                        onProgress(-1f)
+                        if (downloadId == currentDownloadId) onProgress(-1f)
                         output.close()
                         input.close()
                         conn.disconnect()
@@ -97,7 +103,7 @@ class ApkInstaller(
                     }
                     output.write(buffer, 0, bytes)
                     downloaded += bytes
-                    if (total > 0) {
+                    if (total > 0 && downloadId == currentDownloadId) {
                         onProgress(downloaded.toFloat() / total.toFloat())
                     }
                 }

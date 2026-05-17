@@ -87,8 +87,7 @@ class ProfileViewModel(
 
     fun cancelDownload() {
         apkInstaller.cancelDownload()
-        _state.update { it.copy(isDownloading = false, downloadProgress = -1f) }
-        updateService.setDownloadProgress(-1f)
+        _state.update { it.copy(isDownloading = false) }
     }
 
     private fun downloadAndInstall(release: GitHubRelease) {
