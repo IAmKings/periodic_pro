@@ -91,8 +91,9 @@ fun ProfileScreen(
         }
         if (message != null) {
             snackbarHostState.showSnackbar(message = message)
+            onIntent(ProfileIntent.ClearUpdateResult)
         }
-        onIntent(ProfileIntent.ClearUpdateResult)
+        // Available 时不自动清除——由 UpdateDialog 的 dismiss/snooze/skip 回调处理
     }
 
     // UpdateDialog

@@ -75,7 +75,8 @@ class ProfileViewModel(
     }
 
     private fun clearUpdateResult() {
-        updateService.clearResult()
+        // 只清本地 result，不碰全局 UpdateService（否则会导致 MainActivity 弹窗消失）
+        _state.update { it.copy(updateResult = null) }
     }
 
     fun skipVersion(version: String) {
