@@ -87,7 +87,14 @@ class ProfileViewModel(
     private fun downloadAndInstall(release: GitHubRelease) {
         _state.update { it.copy(isDownloading = true, downloadProgress = 0f) }
         apkInstaller.downloadAndInstall(release) { progress ->
-            _state.update { it.copy(downloadProgress = progress) }
+            // >=1f 完成，-1f 失败 → 重置状态
+            val done = progress >= 1f || progress == -1f
+            _state.update {
+                it.copy(
+                    downloadProgress = progress,
+                    isDownloading = !done,
+                )
+            }
             updateService.setDownloadProgress(progress)
         }
     }

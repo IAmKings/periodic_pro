@@ -49,6 +49,7 @@ fun UpdateDialog(
     downloadProgress: Float = -1f,
     modifier: Modifier = Modifier,
 ) {
+    val isDownloading = downloadProgress >= 0f && downloadProgress < 1f
     val apkSize = release.assets
         .firstOrNull { it.name.endsWith(".apk") }
         ?.let { formatFileSize(it.size) }
@@ -61,7 +62,7 @@ fun UpdateDialog(
         .joinToString("\n")
 
     AlertDialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = { if (!isDownloading) onDismiss() },
         modifier = modifier,
         title = {
             Text(

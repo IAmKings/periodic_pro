@@ -137,9 +137,10 @@ class UpdateService(
         _state.update { it.copy(shouldShowDialog = false) }
     }
 
-    /** 更新下载进度 */
+    /** 更新下载进度。>=1 或 -1 时自动重置为 -1 */
     fun setDownloadProgress(progress: Float) {
-        _state.update { it.copy(downloadProgress = progress) }
+        val reset = progress >= 1f || progress == -1f
+        _state.update { it.copy(downloadProgress = if (reset) -1f else progress) }
     }
 
     /** 清除手动检查结果 */
