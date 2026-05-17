@@ -90,7 +90,7 @@ private fun AutoUpdateHost(
                     updateService.skipVersion(result.release.tagName.removePrefix("v"))
                 },
                 onUpdate = {
-                    updateService.dismissDialog()
+                    // 不关弹窗，下载进度由系统通知栏展示
                     apkInstaller.downloadAndInstall(result.release)
                 },
             )
