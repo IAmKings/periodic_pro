@@ -73,49 +73,48 @@ class ApkInstaller(
         cancelled = false
         val downloadId = ++currentDownloadId
         Thread {
+            var conn: HttpURLConnection? = null
+            var input: java.io.InputStream? = null
+            var output: FileOutputStream? = null
             try {
-                if (downloadId != currentDownloadId) return@Thread // 已有新下载
-                val url = URL(apkAsset.browserDownloadUrl)
-                val conn = url.openConnection() as HttpURLConnection
+                if (downloadId != currentDownloadId) return@Thread
+                conn = URL(apkAsset.browserDownloadUrl).openConnection() as HttpURLConnection
                 conn.apply {
                     requestMethod = "GET"
                     connectTimeout = 30_000
                     readTimeout = 60_000
                     setRequestProperty("User-Agent", "PeriodicPro/$versionTag")
                 }
+                input = conn.inputStream
+                output = FileOutputStream(apkFile)
 
                 val total = conn.contentLength.toLong()
-                val input = conn.inputStream
-                val output = FileOutputStream(apkFile)
                 val buffer = ByteArray(8192)
                 var downloaded = 0L
                 var bytes: Int
 
-                while (input.read(buffer).also { bytes = it } != -1) {
+                while (input!!.read(buffer).also { bytes = it } != -1) {
                     if (cancelled) {
                         Log.w(TAG, "Download cancelled")
                         if (downloadId == currentDownloadId) onProgress(-1f)
-                        output.close()
-                        input.close()
-                        conn.disconnect()
-                        apkFile.delete()
                         return@Thread
                     }
-                    output.write(buffer, 0, bytes)
+                    output!!.write(buffer, 0, bytes)
                     downloaded += bytes
                     if (total > 0 && downloadId == currentDownloadId) {
                         onProgress(downloaded.toFloat() / total.toFloat())
                     }
                 }
-                output.close()
-                input.close()
-                conn.disconnect()
-
                 Log.d(TAG, "Download completed: $fileName")
                 installApk(apkFile)
             } catch (e: Exception) {
                 Log.e(TAG, "Download failed", e)
-                onProgress(-1f) // -1 = 失败
+                if (downloadId == currentDownloadId) onProgress(-1f)
+            } finally {
+                try { output?.close() } catch (_: Exception) {}
+                try { input?.close() } catch (_: Exception) {}
+                try { conn?.disconnect() } catch (_: Exception) {}
+                if (cancelled) apkFile.delete()
             }
         }.start()
 

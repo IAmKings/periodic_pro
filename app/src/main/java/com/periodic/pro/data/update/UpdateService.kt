@@ -156,11 +156,6 @@ class UpdateService(
         _state.update { it.copy(downloadFailed = false) }
     }
 
-    /** 清除手动检查结果 */
-    fun clearResult() {
-        _state.update { it.copy(result = null) }
-    }
-
     private suspend fun doCheck(currentVersion: String): UpdateResult {
         return repository.checkUpdate(currentVersion)
     }
