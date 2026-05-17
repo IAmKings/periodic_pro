@@ -104,6 +104,7 @@ fun ProfileScreen(
         UpdateDialog(
             release = release,
             currentVersion = currentVersion,
+            downloadProgress = state.downloadProgress,
             onDismiss = { onIntent(ProfileIntent.ClearUpdateResult) },
             onSnooze = { onIntent(ProfileIntent.ClearUpdateResult) },
             onSkipVersion = {

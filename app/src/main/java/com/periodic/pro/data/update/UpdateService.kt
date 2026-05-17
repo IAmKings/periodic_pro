@@ -20,14 +20,12 @@ import java.util.Locale
  * 更新检查全局状态。
  */
 data class UpdateState(
-    /** 是否正在检查中 */
     val isChecking: Boolean = false,
-    /** 检查结果 */
     val result: UpdateResult? = null,
-    /** 是否应展示全局弹窗（仅启动自动检查弹窗，设置页手动检查不弹窗） */
     val shouldShowDialog: Boolean = false,
-    /** 是否有新版本（供导航 Badge 红点判断） */
     val hasNewVersion: Boolean = false,
+    /** APK下载进度 0f-1f，-1f 表示失败，其他表示未在下载 */
+    val downloadProgress: Float = -1f,
 )
 
 /**
@@ -137,6 +135,11 @@ class UpdateService(
     /** 关闭弹窗（外部点击取消），不清除 hasNewVersion */
     fun dismissDialog() {
         _state.update { it.copy(shouldShowDialog = false) }
+    }
+
+    /** 更新下载进度 */
+    fun setDownloadProgress(progress: Float) {
+        _state.update { it.copy(downloadProgress = progress) }
     }
 
     /** 清除手动检查结果 */

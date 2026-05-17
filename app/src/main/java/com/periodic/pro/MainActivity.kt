@@ -84,14 +84,16 @@ private fun AutoUpdateHost(
             UpdateDialog(
                 release = result.release,
                 currentVersion = result.currentVersion,
+                downloadProgress = updateState.downloadProgress,
                 onDismiss = { updateService.dismissDialog() },
                 onSnooze = { updateService.snooze() },
                 onSkipVersion = {
                     updateService.skipVersion(result.release.tagName.removePrefix("v"))
                 },
                 onUpdate = {
-                    // 不关弹窗，下载进度由系统通知栏展示
-                    apkInstaller.downloadAndInstall(result.release)
+                    apkInstaller.downloadAndInstall(result.release) { progress ->
+                        updateService.setDownloadProgress(progress)
+                    }
                 },
             )
         }

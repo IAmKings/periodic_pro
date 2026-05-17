@@ -49,6 +49,7 @@ class ProfileViewModel(
                         isChecking = serviceState.isChecking,
                         updateResult = serviceState.result,
                         hasNewVersion = serviceState.hasNewVersion,
+                        downloadProgress = if (serviceState.downloadProgress >= 0f) serviceState.downloadProgress else it.downloadProgress,
                     )
                 }
             }
@@ -84,7 +85,10 @@ class ProfileViewModel(
     }
 
     private fun downloadAndInstall(release: GitHubRelease) {
-        _state.update { it.copy(isDownloading = true) }
-        apkInstaller.downloadAndInstall(release)
+        _state.update { it.copy(isDownloading = true, downloadProgress = 0f) }
+        apkInstaller.downloadAndInstall(release) { progress ->
+            _state.update { it.copy(downloadProgress = progress) }
+            updateService.setDownloadProgress(progress)
+        }
     }
 }

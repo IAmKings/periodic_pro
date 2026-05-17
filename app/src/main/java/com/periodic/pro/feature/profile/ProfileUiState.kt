@@ -16,4 +16,5 @@ data class ProfileUiState(
     val isDownloading: Boolean = false,
     val updateResult: UpdateResult? = null,
     val hasNewVersion: Boolean = false,
+    val downloadProgress: Float = -1f,
 )

@@ -9,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import java.util.Locale
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,6 +46,7 @@ fun UpdateDialog(
     onSnooze: () -> Unit,
     onSkipVersion: () -> Unit,
     onUpdate: () -> Unit,
+    downloadProgress: Float = -1f,
     modifier: Modifier = Modifier,
 ) {
     val apkSize = release.assets
@@ -117,6 +119,21 @@ fun UpdateDialog(
                 )
 
                 Spacer(modifier = Modifier.height(Dimensions.Dp16))
+
+                // 下载进度
+                if (downloadProgress >= 0f) {
+                    LinearProgressIndicator(
+                        progress = { downloadProgress },
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Spacer(modifier = Modifier.height(Dimensions.Dp4))
+                    Text(
+                        text = "下载中 ${(downloadProgress * 100).toInt()}%",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Spacer(modifier = Modifier.height(Dimensions.Dp8))
+                }
 
                 // 跳过此版本 — 内嵌在内容区底部，按钮上方
                 PeriodicTextButton(
