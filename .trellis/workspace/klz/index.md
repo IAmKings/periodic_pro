@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 13
+- **Total Sessions**: 14
 - **Last Active**: 2026-05-17
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~456 | Active |
+| `journal-1.md` | ~495 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 14 | 2026-05-17 | 优化周期表UI — 行列号+镧锕间隔+F-block多选 | `5634fcc`, `c388135`, `d494c0a`, `0bf94f6`, `be8bb5c`, `0e201c5`, `7cd3921` | `master` |
 | 13 | 2026-05-17 | 设计权限弹窗系统+修复安装权限检查 | `4bd5e5f`, `cd53ba9`, `6b904c3`, `e754843` | `master` |
 | 12 | 2026-05-15 | 修复周期表长按误触收藏及滑动/交互问题 | `c8f840b`, `e226eb4`, `9e2134f` | `master` |
 | 11 | 2026-05-15 | 更新功能升级为全局服务——弹窗2+1布局、设置联动红点、并发去重 | `63a069f`, `63350c4`, `723ec73` | `master` |
