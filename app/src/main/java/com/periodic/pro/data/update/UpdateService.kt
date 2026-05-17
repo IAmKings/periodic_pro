@@ -137,14 +137,16 @@ class UpdateService(
         _state.update { it.copy(shouldShowDialog = false) }
     }
 
-    /** 更新下载进度。>=1 或 -1（失败）时自动重置 */
+    /** 更新下载进度。>=1 关闭弹窗，-1 标记失败 */
     fun setDownloadProgress(progress: Float) {
+        val success = progress >= 1f
         val failed = progress == -1f
-        val done = progress >= 1f || failed
         _state.update {
             it.copy(
-                downloadProgress = if (done) -1f else progress,
-                downloadFailed = if (done) failed else it.downloadFailed,
+                downloadProgress = -1f,
+                downloadFailed = failed,
+                shouldShowDialog = if (success) false else it.shouldShowDialog,
+                result = if (success) null else it.result,
             )
         }
     }

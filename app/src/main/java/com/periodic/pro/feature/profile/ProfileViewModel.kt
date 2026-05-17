@@ -101,6 +101,7 @@ class ProfileViewModel(
                     downloadProgress = progress,
                     isDownloading = !done,
                     downloadFailed = progress == -1f,
+                    updateResult = if (progress >= 1f) null else it.updateResult,
                 )
             }
             updateService.setDownloadProgress(progress)
