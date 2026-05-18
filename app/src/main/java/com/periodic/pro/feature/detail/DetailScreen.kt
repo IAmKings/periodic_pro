@@ -215,8 +215,22 @@ private fun ElementDetailContent(
     modifier: Modifier = Modifier,
 ) {
     val categoryColor = LocalCategoryColors.current.forCategory(element.category)
-    val scrollState = rememberSaveable(saver = androidx.compose.foundation.ScrollState.Saver) {
-        androidx.compose.foundation.ScrollState(0)
+    val scrollState = rememberScrollState()
+    var savedPosition by rememberSaveable { mutableIntStateOf(0) }
+
+    // 返回时恢复滚动位置：等待布局测量完成后scrollTo
+    LaunchedEffect(Unit) {
+        snapshotFlow { scrollState.maxValue }
+            .first { it > 0 }
+        if (savedPosition > 0) {
+            scrollState.scrollTo(savedPosition.coerceAtMost(scrollState.maxValue))
+        }
+    }
+
+    // 滚动中持续保存位置
+    LaunchedEffect(scrollState) {
+        snapshotFlow { scrollState.value }
+            .collect { savedPosition = it }
     }
 
     Column(
