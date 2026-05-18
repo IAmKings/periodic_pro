@@ -8,7 +8,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.navArgument
 import com.periodic.pro.feature.category.CategoryScreen
 import com.periodic.pro.feature.compare.CompareScreen
 import com.periodic.pro.feature.detail.DetailScreen
@@ -19,6 +18,21 @@ import com.periodic.pro.feature.lab.LabScreen
 import com.periodic.pro.feature.learn.LearnScreen
 import com.periodic.pro.feature.profile.ProfileScreen
 import com.periodic.pro.feature.table.TableScreen
+
+private fun NavHostController.navigateRestorable(route: String) {
+    navigate(route) {
+        launchSingleTop = true
+        restoreState = true
+    }
+}
+
+private fun NavHostController.navigateTab(route: String) {
+    navigate(route) {
+        popUpTo(graph.findStartDestination().id) { saveState = true }
+        launchSingleTop = true
+        restoreState = true
+    }
+}
 
 @Composable
 fun PeriodicNav(
@@ -33,56 +47,28 @@ fun PeriodicNav(
         // === Home ===
         composable(Routes.HOME) {
             HomeScreen(
-                onNavigateToTable = { query ->
-                    navController.navigate(Routes.table(query)) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
+                onNavigateToTable = { query -> navController.navigateTab(Routes.table(query)) },
                 onNavigateToDetail = { atomicNumber ->
-                    navController.navigate(Routes.detail(atomicNumber))
+                    navController.navigateRestorable(Routes.detail(atomicNumber))
                 },
-                onNavigateToCompare = {
-                    navController.navigate(Routes.COMPARE) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-                onNavigateToFavorites = {
-                    navController.navigate(Routes.FAVORITES) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
+                onNavigateToCompare = { navController.navigateTab(Routes.COMPARE) },
+                onNavigateToFavorites = { navController.navigateTab(Routes.FAVORITES) },
             )
         }
 
         // === Table (周期表) ===
         composable(
             route = "${Routes.TABLE}?query={query}",
-            arguments = listOf(
-                navArgument("query") { type = NavType.StringType; defaultValue = "" },
-            ),
+            arguments = listOf(navArgument("query") { type = NavType.StringType; defaultValue = "" }),
         ) {
             val query = it.arguments?.getString("query") ?: ""
             TableScreen(
                 initialQuery = query,
                 onNavigateToDetail = { atomicNumber ->
-                    navController.navigate(Routes.detail(atomicNumber))
+                    navController.navigateRestorable(Routes.detail(atomicNumber))
                 },
                 onNavigateToCompare = { ids ->
-                    if (ids.isNotEmpty()) {
-                        navController.navigate(Routes.compare(ids))
-                    }
+                    if (ids.isNotEmpty()) navController.navigateRestorable(Routes.compare(ids))
                 },
             )
         }
@@ -96,21 +82,11 @@ fun PeriodicNav(
             DetailScreen(
                 atomicNumber = atomicNumber,
                 onNavigateBack = { navController.popBackStack() },
-                onNavigateToLearn = { num ->
-                    navController.navigate(Routes.learnDetail(num))
-                },
-                onNavigateToDiscover = {
-                    navController.navigate(Routes.DISCOVER) {
-                        popUpTo(Routes.HOME) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
-                onNavigateToLab = { _ ->
-                    navController.navigate(Routes.LAB)
-                },
+                onNavigateToLearn = { num -> navController.navigateRestorable(Routes.learnDetail(num)) },
+                onNavigateToDiscover = { navController.navigateTab(Routes.DISCOVER) },
+                onNavigateToLab = { _ -> navController.navigateRestorable(Routes.LAB) },
                 onNavigateToLabDetail = { reactionId ->
-                    navController.navigate("lab?reactionId=$reactionId")
+                    navController.navigateRestorable("lab?reactionId=$reactionId")
                 },
             )
         }
@@ -118,26 +94,14 @@ fun PeriodicNav(
         // === Compare (元素对比) ===
         composable(
             route = Routes.COMPARE,
-            arguments = listOf(navArgument("ids") {
-                type = NavType.StringType
-                defaultValue = ""
-            }),
+            arguments = listOf(navArgument("ids") { type = NavType.StringType; defaultValue = "" }),
         ) { backStackEntry ->
             val ids = (backStackEntry.arguments?.getString("ids") ?: "")
-                .split(",")
-                .mapNotNull { it.toIntOrNull() }
+                .split(",").mapNotNull { it.toIntOrNull() }
             CompareScreen(
                 ids = ids,
                 onNavigateBack = { navController.popBackStack() },
-                onNavigateToTable = {
-                    navController.navigate(Routes.TABLE) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
+                onNavigateToTable = { navController.navigateTab(Routes.TABLE) },
             )
         }
 
@@ -145,17 +109,9 @@ fun PeriodicNav(
         composable(Routes.FAVORITES) {
             FavoritesScreen(
                 onNavigateToDetail = { atomicNumber ->
-                    navController.navigate(Routes.detail(atomicNumber))
+                    navController.navigateRestorable(Routes.detail(atomicNumber))
                 },
-                onNavigateToTable = {
-                    navController.navigate(Routes.TABLE) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
-                },
+                onNavigateToTable = { navController.navigateTab(Routes.TABLE) },
             )
         }
 
@@ -163,7 +119,7 @@ fun PeriodicNav(
         composable(Routes.DISCOVER) {
             DiscoverScreen(
                 onNavigateToDetail = { atomicNumber ->
-                    navController.navigate(Routes.detail(atomicNumber))
+                    navController.navigateRestorable(Routes.detail(atomicNumber))
                 },
             )
         }
@@ -179,12 +135,12 @@ fun PeriodicNav(
         composable(Routes.LEARN) {
             LearnScreen(
                 onNavigateToDetail = { atomicNumber ->
-                    navController.navigate(Routes.detail(atomicNumber))
+                    navController.navigateRestorable(Routes.detail(atomicNumber))
                 },
             )
         }
 
-        // === Learn Detail (从详情跳转，定位到指定元素) ===
+        // === Learn Detail (从详情跳转) ===
         composable(
             route = Routes.LEARN_DETAIL,
             arguments = listOf(navArgument("atomicNumber") { type = NavType.IntType }),
@@ -192,9 +148,7 @@ fun PeriodicNav(
             val atomicNumber = backStackEntry.arguments?.getInt("atomicNumber") ?: 0
             LearnScreen(
                 initialAtomicNumber = atomicNumber,
-                onNavigateToDetail = { num ->
-                    navController.navigate(Routes.detail(num))
-                },
+                onNavigateToDetail = { num -> navController.navigateRestorable(Routes.detail(num)) },
                 onNavigateBack = { navController.popBackStack() },
             )
         }
@@ -202,18 +156,13 @@ fun PeriodicNav(
         // === Lab (化学实验室) ===
         composable(
             route = "${Routes.LAB}?reactionId={reactionId}",
-            arguments = listOf(navArgument("reactionId") {
-                type = NavType.StringType
-                defaultValue = ""
-                nullable = true
-            }),
+            arguments = listOf(navArgument("reactionId") { type = NavType.StringType; defaultValue = ""; nullable = true }),
         ) { backStackEntry ->
-            val reactionId = backStackEntry.arguments?.getString("reactionId")
-                ?.takeIf { it.isNotEmpty() }
+            val reactionId = backStackEntry.arguments?.getString("reactionId")?.takeIf { it.isNotEmpty() }
             LabScreen(
                 initialReactionId = reactionId,
                 onNavigateToDetail = { atomicNumber ->
-                    navController.navigate(Routes.detail(atomicNumber))
+                    navController.navigateRestorable(Routes.detail(atomicNumber))
                 },
                 onNavigateBack = { navController.popBackStack() },
             )
@@ -223,7 +172,7 @@ fun PeriodicNav(
         composable(Routes.CATEGORY) {
             CategoryScreen(
                 onNavigateToDetail = { atomicNumber ->
-                    navController.navigate(Routes.detail(atomicNumber))
+                    navController.navigateRestorable(Routes.detail(atomicNumber))
                 },
             )
         }
@@ -236,7 +185,7 @@ fun PeriodicNav(
             val categoryId = backStackEntry.arguments?.getString("categoryId") ?: ""
             CategoryScreen(
                 onNavigateToDetail = { atomicNumber ->
-                    navController.navigate(Routes.detail(atomicNumber))
+                    navController.navigateRestorable(Routes.detail(atomicNumber))
                 },
                 initialCategoryId = categoryId,
             )
