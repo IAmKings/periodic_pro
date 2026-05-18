@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 15
+- **Total Sessions**: 16
 - **Last Active**: 2026-05-18
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~535 | Active |
+| `journal-1.md` | ~579 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 16 | 2026-05-18 | 多模块优化——Learn/Discover分类色、周期表/VerticalScroll、AtomCanvas重写 | `43891e3`, `6e9cc5a`, `fd3b241`, `b4c694a`, `e6c6980`, `530ea8e`, `60c7d54`, `60c7d54`, `932dc18`, `a72a3bf`, `6435d1a`, `368b951` | `master` |
 | 15 | 2026-05-18 | 应用内下载APK替换DownloadManager — 实时进度+状态机+取消/重试 | `0376194`, `91c881d`, `8bc810f`, `d2c48be`, `059eac3`, `c542df0`, `27c076b`, `4b77e05` | `master` |
 | 14 | 2026-05-17 | 优化周期表UI — 行列号+镧锕间隔+F-block多选 | `5634fcc`, `c388135`, `d494c0a`, `0bf94f6`, `be8bb5c`, `0e201c5`, `7cd3921` | `master` |
 | 13 | 2026-05-17 | 设计权限弹窗系统+修复安装权限检查 | `4bd5e5f`, `cd53ba9`, `6b904c3`, `e754843` | `master` |
