@@ -30,12 +30,15 @@ class DetailViewModel(
     private fun loadElement() {
         viewModelScope.launch {
             val element = elementRepo.getByNumber(atomicNumber)
-            val zhName = elementRepo.getZh(atomicNumber)?.nameZh
+            val zh = elementRepo.getZh(atomicNumber)
+            val zhName = zh?.nameZh
+            val zhDescription = zh?.description
             val reactions = labRepo.getByElement(atomicNumber)
             _state.update {
                 it.copy(
                     element = element,
                     zhName = zhName,
+                    zhDescription = zhDescription,
                     reactions = reactions,
                     isLoading = false,
                 )

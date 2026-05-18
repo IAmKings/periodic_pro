@@ -201,6 +201,7 @@ private fun DetailContent(
                 ElementDetailContent(
                     element = element,
                     zhName = state.zhName,
+                    zhDescription = state.zhDescription,
                     reactions = state.reactions,
                     onNavigateToLearn = onNavigateToLearn,
                     onNavigateToDiscover = onNavigateToDiscover,
@@ -222,6 +223,7 @@ private fun DetailContent(
 private fun ElementDetailContent(
     element: Element,
     zhName: String?,
+    zhDescription: String?,
     reactions: List<ChemicalReaction>,
     onNavigateToLearn: (Int) -> Unit,
     onNavigateToDiscover: () -> Unit,
@@ -270,7 +272,6 @@ private fun ElementDetailContent(
                 .padding(horizontal = Dimensions.Dp16),
             horizontalArrangement = Arrangement.Center,
             verticalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
-            verticalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
         ) {
             shells.forEachIndexed { index, count ->
                 Box(
@@ -296,6 +297,7 @@ private fun ElementDetailContent(
         ElementInfoSection(
             element = element,
             zhName = zhName,
+            zhDescription = zhDescription,
             categoryColor = categoryColor,
         )
 
@@ -349,6 +351,7 @@ private fun ElementDetailContent(
 private fun ElementInfoSection(
     element: Element,
     zhName: String?,
+    zhDescription: String?,
     categoryColor: Color,
 ) {
     Column(
@@ -395,6 +398,15 @@ private fun ElementInfoSection(
                 )
             }
 
+            // 元素描述
+            if (!zhDescription.isNullOrBlank()) {
+                Spacer(modifier = Modifier.height(Dimensions.Dp8))
+                Text(
+                    text = zhDescription,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(Dimensions.Dp12))
