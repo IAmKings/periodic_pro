@@ -528,6 +528,8 @@ private fun DetailContentHydrogenPreview() {
             ),
             onIntent = {},
             onNavigateBack = {},
+            onNavigateToLearn = {},
+            onNavigateToDiscover = {},
         )
     }
 }
@@ -567,6 +569,8 @@ private fun DetailContentIronPreview() {
             ),
             onIntent = {},
             onNavigateBack = {},
+            onNavigateToLearn = {},
+            onNavigateToDiscover = {},
         )
     }
 }
