@@ -66,6 +66,8 @@ import java.util.Locale
 fun DetailScreen(
     atomicNumber: Int,
     onNavigateBack: () -> Unit,
+    onNavigateToLearn: (Int) -> Unit = {},
+    onNavigateToDiscover: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val viewModel: DetailViewModel = koinViewModel { parametersOf(atomicNumber) }
@@ -75,6 +77,8 @@ fun DetailScreen(
         state = state,
         onIntent = viewModel::handle,
         onNavigateBack = onNavigateBack,
+        onNavigateToLearn = onNavigateToLearn,
+        onNavigateToDiscover = onNavigateToDiscover,
         modifier = modifier,
     )
 }
@@ -88,6 +92,8 @@ private fun DetailContent(
     state: DetailUiState,
     onIntent: (DetailIntent) -> Unit,
     onNavigateBack: () -> Unit,
+    onNavigateToLearn: (Int) -> Unit,
+    onNavigateToDiscover: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -161,6 +167,8 @@ private fun DetailContent(
                 ElementDetailContent(
                     element = element,
                     zhName = state.zhName,
+                    onNavigateToLearn = onNavigateToLearn,
+                    onNavigateToDiscover = onNavigateToDiscover,
                     modifier = Modifier.padding(padding),
                 )
             }
@@ -177,6 +185,8 @@ private fun DetailContent(
 private fun ElementDetailContent(
     element: Element,
     zhName: String?,
+    onNavigateToLearn: (Int) -> Unit,
+    onNavigateToDiscover: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val categoryColor = LocalCategoryColors.current.forCategory(element.category)
@@ -228,7 +238,11 @@ private fun ElementDetailContent(
         )
 
         // === 4. 额外信息区 ===
-        ExtraInfoSection(element = element)
+        ExtraInfoSection(
+            element = element,
+            onNavigateToLearn = onNavigateToLearn,
+            onNavigateToDiscover = onNavigateToDiscover,
+        )
 
         Spacer(modifier = Modifier.height(Dimensions.Dp32))
     }
@@ -309,6 +323,8 @@ private fun ElementInfoSection(
 @Composable
 private fun ExtraInfoSection(
     element: Element,
+    onNavigateToLearn: (Int) -> Unit,
+    onNavigateToDiscover: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -347,6 +363,23 @@ private fun ExtraInfoSection(
             ExtraInfoRow(
                 label = stringResource(R.string.detail_period),
                 value = element.period?.toString() ?: "\u2014",
+                modifier = Modifier.weight(1f),
+            )
+        }
+
+        Spacer(modifier = Modifier.height(Dimensions.Dp16))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
+        ) {
+            PeriodicOutlinedButton(
+                onClick = { onNavigateToLearn(element.atomicNumber) },
+                text = "学习资料",
+                modifier = Modifier.weight(1f),
+            )
+            PeriodicOutlinedButton(
+                onClick = onNavigateToDiscover,
+                text = "发现更多",
                 modifier = Modifier.weight(1f),
             )
         }

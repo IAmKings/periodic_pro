@@ -96,6 +96,16 @@ fun PeriodicNav(
             DetailScreen(
                 atomicNumber = atomicNumber,
                 onNavigateBack = { navController.popBackStack() },
+                onNavigateToLearn = { num ->
+                    navController.navigate(Routes.learnDetail(num))
+                },
+                onNavigateToDiscover = {
+                    navController.navigate(Routes.DISCOVER) {
+                        popUpTo(Routes.HOME) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
             )
         }
 
