@@ -395,17 +395,18 @@ private fun ElementInfoSection(
                     text = element.name,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
                 )
-            }
 
-            // 元素描述
-            if (!zhDescription.isNullOrBlank()) {
-                Spacer(modifier = Modifier.height(Dimensions.Dp8))
-                Text(
-                    text = zhDescription,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
-                )
+                // 元素描述
+                if (!zhDescription.isNullOrBlank()) {
+                    Spacer(modifier = Modifier.height(Dimensions.Dp8))
+                    Text(
+                        text = zhDescription,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                    )
+                }
             }
         }
 
