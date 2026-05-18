@@ -433,6 +433,9 @@ private fun ExtraInfoSection(
 
         // === 相关化学反应 ===
         if (reactions.isNotEmpty()) {
+            var expanded by remember { mutableStateOf(false) }
+            val displayReactions = if (expanded) reactions else reactions.take(5)
+
             Spacer(modifier = Modifier.height(Dimensions.Dp16))
             HorizontalDivider(modifier = Modifier.padding(horizontal = Dimensions.Dp16))
             Spacer(modifier = Modifier.height(Dimensions.Dp12))
@@ -444,7 +447,7 @@ private fun ExtraInfoSection(
                 modifier = Modifier.padding(top = Dimensions.Dp4),
             )
             Spacer(modifier = Modifier.height(Dimensions.Dp8))
-            reactions.take(5).forEach { reaction ->
+            displayReactions.forEach { reaction ->
                 Card(
                     onClick = { onNavigateToLabDetail(reaction.id) },
                     modifier = Modifier.fillMaxWidth(),
@@ -469,8 +472,8 @@ private fun ExtraInfoSection(
             }
             if (reactions.size > 5) {
                 PeriodicTextButton(
-                    onClick = { onNavigateToLab(element.atomicNumber) },
-                    text = "查看全部 ${reactions.size} 个反应 →",
+                    onClick = { expanded = !expanded },
+                    text = if (expanded) "收起 ↑" else "查看全部 ${reactions.size} 个反应 ↓",
                 )
             }
         }
