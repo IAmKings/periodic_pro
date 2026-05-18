@@ -249,7 +249,7 @@ private fun ElementDetailContent(
         val shells = remember(element.atomicNumber) {
             ElectronShells.getElectronShells(element.atomicNumber)
         }
-        androidx.compose.foundation.layout.ExperimentalLayoutApi
+        @OptIn(ExperimentalLayoutApi::class)
         FlowRow(
             modifier = Modifier
                 .fillMaxWidth()
