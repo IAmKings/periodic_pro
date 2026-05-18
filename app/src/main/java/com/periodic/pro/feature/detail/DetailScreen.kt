@@ -46,6 +46,7 @@ import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.PeriodicProTheme
 import com.periodic.pro.theme.forCategory
+import com.periodic.pro.ui.components.PeriodicOutlinedButton
 import com.periodic.pro.ui.components.PropertyChip
 import com.periodic.pro.ui.pattern.AtomCanvas
 import com.periodic.pro.ui.pattern.PropertyGrid
