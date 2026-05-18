@@ -223,7 +223,6 @@ private fun ElementDetailContent(
             .fillMaxSize()
             .verticalScroll(scrollState),
     ) {
-        val currentScroll = scrollState.value
         // === 1. AtomCanvas（原子动画头部） ===
         AtomCanvas(
             atomicNumber = element.atomicNumber,
@@ -268,10 +267,10 @@ private fun ElementDetailContent(
         // === 4. 额外信息区 ===
         ExtraInfoSection(
             element = element,
-            onNavigateToLearn = { onSaveScroll(currentScroll); onNavigateToLearn(it) },
-            onNavigateToDiscover = { onSaveScroll(currentScroll); onNavigateToDiscover() },
-            onNavigateToLab = { onSaveScroll(currentScroll); onNavigateToLab(it) },
-            onNavigateToLabDetail = { onSaveScroll(currentScroll); onNavigateToLabDetail(it) },
+            onNavigateToLearn = { onSaveScroll(scrollState.value); onNavigateToLearn(it) },
+            onNavigateToDiscover = { onSaveScroll(scrollState.value); onNavigateToDiscover() },
+            onNavigateToLab = { onSaveScroll(scrollState.value); onNavigateToLab(it) },
+            onNavigateToLabDetail = { onSaveScroll(scrollState.value); onNavigateToLabDetail(it) },
         )
 
         Spacer(modifier = Modifier.height(Dimensions.Dp32))
