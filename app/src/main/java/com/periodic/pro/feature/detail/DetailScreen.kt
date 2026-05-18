@@ -36,6 +36,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -218,18 +219,16 @@ private fun ElementDetailContent(
     val scrollState = rememberScrollState()
     var savedPosition by rememberSaveable { mutableStateOf(0) }
 
-    // 返回时恢复滚动位置：等待布局测量完成后scrollTo
     LaunchedEffect(Unit) {
+        // 先恢复已保存的滚动位置（等待布局测量完成）
         snapshotFlow { scrollState.maxValue }
             .first { it > 0 }
         if (savedPosition > 0) {
             scrollState.scrollTo(savedPosition.coerceAtMost(scrollState.maxValue))
         }
-    }
-
-    // 滚动中持续保存位置
-    LaunchedEffect(scrollState) {
+        // 然后持续保存滚动位置（跳过初始值0避免覆盖已恢复的值）
         snapshotFlow { scrollState.value }
+            .drop(1)
             .collect { savedPosition = it }
     }
 
