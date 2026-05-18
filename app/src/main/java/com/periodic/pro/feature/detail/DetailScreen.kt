@@ -216,7 +216,14 @@ private fun ElementDetailContent(
     modifier: Modifier = Modifier,
 ) {
     val categoryColor = LocalCategoryColors.current.forCategory(element.category)
-    val scrollState = rememberScrollState(initial = scrollPosition)
+    val scrollState = rememberScrollState()
+
+    // 从外部返回时恢复滚动位置
+    LaunchedEffect(scrollPosition) {
+        if (scrollPosition > 0) {
+            scrollState.scrollTo(scrollPosition)
+        }
+    }
 
     Column(
         modifier = modifier
