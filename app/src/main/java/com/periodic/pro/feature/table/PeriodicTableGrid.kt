@@ -205,7 +205,8 @@ fun PeriodicTableGrid(
                         // F-block 标记
                         if (gridMap[fBlockMarkerRow6] == null) {
                             FBlockMarker(
-                                text = "57-71",
+                                rangeStart = 57,
+                                rangeEnd = 71,
                                 onClick = { onSelectSeries((57..71).toList()) },
                                 modifier = Modifier
                                     .offset { IntOffset(fBlockMarkerRow6.second * cellPxInt, yOffset(fBlockMarkerRow6.first)) }
@@ -214,7 +215,8 @@ fun PeriodicTableGrid(
                         }
                         if (gridMap[fBlockMarkerRow7] == null) {
                             FBlockMarker(
-                                text = "89-103",
+                                rangeStart = 89,
+                                rangeEnd = 103,
                                 onClick = { onSelectSeries((89..103).toList()) },
                                 modifier = Modifier
                                     .offset { IntOffset(fBlockMarkerRow7.second * cellPxInt, yOffset(fBlockMarkerRow7.first)) }
@@ -325,7 +327,8 @@ private fun PeriodicTableCell(
 
 @Composable
 private fun FBlockMarker(
-    text: String,
+    rangeStart: Int,
+    rangeEnd: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -338,12 +341,32 @@ private fun FBlockMarker(
             .clickable { onClick() },
         contentAlignment = Alignment.Center,
     ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(horizontal = 2.dp, vertical = 1.dp),
+        ) {
+            Text(
+                text = "$rangeStart",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+            )
+            Text(
+                text = "-",
+                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+            )
+            Text(
+                text = "$rangeEnd",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+            )
+        }
     }
 }
 
