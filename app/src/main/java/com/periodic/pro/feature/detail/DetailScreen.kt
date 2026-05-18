@@ -299,6 +299,7 @@ private fun ElementDetailContent(
         )
 
         // === 3. 属性网格 ===
+        var showCelsius by remember { mutableStateOf(true) }
         PropertyGrid(
             properties = buildProperties(
                 element = element,
@@ -310,8 +311,20 @@ private fun ElementDetailContent(
                 labelAtomicRadius = stringResource(R.string.property_atomic_radius),
                 labelIonizationEnergy = stringResource(R.string.property_ionization_energy),
                 labelElectronConfig = stringResource(R.string.property_electron_configuration),
+                showCelsius = showCelsius,
             ),
             modifier = Modifier.padding(vertical = Dimensions.Dp8),
+        )
+
+        // 温度单位切换
+        Text(
+            text = if (showCelsius) "\u2103 / K" else "K / \u2103",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .align(Alignment.End)
+                .padding(end = Dimensions.Dp16)
+                .clickable { showCelsius = !showCelsius },
         )
 
         HorizontalDivider(
@@ -557,7 +570,10 @@ private fun buildProperties(
     labelAtomicRadius: String,
     labelIonizationEnergy: String,
     labelElectronConfig: String,
+    showCelsius: Boolean,
 ): List<PropertyItem> {
+    val tempUnit = if (showCelsius) "\u2103" else "K"
+    val tempConvert: (Double?) -> Double? = if (showCelsius) { { it?.minus(273.15) } } else { { it } }
     return listOf(
         PropertyItem(
             name = labelAtomicMass,
@@ -571,13 +587,13 @@ private fun buildProperties(
         ),
         PropertyItem(
             name = labelMeltingPoint,
-            value = element.meltingPoint?.let { formatDouble(it - 273.15) },
-            unit = "\u2103",
+            value = tempConvert(element.meltingPoint)?.let { formatDouble(it) },
+            unit = tempUnit,
         ),
         PropertyItem(
             name = labelBoilingPoint,
-            value = element.boilingPoint?.let { formatDouble(it - 273.15) },
-            unit = "\u2103",
+            value = tempConvert(element.boilingPoint)?.let { formatDouble(it) },
+            unit = tempUnit,
         ),
         PropertyItem(
             name = labelElectronegativity,
