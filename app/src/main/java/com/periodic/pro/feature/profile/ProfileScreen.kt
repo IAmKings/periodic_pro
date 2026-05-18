@@ -153,14 +153,6 @@ private fun ProfileContent(
                         style = MaterialTheme.typography.titleLarge,
                     )
                 },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.detail_back),
-                        )
-                    }
-                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
                 ),
@@ -392,12 +384,22 @@ private fun AboutSection() {
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            // 应用图标
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = stringResource(R.string.app_name),
-                modifier = Modifier.size(Dimensions.Dp56),
-            )
+            // 应用图标（带背景）
+            Box(
+                modifier = Modifier
+                    .size(Dimensions.Dp56)
+                    .background(
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        shape = RoundedCornerShape(Dimensions.Dp12),
+                    ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                    contentDescription = stringResource(R.string.app_name),
+                    modifier = Modifier.size(Dimensions.Dp48),
+                )
+            }
 
             Spacer(modifier = Modifier.width(Dimensions.Dp16))
 

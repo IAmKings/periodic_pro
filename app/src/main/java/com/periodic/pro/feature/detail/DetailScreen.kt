@@ -257,6 +257,8 @@ private fun ElementDetailContent(
             symbol = element.symbol,
         )
 
+        Spacer(modifier = Modifier.height(Dimensions.Dp12))
+
         // 电子壳层标签
         val shells = remember(element.atomicNumber) {
             ElectronShells.getElectronShells(element.atomicNumber)
@@ -286,6 +288,8 @@ private fun ElementDetailContent(
                 }
             }
         }
+
+        Spacer(modifier = Modifier.height(Dimensions.Dp4))
 
         // === 2. 元素基本信息区 ===
         ElementInfoSection(
