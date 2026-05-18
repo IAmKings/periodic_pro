@@ -267,7 +267,7 @@ private fun ElementDetailContent(
         FlowRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = Dimensions.Dp16),
+                .padding(horizontal = Dimensions.Dp32),
             horizontalArrangement = Arrangement.Center,
             verticalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
         ) {
