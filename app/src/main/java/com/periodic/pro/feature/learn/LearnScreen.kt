@@ -59,6 +59,7 @@ import com.periodic.pro.data.learn.model.LearnItem
 import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.Elevation
+import com.periodic.pro.theme.CATEGORY_CIRCLE_ALPHA
 import com.periodic.pro.theme.LearnBadgeColors
 import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.PeriodicProTheme
@@ -373,7 +374,7 @@ private fun LearnListItem(
                 modifier = Modifier
                     .size(44.dp)
                     .background(
-                        color = categoryColor.copy(alpha = 0.15f),
+                        color = categoryColor.copy(alpha = CATEGORY_CIRCLE_ALPHA),
                         shape = RoundedCornerShape(22.dp),
                     ),
                 contentAlignment = Alignment.Center,

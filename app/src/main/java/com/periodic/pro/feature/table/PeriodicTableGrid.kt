@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.data.element.model.ElementZh
+import com.periodic.pro.theme.CATEGORY_CELL_ALPHA
 import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.forCategory
 
@@ -265,7 +266,7 @@ private fun PeriodicTableCell(
         modifier = modifier
             .padding(1.dp)
             .clip(shape)
-            .background(categoryColor.copy(alpha = 0.85f))
+            .background(categoryColor.copy(alpha = CATEGORY_CELL_ALPHA))
             .alpha(alpha)
             .then(
                 if (isSelected) {

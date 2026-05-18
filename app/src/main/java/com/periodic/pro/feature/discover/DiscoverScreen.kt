@@ -40,6 +40,7 @@ import com.periodic.pro.R
 import com.periodic.pro.data.discover.model.DiscoverItem
 import androidx.compose.ui.graphics.Color
 import com.periodic.pro.data.element.model.Category
+import com.periodic.pro.theme.CATEGORY_CIRCLE_ALPHA
 import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.forCategory
 import com.periodic.pro.theme.Dimensions
@@ -307,7 +308,7 @@ private fun DiscoverFeedCard(
                 modifier = Modifier
                     .size(44.dp)
                     .background(
-                        color = categoryColor.copy(alpha = 0.15f),
+                        color = categoryColor.copy(alpha = CATEGORY_CIRCLE_ALPHA),
                         shape = RoundedCornerShape(22.dp),
                     ),
                 contentAlignment = Alignment.Center,

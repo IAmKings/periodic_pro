@@ -52,6 +52,12 @@ data class CategoryColors(
     val actinide: Color = Color(0xFFE599F7),
 )
 
+// ===== 分类颜色透明度 Token =====
+/** 元素卡片背景（周期表单元格） */
+const val CATEGORY_CELL_ALPHA = 0.85f
+/** 元素圆形标记背景（学习/发现列表） */
+const val CATEGORY_CIRCLE_ALPHA = 0.15f
+
 // 添加 forCategory 方法到 CategoryColors（扩展函数）
 fun CategoryColors.forCategory(category: Category): Color = when (category) {
     Category.ALKALI_METAL -> alkali
