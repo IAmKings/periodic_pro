@@ -178,6 +178,23 @@ fun PeriodicNav(
             )
         }
 
+        // === Learn Detail (从详情跳转，定位到指定元素) ===
+        composable(
+            route = Routes.LEARN_DETAIL,
+            arguments = listOf(navArgument("atomicNumber") { type = NavType.IntType }),
+        ) { backStackEntry ->
+            val atomicNumber = backStackEntry.arguments?.getInt("atomicNumber") ?: 0
+            LearnScreen(
+                onNavigateToDetail = { num ->
+                    navController.navigate(Routes.detail(num))
+                },
+            )
+            // 自动选中对应元素
+            LaunchedEffect(atomicNumber) {
+                // TODO: LearnScreen暂不支持initialAtomicNumber参数，需后续添加
+            }
+        }
+
         // === Lab (化学实验室) ===
         composable(Routes.LAB) {
             LabScreen(
