@@ -185,11 +185,11 @@ fun PeriodicNav(
         ) { backStackEntry ->
             val atomicNumber = backStackEntry.arguments?.getInt("atomicNumber") ?: 0
             LearnScreen(
+                initialAtomicNumber = atomicNumber,
                 onNavigateToDetail = { num ->
                     navController.navigate(Routes.detail(num))
                 },
             )
-            // TODO: LearnScreen暂不支持initialAtomicNumber参数，需后续添加自动选中
         }
 
         // === Lab (化学实验室) ===

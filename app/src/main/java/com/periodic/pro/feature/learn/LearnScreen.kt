@@ -77,10 +77,17 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun LearnScreen(
     onNavigateToDetail: (Int) -> Unit,
+    initialAtomicNumber: Int = 0,
     modifier: Modifier = Modifier,
     vm: LearnViewModel = koinViewModel(),
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(initialAtomicNumber) {
+        if (initialAtomicNumber > 0) {
+            vm.handle(LearnIntent.SelectElement(initialAtomicNumber))
+        }
+    }
 
     LaunchedEffect(Unit) {
         vm.effect.collect { effect ->
