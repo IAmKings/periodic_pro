@@ -833,6 +833,7 @@ private fun LabListPreview() {
                 filteredReactions = previewReactions,
                 isLoading = false,
             ),
+            listState = rememberLazyListState(),
             onIntent = {},
         )
     }
