@@ -85,6 +85,12 @@ class ApkInstaller(
                     readTimeout = 60_000
                     setRequestProperty("User-Agent", "PeriodicPro/$versionTag")
                 }
+                val responseCode = conn.responseCode
+                if (responseCode != HttpURLConnection.HTTP_OK) {
+                    Log.e(TAG, "Download failed: HTTP $responseCode")
+                    if (downloadId == currentDownloadId) onProgress(-1f)
+                    return@Thread
+                }
                 input = conn.inputStream
                 output = FileOutputStream(apkFile)
 
@@ -105,7 +111,9 @@ class ApkInstaller(
                         onProgress(downloaded.toFloat() / total.toFloat())
                     }
                 }
-                Log.d(TAG, "Download completed: $fileName")
+                output!!.flush()
+                output!!.fd.sync()
+                Log.d(TAG, "Download completed: $fileName (${apkFile.length()} bytes)")
                 installApk(apkFile)
             } catch (e: Exception) {
                 Log.e(TAG, "Download failed", e)
