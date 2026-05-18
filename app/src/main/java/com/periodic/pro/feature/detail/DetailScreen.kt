@@ -160,8 +160,6 @@ private fun DetailContent(
                 ElementDetailContent(
                     element = element,
                     zhName = state.zhName,
-                    isFavorite = state.isFavorite,
-                    onToggleFavorite = { onIntent(DetailIntent.ToggleFavorite) },
                     modifier = Modifier.padding(padding),
                 )
             }
@@ -178,8 +176,6 @@ private fun DetailContent(
 private fun ElementDetailContent(
     element: Element,
     zhName: String?,
-    isFavorite: Boolean,
-    onToggleFavorite: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val categoryColor = LocalCategoryColors.current.forCategory(element.category)
@@ -201,8 +197,6 @@ private fun ElementDetailContent(
         ElementInfoSection(
             element = element,
             zhName = zhName,
-            isFavorite = isFavorite,
-            onToggleFavorite = onToggleFavorite,
             categoryColor = categoryColor,
         )
 
@@ -246,8 +240,6 @@ private fun ElementDetailContent(
 private fun ElementInfoSection(
     element: Element,
     zhName: String?,
-    isFavorite: Boolean,
-    onToggleFavorite: () -> Unit,
     categoryColor: Color,
 ) {
     Column(
@@ -294,23 +286,6 @@ private fun ElementInfoSection(
                 )
             }
 
-            // 收藏按钮
-            IconButton(onClick = onToggleFavorite) {
-                Icon(
-                    imageVector = if (isFavorite) {
-                        Icons.Filled.Favorite
-                    } else {
-                        Icons.Outlined.FavoriteBorder
-                    },
-                    contentDescription = stringResource(R.string.detail_favorite),
-                    tint = if (isFavorite) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    },
-                    modifier = Modifier.size(Dimensions.Dp24),
-                )
-            }
         }
 
         Spacer(modifier = Modifier.height(Dimensions.Dp12))
