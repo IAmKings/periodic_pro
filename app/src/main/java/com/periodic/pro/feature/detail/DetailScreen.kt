@@ -415,21 +415,11 @@ private fun ExtraInfoSection(
         }
 
         Spacer(modifier = Modifier.height(Dimensions.Dp16))
-        Row(
+        PeriodicOutlinedButton(
+            onClick = { onNavigateToLearn(element.atomicNumber) },
+            text = "学习资料",
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
-        ) {
-            PeriodicOutlinedButton(
-                onClick = { onNavigateToLearn(element.atomicNumber) },
-                text = "学习资料",
-                modifier = Modifier.weight(1f),
-            )
-            PeriodicOutlinedButton(
-                onClick = onNavigateToDiscover,
-                text = "发现更多",
-                modifier = Modifier.weight(1f),
-            )
-        }
+        )
 
         // === 相关化学反应 ===
         if (reactions.isNotEmpty()) {
