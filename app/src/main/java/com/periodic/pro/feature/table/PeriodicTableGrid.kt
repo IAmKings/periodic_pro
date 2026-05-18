@@ -205,7 +205,7 @@ fun PeriodicTableGrid(
                         // F-block 标记
                         if (gridMap[fBlockMarkerRow6] == null) {
                             FBlockMarker(
-                                text = "*",
+                                text = "57-71",
                                 onClick = { onSelectSeries((57..71).toList()) },
                                 modifier = Modifier
                                     .offset { IntOffset(fBlockMarkerRow6.second * cellPxInt, yOffset(fBlockMarkerRow6.first)) }
@@ -214,7 +214,7 @@ fun PeriodicTableGrid(
                         }
                         if (gridMap[fBlockMarkerRow7] == null) {
                             FBlockMarker(
-                                text = "**",
+                                text = "89-103",
                                 onClick = { onSelectSeries((89..103).toList()) },
                                 modifier = Modifier
                                     .offset { IntOffset(fBlockMarkerRow7.second * cellPxInt, yOffset(fBlockMarkerRow7.first)) }
