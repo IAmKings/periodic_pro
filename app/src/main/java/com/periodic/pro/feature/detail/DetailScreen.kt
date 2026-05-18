@@ -258,7 +258,7 @@ private fun ElementDetailContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = Dimensions.Dp16),
-            horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp6),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalArrangement = Arrangement.spacedBy(Dimensions.Dp4),
         ) {
             shells.forEachIndexed { index, count ->
