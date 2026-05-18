@@ -37,6 +37,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.BaselineShift
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import androidx.compose.ui.Alignment
@@ -591,7 +597,7 @@ private fun buildProperties(
         PropertyItem(
             name = labelElectronConfig,
             value = element.electronConfiguration,
-            valueAnnotated = electronConfigToAnnotated(element.electronConfiguration),
+            valueAnnotated = element.electronConfiguration?.let { electronConfigToAnnotated(it) },
         ),
     )
 }
