@@ -53,7 +53,10 @@ fun AtomCanvas(
     modifier: Modifier = Modifier,
 ) {
     val shells = remember(atomicNumber) { ElectronShells.getElectronShells(atomicNumber) }
-    val baseRadius = 32f * scale
+    // 最小核半径确保双字母符号
+    val nucleusRadius = ((20f + atomicNumber * 0.3f) * scale).coerceIn(30f * scale, 55f * scale)
+    // 第一轨道从核外开始，加足够间距
+    val baseRadius = nucleusRadius + 16f * scale
     val radiusIncrement = when {
         shells.size <= 2 -> 50f * scale
         shells.size <= 4 -> 45f * scale
@@ -87,9 +90,6 @@ fun AtomCanvas(
         ),
         label = "pulse",
     )
-
-    // 最小核半径确保双字母符号（He/Fe/Zn等）不超出圆圈
-    val nucleusRadius = ((20f + atomicNumber * 0.3f) * scale).coerceIn(30f * scale, 55f * scale)
 
     Box(
         modifier = modifier.fillMaxWidth().height((240 * scale).dp),
