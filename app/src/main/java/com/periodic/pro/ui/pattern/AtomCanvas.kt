@@ -48,15 +48,17 @@ fun AtomCanvas(
     atomicNumber: Int,
     period: Int,
     categoryColor: Color,
+    symbol: String = "",
+    scale: Float = 1.5f,
     modifier: Modifier = Modifier,
 ) {
     val shells = remember(atomicNumber) { ElectronShells.getElectronShells(atomicNumber) }
-    val baseRadius = 32f
+    val baseRadius = 32f * scale
     val radiusIncrement = when {
-        shells.size <= 2 -> 50f
-        shells.size <= 4 -> 45f
-        shells.size <= 5 -> 40f
-        else -> 35f
+        shells.size <= 2 -> 50f * scale
+        shells.size <= 4 -> 45f * scale
+        shells.size <= 5 -> 40f * scale
+        else -> 35f * scale
     }
 
     // 每层独立旋转
@@ -86,10 +88,10 @@ fun AtomCanvas(
         label = "pulse",
     )
 
-    val nucleusRadius = (20f + atomicNumber * 0.3f).coerceIn(20f, 55f)
+    val nucleusRadius = ((20f + atomicNumber * 0.3f) * scale).coerceIn(20f * scale, 55f * scale)
 
     Box(
-        modifier = modifier.fillMaxWidth().height(240.dp),
+        modifier = modifier.fillMaxWidth().height((240 * scale).dp),
         contentAlignment = Alignment.Center,
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
@@ -127,9 +129,9 @@ fun AtomCanvas(
                 brush = Brush.radialGradient(
                     colors = listOf(categoryColor.copy(alpha = 0.35f), Color.Transparent),
                     center = Offset(centerX, centerY),
-                    radius = nucleusRadius + 10f,
+                    radius = nucleusRadius + 10f * scale,
                 ),
-                radius = nucleusRadius + 10f,
+                radius = nucleusRadius + 10f * scale,
                 center = Offset(centerX, centerY),
             )
 
@@ -159,11 +161,11 @@ fun AtomCanvas(
                         val pos = Offset(ex, ey)
 
                         // 电子光晕
-                        drawCircle(color = categoryColor.copy(alpha = 0.3f), radius = 8f * electronScale, center = pos)
+                        drawCircle(color = categoryColor.copy(alpha = 0.3f), radius = 8f * scale * electronScale, center = pos)
                         // 电子核心
-                        drawCircle(color = categoryColor, radius = 4f * electronScale, center = pos)
+                        drawCircle(color = categoryColor, radius = 4f * scale * electronScale, center = pos)
                         // 高光
-                        drawCircle(color = Color.White.copy(alpha = 0.7f), radius = 1.5f * electronScale, center = Offset(ex - 1.5f, ey - 1.5f))
+                        drawCircle(color = Color.White.copy(alpha = 0.7f), radius = 1.5f * scale * electronScale, center = Offset(ex - 1.5f * scale, ey - 1.5f * scale))
                     }
                 }
             }
@@ -171,9 +173,9 @@ fun AtomCanvas(
 
         // 元素符号覆盖
         Text(
-            text = ElectronShells.shellNames.getOrElse(shells.size - 1) { "" },
-            color = Color.White.copy(alpha = 0.2f),
-            fontSize = 18.sp,
+            text = symbol,
+            color = Color.White.copy(alpha = 0.15f),
+            fontSize = (12 * scale).sp,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.Monospace,
         )

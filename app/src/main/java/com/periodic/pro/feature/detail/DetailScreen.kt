@@ -194,6 +194,7 @@ private fun ElementDetailContent(
             atomicNumber = element.atomicNumber,
             period = element.period ?: 1,
             categoryColor = categoryColor,
+            symbol = element.symbol,
         )
 
         // === 2. 元素基本信息区 ===
