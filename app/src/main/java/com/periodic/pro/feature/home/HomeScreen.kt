@@ -100,7 +100,7 @@ private fun HomeContent(
             .verticalScroll(rememberScrollState()),
     ) {
         // === 1. 欢迎区 ===
-        Spacer(modifier = Modifier.windowInsetsTopHeight(WindowInsets.statusBars))
+        Spacer(modifier = Modifier.height(WindowInsets.statusBars.asPaddingValues().calculateTopPadding()))
         Text(
             text = stringResource(R.string.app_name),
             style = MaterialTheme.typography.titleLarge,
