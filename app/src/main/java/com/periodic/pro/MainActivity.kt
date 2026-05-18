@@ -16,9 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.periodic.pro.BuildConfig
 import com.periodic.pro.data.update.ApkInstaller
-import com.periodic.pro.data.update.GitHubRelease
 import com.periodic.pro.data.update.UpdateService
 import com.periodic.pro.theme.PeriodicProTheme
 import androidx.lifecycle.compose.collectAsStateWithLifecycle

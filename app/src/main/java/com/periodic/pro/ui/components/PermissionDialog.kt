@@ -1,18 +1,13 @@
 package com.periodic.pro.ui.components
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import com.periodic.pro.data.permission.PermissionDef
 import com.periodic.pro.data.permission.PermissionRequest
-import com.periodic.pro.theme.Dimensions
 
 /**
  * 权限弹窗 — PermissionDef 数据驱动。

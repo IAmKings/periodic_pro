@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.periodic.pro.data.element.ElementRepository
 import com.periodic.pro.data.favorites.FavoritesRepository
 import com.periodic.pro.data.lab.LabRepository
-import com.periodic.pro.data.lab.model.ChemicalReaction
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
