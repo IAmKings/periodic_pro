@@ -190,7 +190,10 @@ private fun LearnListContent(
                 // 快速跳转按钮（stickyHeader吸顶，始终可见）
                 stickyHeader(key = "jump_buttons") {
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.surface)
+                            .padding(vertical = Dimensions.Dp4),
                         horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
                     ) {
                         Button(
