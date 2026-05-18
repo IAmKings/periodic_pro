@@ -95,7 +95,7 @@
     <string name="learn_badge_core">核心</string>
     <string name="learn_badge_important">重点</string>
     <string name="learn_badge_normal">其他</string>
-    <string name="learn_element_label">#%d号 %s元素</string>
+    <string name="learn_element_label">#%d号元素 %s</string>
     <string name="learn_detail_title">#%d %s 学习资料</string>
     <string name="learn_detail_not_found">学习资料未找到</string>
     <string name="learn_section_discovery">发现历史</string>
