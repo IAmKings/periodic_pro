@@ -189,6 +189,7 @@ fun PeriodicNav(
                 onNavigateToDetail = { num ->
                     navController.navigate(Routes.detail(num))
                 },
+                onNavigateBack = { navController.popBackStack() },
             )
         }
 

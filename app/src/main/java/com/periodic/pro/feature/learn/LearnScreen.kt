@@ -78,6 +78,7 @@ import org.koin.androidx.compose.koinViewModel
 fun LearnScreen(
     onNavigateToDetail: (Int) -> Unit,
     initialAtomicNumber: Int = 0,
+    onNavigateBack: () -> Unit = {},
     modifier: Modifier = Modifier,
     vm: LearnViewModel = koinViewModel(),
 ) {
@@ -112,7 +113,10 @@ fun LearnScreen(
         LearnNavMode.DETAIL -> LearnDetailContent(
             item = state.selectedItem,
             symbol = state.selectedItem?.atomicNumber?.let { state.symbolMap[it] } ?: "?",
-            onBack = { vm.handle(LearnIntent.BackToList) },
+            onBack = {
+                if (initialAtomicNumber > 0) onNavigateBack()
+                else vm.handle(LearnIntent.BackToList)
+            },
             onNavigateToDetail = { atomicNumber ->
                 vm.handle(LearnIntent.NavigateToDetail(atomicNumber))
             },
