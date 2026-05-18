@@ -619,7 +619,7 @@ private fun electronConfigToAnnotated(config: String): AnnotatedString {
                     while (i < config.length && config[i].isDigit()) i++
                     withStyle(androidx.compose.ui.text.SpanStyle(
                         baselineShift = androidx.compose.ui.text.style.BaselineShift.Superscript,
-                        fontSize = androidx.compose.ui.unit.sp(11),
+                        fontSize = androidx.compose.ui.unit.TextUnit(11f, androidx.compose.ui.unit.TextUnitType.Sp),
                     )) { append(config.substring(start, i)) }
                     continue
                 }
