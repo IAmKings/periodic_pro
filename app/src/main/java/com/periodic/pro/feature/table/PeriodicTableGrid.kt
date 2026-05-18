@@ -74,7 +74,7 @@ fun PeriodicTableGrid(
                 element.name.lowercase().contains(query) ||
                 (query.toIntOrNull() != null && element.atomicNumber.toString().contains(query)) ||
                 zhMap[element.atomicNumber]?.nameZh?.contains(query) == true ||
-                zhMap[element.atomicNumber]?.pinyin?.contains(query) == true
+                zhMap[element.atomicNumber]?.pinyin?.let { stripTones(it).contains(query) } == true
         }.map { it.atomicNumber }.toSet()
     }
 
@@ -238,6 +238,17 @@ private fun getGridPosition(element: Element): Pair<Int, Int> {
         )
     }
 }
+
+/** 去除拼音声调 + ü→v：tiě → tie, lǜ → lv */
+private fun stripTones(pinyin: String): String =
+    java.text.Normalizer.normalize(pinyin, java.text.Normalizer.Form.NFD)
+        .replace(Regex("\\p{InCombiningDiacriticalMarks}+"), "")
+        .replace('ü', 'v')
+        .replace('\u01D8', 'v')  // ǖ
+        .replace('\u01D9', 'v')  // ǘ
+        .replace('\u01DA', 'v')  // ǚ
+        .replace('\u01DB', 'v')  // ǜ
+        .lowercase()
 
 private fun buildGridMap(elements: List<Element>): Map<Pair<Int, Int>, Element> {
     val map = mutableMapOf<Pair<Int, Int>, Element>()
