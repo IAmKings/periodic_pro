@@ -4,6 +4,7 @@ package com.periodic.pro.feature.learn
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -114,6 +115,7 @@ fun LearnScreen(
 
 // ===== List view =====
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun LearnListContent(
     state: LearnUiState,
