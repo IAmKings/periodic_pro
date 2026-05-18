@@ -107,11 +107,7 @@ fun PeriodicNav(
                     }
                 },
                 onNavigateToLab = { _ ->
-                    navController.navigate(Routes.LAB) {
-                        popUpTo(Routes.HOME) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
+                    navController.navigate(Routes.LAB)
                 },
                 onNavigateToLabDetail = { reactionId ->
                     navController.navigate("lab?reactionId=$reactionId")
