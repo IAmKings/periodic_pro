@@ -259,8 +259,8 @@ private fun ElementDetailContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = Dimensions.Dp16),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalArrangement = Arrangement.spacedBy(Dimensions.Dp4),
+            horizontalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
         ) {
             shells.forEachIndexed { index, count ->
                 Box(
@@ -269,11 +269,11 @@ private fun ElementDetailContent(
                             color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                             shape = RoundedCornerShape(8.dp),
                         )
-                        .padding(horizontal = Dimensions.Dp8, vertical = Dimensions.Dp4),
+                        .padding(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp6),
                 ) {
                     Text(
                         text = "${ElectronShells.shellNames.getOrElse(index) { "?" }} $count",
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
