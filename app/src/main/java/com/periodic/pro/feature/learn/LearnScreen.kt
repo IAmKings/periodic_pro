@@ -167,38 +167,12 @@ private fun LearnListContent(
             val hasImportant = state.importantItems.isNotEmpty()
             val hasOther = state.otherItems.isNotEmpty()
 
-            // 计算各section索引用于快速跳转
-            val coreCount = state.coreItems.size + 1 // +1 for section header
-            val importantHeaderIndex = if (hasCore) coreCount else 0
-            val otherHeaderIndex = importantHeaderIndex + (if (hasImportant) state.importantItems.size + 1 else 0)
             val categoryMap = state.categoryMap
             val scope = rememberCoroutineScope()
-
-            // 快速跳转按钮
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = Dimensions.Dp16, vertical = Dimensions.Dp4),
-                horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
-            ) {
-                Button(
-                    onClick = { scope.launch { listState.scrollToItem(0) } },
-                    colors = ButtonDefaults.buttonColors(containerColor = LearnBadgeColors.CoreBg),
-                    contentPadding = PaddingValues(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp4),
-                ) { Text(stringResource(R.string.learn_level_core), color = LearnBadgeColors.Core, style = MaterialTheme.typography.labelMedium) }
-                Button(
-                    onClick = { scope.launch { listState.scrollToItem(importantHeaderIndex) } },
-                    enabled = hasImportant,
-                    colors = ButtonDefaults.buttonColors(containerColor = LearnBadgeColors.ImportantBg),
-                    contentPadding = PaddingValues(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp4),
-                ) { Text(stringResource(R.string.learn_level_important), color = LearnBadgeColors.Important, style = MaterialTheme.typography.labelMedium) }
-                Button(
-                    onClick = { scope.launch { listState.scrollToItem(otherHeaderIndex) } },
-                    enabled = hasOther,
-                    colors = ButtonDefaults.buttonColors(containerColor = LearnBadgeColors.OtherBg),
-                    contentPadding = PaddingValues(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp4),
-                ) { Text(stringResource(R.string.learn_level_normal), color = LearnBadgeColors.Other, style = MaterialTheme.typography.labelMedium) }
-            }
+            // LazyColumn索引：0=jump buttons, 1=core header, ...
+            val coreSectionItems = if (hasCore) state.coreItems.size + 1 else 0
+            val importantSectionIndex = 1 + coreSectionItems
+            val otherSectionIndex = importantSectionIndex + (if (hasImportant) state.importantItems.size + 1 else 0)
 
             LazyColumn(
                 state = listState,
@@ -211,6 +185,31 @@ private fun LearnListContent(
                 ),
                 verticalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
             ) {
+                // 快速跳转按钮（LazyColumn第一项，始终可见）
+                item(key = "jump_buttons") {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
+                    ) {
+                        Button(
+                            onClick = { scope.launch { listState.scrollToItem(1) } },
+                            colors = ButtonDefaults.buttonColors(containerColor = LearnBadgeColors.CoreBg),
+                            contentPadding = PaddingValues(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp4),
+                        ) { Text(stringResource(R.string.learn_level_core), color = LearnBadgeColors.Core, style = MaterialTheme.typography.labelMedium) }
+                        Button(
+                            onClick = { scope.launch { listState.scrollToItem(importantSectionIndex) } },
+                            enabled = hasImportant,
+                            colors = ButtonDefaults.buttonColors(containerColor = LearnBadgeColors.ImportantBg),
+                            contentPadding = PaddingValues(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp4),
+                        ) { Text(stringResource(R.string.learn_level_important), color = LearnBadgeColors.Important, style = MaterialTheme.typography.labelMedium) }
+                        Button(
+                            onClick = { scope.launch { listState.scrollToItem(otherSectionIndex) } },
+                            enabled = hasOther,
+                            colors = ButtonDefaults.buttonColors(containerColor = LearnBadgeColors.OtherBg),
+                            contentPadding = PaddingValues(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp4),
+                        ) { Text(stringResource(R.string.learn_level_normal), color = LearnBadgeColors.Other, style = MaterialTheme.typography.labelMedium) }
+                    }
+                }
                 // Core section
                 if (hasCore) {
                     item(key = "section_core") {
