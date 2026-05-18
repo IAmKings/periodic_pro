@@ -29,7 +29,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,7 +43,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.ui.platform.LocalContext
 import com.periodic.pro.R
+import com.periodic.pro.data.lab.LabRepository
+import com.periodic.pro.data.lab.model.ChemicalReaction
 import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.theme.Dimensions
@@ -47,6 +57,7 @@ import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.PeriodicProTheme
 import com.periodic.pro.theme.forCategory
 import com.periodic.pro.ui.components.PeriodicOutlinedButton
+import com.periodic.pro.ui.components.PeriodicTextButton
 import com.periodic.pro.ui.components.PropertyChip
 import com.periodic.pro.ui.pattern.AtomCanvas
 import com.periodic.pro.ui.pattern.PropertyGrid
@@ -69,6 +80,8 @@ fun DetailScreen(
     onNavigateBack: () -> Unit,
     onNavigateToLearn: (Int) -> Unit = {},
     onNavigateToDiscover: () -> Unit = {},
+    onNavigateToLab: (Int) -> Unit = {},
+    onNavigateToLabDetail: (String) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val viewModel: DetailViewModel = koinViewModel { parametersOf(atomicNumber) }
@@ -80,6 +93,8 @@ fun DetailScreen(
         onNavigateBack = onNavigateBack,
         onNavigateToLearn = onNavigateToLearn,
         onNavigateToDiscover = onNavigateToDiscover,
+        onNavigateToLab = onNavigateToLab,
+        onNavigateToLabDetail = onNavigateToLabDetail,
         modifier = modifier,
     )
 }
@@ -95,6 +110,8 @@ private fun DetailContent(
     onNavigateBack: () -> Unit,
     onNavigateToLearn: (Int) -> Unit,
     onNavigateToDiscover: () -> Unit,
+    onNavigateToLab: (Int) -> Unit,
+    onNavigateToLabDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -170,6 +187,8 @@ private fun DetailContent(
                     zhName = state.zhName,
                     onNavigateToLearn = onNavigateToLearn,
                     onNavigateToDiscover = onNavigateToDiscover,
+                    onNavigateToLab = onNavigateToLab,
+                    onNavigateToLabDetail = onNavigateToLabDetail,
                     modifier = Modifier.padding(padding),
                 )
             }
@@ -188,6 +207,8 @@ private fun ElementDetailContent(
     zhName: String?,
     onNavigateToLearn: (Int) -> Unit,
     onNavigateToDiscover: () -> Unit,
+    onNavigateToLab: (Int) -> Unit,
+    onNavigateToLabDetail: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val categoryColor = LocalCategoryColors.current.forCategory(element.category)
@@ -243,6 +264,8 @@ private fun ElementDetailContent(
             element = element,
             onNavigateToLearn = onNavigateToLearn,
             onNavigateToDiscover = onNavigateToDiscover,
+            onNavigateToLab = onNavigateToLab,
+            onNavigateToLabDetail = onNavigateToLabDetail,
         )
 
         Spacer(modifier = Modifier.height(Dimensions.Dp32))
@@ -326,6 +349,8 @@ private fun ExtraInfoSection(
     element: Element,
     onNavigateToLearn: (Int) -> Unit,
     onNavigateToDiscover: () -> Unit,
+    onNavigateToLab: (Int) -> Unit,
+    onNavigateToLabDetail: (String) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -383,6 +408,56 @@ private fun ExtraInfoSection(
                 text = "发现更多",
                 modifier = Modifier.weight(1f),
             )
+        }
+
+        // === 相关化学反应 ===
+        val context = LocalContext.current
+        var reactions by remember { mutableStateOf<List<ChemicalReaction>>(emptyList()) }
+        LaunchedEffect(element.atomicNumber) {
+            val repo = LabRepository(context)
+            reactions = repo.getByElement(element.atomicNumber)
+        }
+        if (reactions.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(Dimensions.Dp16))
+            HorizontalDivider(modifier = Modifier.padding(horizontal = Dimensions.Dp16))
+            Spacer(modifier = Modifier.height(Dimensions.Dp12))
+            Text(
+                text = "相关化学反应",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.padding(top = Dimensions.Dp4),
+            )
+            Spacer(modifier = Modifier.height(Dimensions.Dp8))
+            reactions.take(5).forEach { reaction ->
+                Card(
+                    onClick = { onNavigateToLabDetail(reaction.id) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.small,
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
+                ) {
+                    Column(modifier = Modifier.padding(Dimensions.Dp12)) {
+                        Text(
+                            text = reaction.equation,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                        Text(
+                            text = reaction.name,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(Dimensions.Dp4))
+            }
+            if (reactions.size > 5) {
+                PeriodicTextButton(
+                    onClick = { onNavigateToLab(element.atomicNumber) },
+                    text = "查看全部 ${reactions.size} 个反应 →",
+                )
+            }
         }
     }
 }

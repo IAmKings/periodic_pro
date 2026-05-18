@@ -80,10 +80,16 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun LabScreen(
     onNavigateToDetail: (Int) -> Unit,
+    initialReactionId: String? = null,
     modifier: Modifier = Modifier,
     vm: LabViewModel = koinViewModel(),
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(initialReactionId) {
+        val id = initialReactionId ?: return@LaunchedEffect
+        vm.handle(LabIntent.SelectReaction(id))
+    }
 
     LaunchedEffect(Unit) {
         vm.effect.collect { effect ->

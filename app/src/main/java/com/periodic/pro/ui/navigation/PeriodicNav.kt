@@ -106,6 +106,16 @@ fun PeriodicNav(
                         restoreState = true
                     }
                 },
+                onNavigateToLab = { _ ->
+                    navController.navigate(Routes.LAB) {
+                        popUpTo(Routes.HOME) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                onNavigateToLabDetail = { reactionId ->
+                    navController.navigate("lab?reactionId=$reactionId")
+                },
             )
         }
 
@@ -194,8 +204,18 @@ fun PeriodicNav(
         }
 
         // === Lab (化学实验室) ===
-        composable(Routes.LAB) {
+        composable(
+            route = "${Routes.LAB}?reactionId={reactionId}",
+            arguments = listOf(navArgument("reactionId") {
+                type = NavType.StringType
+                defaultValue = ""
+                nullable = true
+            }),
+        ) { backStackEntry ->
+            val reactionId = backStackEntry.arguments?.getString("reactionId")
+                ?.takeIf { it.isNotEmpty() }
             LabScreen(
+                initialReactionId = reactionId,
                 onNavigateToDetail = { atomicNumber ->
                     navController.navigate(Routes.detail(atomicNumber))
                 },

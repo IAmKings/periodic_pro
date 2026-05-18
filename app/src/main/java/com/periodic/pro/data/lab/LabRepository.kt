@@ -53,4 +53,11 @@ class LabRepository(private val context: Context) {
     suspend fun getByLevel(level: ReactionLevel): List<ChemicalReaction> {
         return loadAll().filter { it.level == level }
     }
+
+    /**
+     * 根据涉及元素（原子序数）获取关联反应列表。
+     */
+    suspend fun getByElement(atomicNumber: Int): List<ChemicalReaction> {
+        return loadAll().filter { atomicNumber in it.involvedElements }
+    }
 }
