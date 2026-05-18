@@ -174,7 +174,7 @@ fun AtomCanvas(
         // 元素符号覆盖
         Text(
             text = symbol,
-            color = Color.White.copy(alpha = 0.15f),
+            color = Color.White,
             fontSize = (12 * scale).sp,
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.Monospace,
