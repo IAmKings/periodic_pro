@@ -216,7 +216,7 @@ private fun ElementDetailContent(
 ) {
     val categoryColor = LocalCategoryColors.current.forCategory(element.category)
     val scrollState = rememberScrollState()
-    var savedPosition by rememberSaveable { mutableIntStateOf(0) }
+    var savedPosition by rememberSaveable { mutableStateOf(0) }
 
     // 返回时恢复滚动位置：等待布局测量完成后scrollTo
     LaunchedEffect(Unit) {
