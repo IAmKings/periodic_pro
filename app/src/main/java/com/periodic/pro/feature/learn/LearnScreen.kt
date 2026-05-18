@@ -53,10 +53,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.R
 import com.periodic.pro.data.learn.model.LearnItem
+import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.Elevation
 import com.periodic.pro.theme.LearnBadgeColors
+import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.PeriodicProTheme
+import com.periodic.pro.theme.forCategory
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -162,6 +165,38 @@ private fun LearnListContent(
             val hasImportant = state.importantItems.isNotEmpty()
             val hasOther = state.otherItems.isNotEmpty()
 
+            // 计算各section索引用于快速跳转
+            val coreCount = state.coreItems.size + 1 // +1 for section header
+            val importantHeaderIndex = if (hasCore) coreCount else 0
+            val otherHeaderIndex = importantHeaderIndex + (if (hasImportant) state.importantItems.size + 1 else 0)
+            val categoryMap = state.categoryMap
+
+            // 快速跳转按钮
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Dimensions.Dp16, vertical = Dimensions.Dp4),
+                horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
+            ) {
+                Button(
+                    onClick = { listState.animateScrollToItem(0) },
+                    colors = ButtonDefaults.buttonColors(containerColor = LearnBadgeColors.CoreBg),
+                    contentPadding = PaddingValues(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp4),
+                ) { Text(stringResource(R.string.learn_level_core), color = LearnBadgeColors.Core, style = MaterialTheme.typography.labelMedium) }
+                Button(
+                    onClick = { listState.animateScrollToItem(importantHeaderIndex) },
+                    enabled = hasImportant,
+                    colors = ButtonDefaults.buttonColors(containerColor = LearnBadgeColors.ImportantBg),
+                    contentPadding = PaddingValues(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp4),
+                ) { Text(stringResource(R.string.learn_level_important), color = LearnBadgeColors.Important, style = MaterialTheme.typography.labelMedium) }
+                Button(
+                    onClick = { listState.animateScrollToItem(otherHeaderIndex) },
+                    enabled = hasOther,
+                    colors = ButtonDefaults.buttonColors(containerColor = LearnBadgeColors.OtherBg),
+                    contentPadding = PaddingValues(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp4),
+                ) { Text(stringResource(R.string.learn_level_normal), color = LearnBadgeColors.Other, style = MaterialTheme.typography.labelMedium) }
+            }
+
             LazyColumn(
                 state = listState,
                 modifier = Modifier
@@ -185,6 +220,9 @@ private fun LearnListContent(
                         LearnListItem(
                             item = item,
                             symbol = state.symbolMap[item.atomicNumber] ?: "?",
+                            categoryColor = LocalCategoryColors.current.forCategory(
+                                categoryMap[item.atomicNumber] ?: Category.TRANSITION_METAL
+                            ),
                             onClick = {
                                 onIntent(LearnIntent.SaveScroll(listState.firstVisibleItemIndex, listState.firstVisibleItemScrollOffset))
                                 onIntent(LearnIntent.SelectElement(item.atomicNumber))
@@ -208,6 +246,9 @@ private fun LearnListContent(
                         LearnListItem(
                             item = item,
                             symbol = state.symbolMap[item.atomicNumber] ?: "?",
+                            categoryColor = LocalCategoryColors.current.forCategory(
+                                categoryMap[item.atomicNumber] ?: Category.TRANSITION_METAL
+                            ),
                             onClick = {
                                 onIntent(LearnIntent.SaveScroll(listState.firstVisibleItemIndex, listState.firstVisibleItemScrollOffset))
                                 onIntent(LearnIntent.SelectElement(item.atomicNumber))
@@ -228,6 +269,9 @@ private fun LearnListContent(
                         LearnListItem(
                             item = item,
                             symbol = state.symbolMap[item.atomicNumber] ?: "?",
+                            categoryColor = LocalCategoryColors.current.forCategory(
+                                categoryMap[item.atomicNumber] ?: Category.TRANSITION_METAL
+                            ),
                             onClick = {
                                 onIntent(LearnIntent.SaveScroll(listState.firstVisibleItemIndex, listState.firstVisibleItemScrollOffset))
                                 onIntent(LearnIntent.SelectElement(item.atomicNumber))
@@ -282,6 +326,7 @@ private fun LevelSectionHeader(
 private fun LearnListItem(
     item: LearnItem,
     symbol: String,
+    categoryColor: Color,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -321,7 +366,7 @@ private fun LearnListItem(
                 modifier = Modifier
                     .size(44.dp)
                     .background(
-                        color = badgeColor.copy(alpha = 0.15f),
+                        color = categoryColor.copy(alpha = 0.15f),
                         shape = RoundedCornerShape(22.dp),
                     ),
                 contentAlignment = Alignment.Center,
@@ -330,7 +375,7 @@ private fun LearnListItem(
                     text = symbol,
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = badgeColor,
+                    color = categoryColor,
                 )
             }
 
