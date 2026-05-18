@@ -597,6 +597,34 @@ private fun buildProperties(
 }
 
 /**
+ * 将电子排布字符串转为上标数字的 AnnotatedString。
+ * "[Rn] 5f14 6d10 7s2 7p5" → 数字上标
+ */
+private fun electronConfigToAnnotated(config: String): AnnotatedString {
+    return buildAnnotatedString {
+        var i = 0
+        while (i < config.length) {
+            val ch = config[i]
+            if (ch.isDigit() && (i == 0 || !config[i - 1].isDigit())) {
+                // digit start — check if it follows a letter (superscript context)
+                val prev = if (i > 0) config[i - 1] else ' '
+                if (prev.isLetter() && prev != '[' && prev != ']') {
+                    val start = i
+                    while (i < config.length && config[i].isDigit()) i++
+                    withStyle(androidx.compose.ui.text.SpanStyle(
+                        baselineShift = androidx.compose.ui.text.style.BaselineShift.Superscript,
+                        fontSize = androidx.compose.ui.unit.sp(11),
+                    )) { append(config.substring(start, i)) }
+                    continue
+                }
+            }
+            append(ch)
+            i++
+        }
+    }
+}
+
+/**
  * 格式化 Double? 值：最多2位小数，去除尾部零。
  * null 返回 null，由 PropertyGrid 显示 "—"。
  */

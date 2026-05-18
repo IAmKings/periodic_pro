@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -70,6 +71,7 @@ data class PropertyItem(
     val name: String,
     val value: String?,
     val unit: String? = null,
+    val valueAnnotated: AnnotatedString? = null,
 )
 
 @Composable
@@ -84,12 +86,21 @@ private fun PropertyCell(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Spacer(modifier = Modifier.height(Dimensions.Dp4))
-        Text(
-            text = prop.value ?: "\u2014",
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Medium,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
+        if (prop.valueAnnotated != null) {
+            Text(
+                text = prop.valueAnnotated,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+        } else {
+            Text(
+                text = prop.value ?: "\u2014",
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+        }
         if (prop.value != null && prop.unit != null) {
             Text(
                 text = prop.unit,
