@@ -1,5 +1,6 @@
 package com.periodic.pro.ui.pattern
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -7,33 +8,39 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import android.content.res.Configuration
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import com.periodic.pro.theme.AtomElectronColor
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.periodic.pro.data.element.ElectronShells
 import com.periodic.pro.theme.PeriodicProTheme
 import kotlin.math.cos
 import kotlin.math.sin
 
 /**
- * Canvas 2D 原子动画。
+ * Canvas 2D 原子动画 — 多壳层独立旋转电子。
  *
- * 绘制原子核（按原子序号比例缩放）+ 电子层轨道（周期数 = 层数）+ 电子小球匀速转动。
- * 原子核颜色使用该元素的 Category 色。
+ * 参考 ElectronShell 实现：每层独立方向/速度旋转，脉冲光晕，电子发光效果。
  *
- * @param atomicNumber 原子序号，决定原子核大小
- * @param period 周期数（电子层数）
- * @param categoryColor 原子核颜色（元素分类色）
+ * @param atomicNumber 原子序号，决定核大小和电子分布
+ * @param categoryColor 原子核/电子颜色（元素分类色）
  * @param modifier Modifier
  */
 @Composable
@@ -43,105 +50,159 @@ fun AtomCanvas(
     categoryColor: Color,
     modifier: Modifier = Modifier,
 ) {
-    val infiniteTransition = rememberInfiniteTransition(label = "atom")
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
+    val shells = remember(atomicNumber) { ElectronShells.getElectronShells(atomicNumber) }
+    val baseRadius = 32f
+    val radiusIncrement = when {
+        shells.size <= 2 -> 50f
+        shells.size <= 4 -> 45f
+        shells.size <= 5 -> 40f
+        else -> 35f
+    }
+
+    // 每层独立旋转
+    val rotations = shells.mapIndexed { index, _ ->
+        val transition = rememberInfiniteTransition(label = "orbit-$index")
+        val duration = 3000 + index * 1500
+        val direction = if (index % 2 == 0) 1f else -1f
+        transition.animateFloat(
+            initialValue = 0f,
+            targetValue = 360f * direction,
+            animationSpec = infiniteRepeatable(
+                animation = tween(duration, easing = LinearEasing),
+                repeatMode = RepeatMode.Restart,
+            ),
+            label = "rotation-$index",
+        ).value
+    }
+
+    val pulseTransition = rememberInfiniteTransition(label = "pulse")
+    val pulseAlpha by pulseTransition.animateFloat(
+        initialValue = 0.2f,
+        targetValue = 0.45f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart,
+            animation = tween(2000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse,
         ),
-        label = "orbit",
+        label = "pulse",
     )
 
-    Canvas(modifier = modifier.fillMaxWidth().height(240.dp)) {
-        val center = Offset(size.width / 2, size.height / 2)
-        val nucleusRadius = (20f + atomicNumber * 0.3f).coerceIn(20f, 60f)
+    val nucleusRadius = (20f + atomicNumber * 0.3f).coerceIn(20f, 55f)
 
-        // 1. 原子核圆球（Category 色 + radialGradient 立体感）
-        drawCircle(
-            brush = Brush.radialGradient(
-                colors = listOf(categoryColor, categoryColor.copy(alpha = 0.6f)),
-                center = center,
-                radius = nucleusRadius,
-            ),
-            radius = nucleusRadius,
-            center = center,
-        )
+    Box(
+        modifier = modifier.fillMaxWidth().height(240.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val centerX = size.width / 2
+            val centerY = size.height / 2
 
-        // 2. 电子层轨道圆环（灰色虚线）
-        val shellCount = period.coerceIn(1, 7)
-        for (i in 1..shellCount) {
-            val orbitRadius = nucleusRadius + 20f + i * 22f
+            // 背景光晕
+            val glowRadius = baseRadius + shells.size * radiusIncrement + 20f
             drawCircle(
-                color = Color.Gray.copy(alpha = 0.4f),
-                radius = orbitRadius,
-                center = center,
-                style = Stroke(
-                    width = 1.5f,
-                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(8f, 6f)),
+                brush = Brush.radialGradient(
+                    colors = listOf(categoryColor.copy(alpha = pulseAlpha), Color.Transparent),
+                    center = Offset(centerX, centerY),
+                    radius = glowRadius,
                 ),
+                radius = glowRadius,
+                center = Offset(centerX, centerY),
             )
+
+            // 电子壳层虚线轨道
+            shells.forEachIndexed { index, _ ->
+                val orbitRadius = baseRadius + index * radiusIncrement
+                drawCircle(
+                    color = Color.Gray.copy(alpha = 0.35f),
+                    radius = orbitRadius,
+                    center = Offset(centerX, centerY),
+                    style = Stroke(
+                        width = 1.5f,
+                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(6f, 6f)),
+                    ),
+                )
+            }
+
+            // 原子核光晕
+            drawCircle(
+                brush = Brush.radialGradient(
+                    colors = listOf(categoryColor.copy(alpha = 0.35f), Color.Transparent),
+                    center = Offset(centerX, centerY),
+                    radius = nucleusRadius + 10f,
+                ),
+                radius = nucleusRadius + 10f,
+                center = Offset(centerX, centerY),
+            )
+
+            // 原子核
+            drawCircle(
+                brush = Brush.radialGradient(
+                    colors = listOf(categoryColor, categoryColor.copy(alpha = 0.5f)),
+                    center = Offset(centerX, centerY),
+                    radius = nucleusRadius,
+                ),
+                radius = nucleusRadius,
+                center = Offset(centerX, centerY),
+            )
+
+            // 电子 — 每层独立旋转
+            shells.forEachIndexed { shellIndex, electronCount ->
+                val orbitRadius = baseRadius + shellIndex * radiusIncrement
+                val angleStep = (2 * Math.PI / electronCount).toFloat()
+                val rotation = rotations[shellIndex]
+                val electronScale = if (shellIndex >= 5) 0.8f else 1f
+
+                rotate(degrees = rotation, pivot = Offset(centerX, centerY)) {
+                    for (i in 0 until electronCount) {
+                        val angle = angleStep * i - (Math.PI / 2).toFloat()
+                        val ex = centerX + orbitRadius * cos(angle)
+                        val ey = centerY + orbitRadius * sin(angle)
+                        val pos = Offset(ex, ey)
+
+                        // 电子光晕
+                        drawCircle(color = categoryColor.copy(alpha = 0.3f), radius = 8f * electronScale, center = pos)
+                        // 电子核心
+                        drawCircle(color = categoryColor, radius = 4f * electronScale, center = pos)
+                        // 高光
+                        drawCircle(color = Color.White.copy(alpha = 0.7f), radius = 1.5f * electronScale, center = Offset(ex - 1.5f, ey - 1.5f))
+                    }
+                }
+            }
         }
 
-        // 3. 最外层轨道上的电子小球（随 rotation 转动）
-        val outerOrbitRadius = nucleusRadius + 20f + shellCount * 22f
-        val electronAngle = Math.toRadians(rotation.toDouble())
-        val electronPos = Offset(
-            center.x + outerOrbitRadius * cos(electronAngle).toFloat(),
-            center.y + outerOrbitRadius * sin(electronAngle).toFloat(),
+        // 元素符号覆盖
+        Text(
+            text = ElectronShells.shellNames.getOrElse(shells.size - 1) { "" },
+            color = Color.White.copy(alpha = 0.2f),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            fontFamily = FontFamily.Monospace,
         )
-        drawCircle(color = AtomElectronColor, radius = 6f, center = electronPos)
     }
 }
 
 @Preview(name = "Light - H", showBackground = true)
-@Preview(
-    name = "Dark - H",
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-)
+@Preview(name = "Dark - H", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun AtomCanvasHydrogenPreview() {
     PeriodicProTheme {
-        AtomCanvas(
-            atomicNumber = 1,
-            period = 1,
-            categoryColor = Color(0xFF748FFC),
-        )
+        AtomCanvas(atomicNumber = 1, period = 1, categoryColor = Color(0xFF748FFC))
     }
 }
 
 @Preview(name = "Light - Fe", showBackground = true)
-@Preview(
-    name = "Dark - Fe",
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-)
+@Preview(name = "Dark - Fe", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun AtomCanvasIronPreview() {
     PeriodicProTheme {
-        AtomCanvas(
-            atomicNumber = 26,
-            period = 4,
-            categoryColor = Color(0xFFFFD43B),
-        )
+        AtomCanvas(atomicNumber = 26, period = 4, categoryColor = Color(0xFFFFD43B))
     }
 }
 
 @Preview(name = "Light - U", showBackground = true)
-@Preview(
-    name = "Dark - U",
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-)
+@Preview(name = "Dark - U", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun AtomCanvasUraniumPreview() {
     PeriodicProTheme {
-        AtomCanvas(
-            atomicNumber = 92,
-            period = 7,
-            categoryColor = Color(0xFFE599F7),
-        )
+        AtomCanvas(atomicNumber = 92, period = 7, categoryColor = Color(0xFFE599F7))
     }
 }
