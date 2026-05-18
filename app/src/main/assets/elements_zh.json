@@ -2,591 +2,709 @@
   {
     "atomicNumber": 1,
     "nameZh": "氢",
-    "pinyin": "qīng"
+    "pinyin": "qīng",
+    "description": "宇宙中最轻、最丰富的元素，是恒星和太阳的主要燃料。"
   },
   {
     "atomicNumber": 2,
     "nameZh": "氦",
-    "pinyin": "hài"
+    "pinyin": "hài",
+    "description": "第二轻的元素，常用于气球和低温科学研究。"
   },
   {
     "atomicNumber": 3,
     "nameZh": "锂",
-    "pinyin": "lǐ"
+    "pinyin": "lǐ",
+    "description": "最轻的金属元素，广泛用于电池和药物。"
   },
   {
     "atomicNumber": 4,
     "nameZh": "铍",
-    "pinyin": "pí"
+    "pinyin": "pí",
+    "description": "轻质高强度金属，用于航空航天和X射线窗口。"
   },
   {
     "atomicNumber": 5,
     "nameZh": "硼",
-    "pinyin": "péng"
+    "pinyin": "péng",
+    "description": "准金属元素，用于玻璃纤维和高强度材料。"
   },
   {
     "atomicNumber": 6,
     "nameZh": "碳",
-    "pinyin": "tàn"
+    "pinyin": "tàn",
+    "description": "生命的基础元素，可形成钻石、石墨等多种同素异形体。"
   },
   {
     "atomicNumber": 7,
     "nameZh": "氮",
-    "pinyin": "dàn"
+    "pinyin": "dàn",
+    "description": "大气中含量最多的气体，是蛋白质的重要组成元素。"
   },
   {
     "atomicNumber": 8,
     "nameZh": "氧",
-    "pinyin": "yǎng"
+    "pinyin": "yǎng",
+    "description": "生命必需的气体，支持燃烧和呼吸作用。"
   },
   {
     "atomicNumber": 9,
     "nameZh": "氟",
-    "pinyin": "fú"
+    "pinyin": "fú",
+    "description": "最活泼的非金属元素，用于牙膏和制冷剂。"
   },
   {
     "atomicNumber": 10,
     "nameZh": "氖",
-    "pinyin": "nǎi"
+    "pinyin": "nǎi",
+    "description": "惰性气体，常用于霓虹灯和激光器。"
   },
   {
     "atomicNumber": 11,
     "nameZh": "钠",
-    "pinyin": "nà"
+    "pinyin": "nà",
+    "description": "高活性金属，食盐的主要成分。"
   },
   {
     "atomicNumber": 12,
     "nameZh": "镁",
-    "pinyin": "měi"
+    "pinyin": "měi",
+    "description": "轻质金属，用于合金和烟火。"
   },
   {
     "atomicNumber": 13,
     "nameZh": "铝",
-    "pinyin": "lǚ"
+    "pinyin": "lǚ",
+    "description": "地壳中含量最多的金属，广泛用于建筑和包装。"
   },
   {
     "atomicNumber": 14,
     "nameZh": "硅",
-    "pinyin": "guī"
+    "pinyin": "guī",
+    "description": "半导体工业的基础材料，用于芯片制造。"
   },
   {
     "atomicNumber": 15,
     "nameZh": "磷",
-    "pinyin": "lín"
+    "pinyin": "lín",
+    "description": "生命必需元素，存在于DNA和骨骼中。"
   },
   {
     "atomicNumber": 16,
     "nameZh": "硫",
-    "pinyin": "liú"
+    "pinyin": "liú",
+    "description": "黄色固体，用于硫酸生产和橡胶硫化。"
   },
   {
     "atomicNumber": 17,
     "nameZh": "氯",
-    "pinyin": "lǜ"
+    "pinyin": "lǜ",
+    "description": "黄绿色有毒气体，用于消毒和制造塑料。"
   },
   {
     "atomicNumber": 18,
     "nameZh": "氩",
-    "pinyin": "yà"
+    "pinyin": "yà",
+    "description": "大气中第三丰富的气体，用于焊接保护。"
   },
   {
     "atomicNumber": 19,
     "nameZh": "钾",
-    "pinyin": "jiǎ"
+    "pinyin": "jiǎ",
+    "description": "对植物生长至关重要的元素。"
   },
   {
     "atomicNumber": 20,
     "nameZh": "钙",
-    "pinyin": "gài"
+    "pinyin": "gài",
+    "description": "骨骼和牙齿的主要成分。"
   },
   {
     "atomicNumber": 21,
     "nameZh": "钪",
-    "pinyin": "kàng"
+    "pinyin": "kàng",
+    "description": "用于高强度铝合金。"
   },
   {
     "atomicNumber": 22,
     "nameZh": "钛",
-    "pinyin": "tài"
+    "pinyin": "tài",
+    "description": "轻质高强度金属，用于航空和医疗植入物。"
   },
   {
     "atomicNumber": 23,
     "nameZh": "钒",
-    "pinyin": "fán"
+    "pinyin": "fán",
+    "description": "用于钢铁合金和储能电池。"
   },
   {
     "atomicNumber": 24,
     "nameZh": "铬",
-    "pinyin": "gè"
+    "pinyin": "gè",
+    "description": "用于不锈钢和电镀。"
   },
   {
     "atomicNumber": 25,
     "nameZh": "锰",
-    "pinyin": "měng"
+    "pinyin": "měng",
+    "description": "用于钢铁生产和电池。"
   },
   {
     "atomicNumber": 26,
     "nameZh": "铁",
-    "pinyin": "tiě"
+    "pinyin": "tiě",
+    "description": "地球上最常用的金属，是钢铁的主要成分。"
   },
   {
     "atomicNumber": 27,
     "nameZh": "钴",
-    "pinyin": "gǔ"
+    "pinyin": "gǔ",
+    "description": "用于锂电池和蓝色颜料。"
   },
   {
     "atomicNumber": 28,
     "nameZh": "镍",
-    "pinyin": "niè"
+    "pinyin": "niè",
+    "description": "用于不锈钢和硬币。"
   },
   {
     "atomicNumber": 29,
     "nameZh": "铜",
-    "pinyin": "tóng"
+    "pinyin": "tóng",
+    "description": "优良的导电体，广泛用于电线和管道。"
   },
   {
     "atomicNumber": 30,
     "nameZh": "锌",
-    "pinyin": "xīn"
+    "pinyin": "xīn",
+    "description": "用于镀锌防腐和电池。"
   },
   {
     "atomicNumber": 31,
     "nameZh": "镓",
-    "pinyin": "jiā"
+    "pinyin": "jiā",
+    "description": "低熔点金属，用于半导体和LED。"
   },
   {
     "atomicNumber": 32,
     "nameZh": "锗",
-    "pinyin": "zhě"
+    "pinyin": "zhě",
+    "description": "半导体材料，用于光纤和红外光学。"
   },
   {
     "atomicNumber": 33,
     "nameZh": "砷",
-    "pinyin": "shēn"
+    "pinyin": "shēn",
+    "description": "准金属，历史上曾被用作毒药。"
   },
   {
     "atomicNumber": 34,
     "nameZh": "硒",
-    "pinyin": "xī"
+    "pinyin": "xī",
+    "description": "人体必需的微量元素，用于电子设备。"
   },
   {
     "atomicNumber": 35,
     "nameZh": "溴",
-    "pinyin": "xiù"
+    "pinyin": "xiù",
+    "description": "室温下唯一呈液态的非金属元素。"
   },
   {
     "atomicNumber": 36,
     "nameZh": "氪",
-    "pinyin": "kè"
+    "pinyin": "kè",
+    "description": "稀有气体，用于照明和激光。"
   },
   {
     "atomicNumber": 37,
     "nameZh": "铷",
-    "pinyin": "rú"
+    "pinyin": "rú",
+    "description": "高活性碱金属，用于原子钟。"
   },
   {
     "atomicNumber": 38,
     "nameZh": "锶",
-    "pinyin": "sī"
+    "pinyin": "sī",
+    "description": "用于烟火和CRT显示器。"
   },
   {
     "atomicNumber": 39,
     "nameZh": "钇",
-    "pinyin": "yǐ"
+    "pinyin": "yǐ",
+    "description": "用于LED和超导体。"
   },
   {
     "atomicNumber": 40,
     "nameZh": "锆",
-    "pinyin": "gào"
+    "pinyin": "gào",
+    "description": "耐腐蚀金属，用于核反应堆。"
   },
   {
     "atomicNumber": 41,
     "nameZh": "铌",
-    "pinyin": "ní"
+    "pinyin": "ní",
+    "description": "用于超导磁铁和钢合金。"
   },
   {
     "atomicNumber": 42,
     "nameZh": "钼",
-    "pinyin": "mù"
+    "pinyin": "mù",
+    "description": "高熔点金属，用于钢铁合金。"
   },
   {
     "atomicNumber": 43,
     "nameZh": "锝",
-    "pinyin": "dé"
+    "pinyin": "dé",
+    "description": "第一个人工合成的元素，用于医学成像。"
   },
   {
     "atomicNumber": 44,
     "nameZh": "钌",
-    "pinyin": "liǎo"
+    "pinyin": "liǎo",
+    "description": "铂族金属，用于催化剂和电子设备。"
   },
   {
     "atomicNumber": 45,
     "nameZh": "铑",
-    "pinyin": "lǎo"
+    "pinyin": "lǎo",
+    "description": "最贵重的金属之一，用于催化转化器。"
   },
   {
     "atomicNumber": 46,
     "nameZh": "钯",
-    "pinyin": "bǎ"
+    "pinyin": "bǎ",
+    "description": "用于汽车催化转化器和电子设备。"
   },
   {
     "atomicNumber": 47,
     "nameZh": "银",
-    "pinyin": "yín"
+    "pinyin": "yín",
+    "description": "导电性最好的金属，用于珠宝和电子。"
   },
   {
     "atomicNumber": 48,
     "nameZh": "镉",
-    "pinyin": "gé"
+    "pinyin": "gé",
+    "description": "有毒金属，曾用于电池和颜料。"
   },
   {
     "atomicNumber": 49,
     "nameZh": "铟",
-    "pinyin": "yīn"
+    "pinyin": "yīn",
+    "description": "软金属，用于触摸屏和焊料。"
   },
   {
     "atomicNumber": 50,
     "nameZh": "锡",
-    "pinyin": "xī"
+    "pinyin": "xī",
+    "description": "用于焊料和食品包装。"
   },
   {
     "atomicNumber": 51,
     "nameZh": "锑",
-    "pinyin": "tī"
+    "pinyin": "tī",
+    "description": "用于阻燃剂和合金。"
   },
   {
     "atomicNumber": 52,
     "nameZh": "碲",
-    "pinyin": "dì"
+    "pinyin": "dì",
+    "description": "用于太阳能电池和合金。"
   },
   {
     "atomicNumber": 53,
     "nameZh": "碘",
-    "pinyin": "diǎn"
+    "pinyin": "diǎn",
+    "description": "人体必需的微量元素，用于甲状腺激素。"
   },
   {
     "atomicNumber": 54,
     "nameZh": "氙",
-    "pinyin": "xiān"
+    "pinyin": "xiān",
+    "description": "稀有气体，用于闪光灯和麻醉。"
   },
   {
     "atomicNumber": 55,
     "nameZh": "铯",
-    "pinyin": "sè"
+    "pinyin": "sè",
+    "description": "用于原子钟的高精度计时。"
   },
   {
     "atomicNumber": 56,
     "nameZh": "钡",
-    "pinyin": "bèi"
+    "pinyin": "bèi",
+    "description": "用于烟火和医学成像。"
   },
   {
     "atomicNumber": 57,
     "nameZh": "镧",
-    "pinyin": "lán"
+    "pinyin": "lán",
+    "description": "镧系元素之首，用于催化剂和光学玻璃。"
   },
   {
     "atomicNumber": 58,
     "nameZh": "铈",
-    "pinyin": "shì"
+    "pinyin": "shì",
+    "description": "最丰富的稀土元素，用于抛光剂。"
   },
   {
     "atomicNumber": 59,
     "nameZh": "镨",
-    "pinyin": "pǔ"
+    "pinyin": "pǔ",
+    "description": "用于强力磁铁和玻璃着色。"
   },
   {
     "atomicNumber": 60,
     "nameZh": "钕",
-    "pinyin": "nǚ"
+    "pinyin": "nǚ",
+    "description": "用于世界上最强的永磁体。"
   },
   {
     "atomicNumber": 61,
     "nameZh": "钷",
-    "pinyin": "pǒ"
+    "pinyin": "pǒ",
+    "description": "放射性元素，用于核电池。"
   },
   {
     "atomicNumber": 62,
     "nameZh": "钐",
-    "pinyin": "shān"
+    "pinyin": "shān",
+    "description": "用于磁铁和癌症治疗。"
   },
   {
     "atomicNumber": 63,
     "nameZh": "铕",
-    "pinyin": "yǒu"
+    "pinyin": "yǒu",
+    "description": "用于荧光灯和防伪标记。"
   },
   {
     "atomicNumber": 64,
     "nameZh": "钆",
-    "pinyin": "gá"
+    "pinyin": "gá",
+    "description": "用于MRI造影剂和核反应堆。"
   },
   {
     "atomicNumber": 65,
     "nameZh": "铽",
-    "pinyin": "tè"
+    "pinyin": "tè",
+    "description": "用于绿色荧光粉和固态存储。"
   },
   {
     "atomicNumber": 66,
     "nameZh": "镝",
-    "pinyin": "dī"
+    "pinyin": "dī",
+    "description": "用于强力磁铁和激光材料。"
   },
   {
     "atomicNumber": 67,
     "nameZh": "钬",
-    "pinyin": "huǒ"
+    "pinyin": "huǒ",
+    "description": "拥有最强磁矩的元素之一。"
   },
   {
     "atomicNumber": 68,
     "nameZh": "铒",
-    "pinyin": "ěr"
+    "pinyin": "ěr",
+    "description": "用于光纤放大器和激光。"
   },
   {
     "atomicNumber": 69,
     "nameZh": "铥",
-    "pinyin": "diū"
+    "pinyin": "diū",
+    "description": "最稀有的镧系元素之一。"
   },
   {
     "atomicNumber": 70,
     "nameZh": "镱",
-    "pinyin": "yì"
+    "pinyin": "yì",
+    "description": "用于激光和医疗设备。"
   },
   {
     "atomicNumber": 71,
     "nameZh": "镥",
-    "pinyin": "lǔ"
+    "pinyin": "lǔ",
+    "description": "镧系元素中最重的，用于PET扫描。"
   },
   {
     "atomicNumber": 72,
     "nameZh": "铪",
-    "pinyin": "hā"
+    "pinyin": "hā",
+    "description": "用于核反应堆控制棒和微处理器。"
   },
   {
     "atomicNumber": 73,
     "nameZh": "钽",
-    "pinyin": "tǎn"
+    "pinyin": "tǎn",
+    "description": "用于电子电容器和外科植入物。"
   },
   {
     "atomicNumber": 74,
     "nameZh": "钨",
-    "pinyin": "wū"
+    "pinyin": "wū",
+    "description": "熔点最高的金属，用于灯丝和切削工具。"
   },
   {
     "atomicNumber": 75,
     "nameZh": "铼",
-    "pinyin": "lái"
+    "pinyin": "lái",
+    "description": "用于喷气发动机和催化剂。"
   },
   {
     "atomicNumber": 76,
     "nameZh": "锇",
-    "pinyin": "é"
+    "pinyin": "é",
+    "description": "密度最大的天然元素。"
   },
   {
     "atomicNumber": 77,
     "nameZh": "铱",
-    "pinyin": "yī"
+    "pinyin": "yī",
+    "description": "最耐腐蚀的金属，用于火花塞。"
   },
   {
     "atomicNumber": 78,
     "nameZh": "铂",
-    "pinyin": "bó"
+    "pinyin": "bó",
+    "description": "贵金属，用于珠宝和催化转化器。"
   },
   {
     "atomicNumber": 79,
     "nameZh": "金",
-    "pinyin": "jīn"
+    "pinyin": "jīn",
+    "description": "最具价值的贵金属，用于珠宝和货币。"
   },
   {
     "atomicNumber": 80,
     "nameZh": "汞",
-    "pinyin": "gǒng"
+    "pinyin": "gǒng",
+    "description": "室温下唯一呈液态的金属。"
   },
   {
     "atomicNumber": 81,
     "nameZh": "铊",
-    "pinyin": "tā"
+    "pinyin": "tā",
+    "description": "有毒金属，用于电子设备和医学成像。"
   },
   {
     "atomicNumber": 82,
     "nameZh": "铅",
-    "pinyin": "qiān"
+    "pinyin": "qiān",
+    "description": "软重金属，历史上用于管道和电池。"
   },
   {
     "atomicNumber": 83,
     "nameZh": "铋",
-    "pinyin": "bì"
+    "pinyin": "bì",
+    "description": "低毒性金属，用于药物和合金。"
   },
   {
     "atomicNumber": 84,
     "nameZh": "钋",
-    "pinyin": "pō"
+    "pinyin": "pō",
+    "description": "高放射性元素，由居里夫人发现。"
   },
   {
     "atomicNumber": 85,
     "nameZh": "砹",
-    "pinyin": "ài"
+    "pinyin": "ài",
+    "description": "最稀有的天然元素之一。"
   },
   {
     "atomicNumber": 86,
     "nameZh": "氡",
-    "pinyin": "dōng"
+    "pinyin": "dōng",
+    "description": "放射性惰性气体，可能导致肺癌。"
   },
   {
     "atomicNumber": 87,
     "nameZh": "钫",
-    "pinyin": "fāng"
+    "pinyin": "fāng",
+    "description": "最不稳定的天然元素。"
   },
   {
     "atomicNumber": 88,
     "nameZh": "镭",
-    "pinyin": "léi"
+    "pinyin": "léi",
+    "description": "放射性元素，曾用于夜光涂料。"
   },
   {
     "atomicNumber": 89,
     "nameZh": "锕",
-    "pinyin": "ā"
+    "pinyin": "ā",
+    "description": "锕系元素之首，高放射性。"
   },
   {
     "atomicNumber": 90,
     "nameZh": "钍",
-    "pinyin": "tǔ"
+    "pinyin": "tǔ",
+    "description": "可能成为未来的核燃料来源。"
   },
   {
     "atomicNumber": 91,
     "nameZh": "镤",
-    "pinyin": "pú"
+    "pinyin": "pú",
+    "description": "稀有放射性元素。"
   },
   {
     "atomicNumber": 92,
     "nameZh": "铀",
-    "pinyin": "yóu"
+    "pinyin": "yóu",
+    "description": "用于核能发电和核武器。"
   },
   {
     "atomicNumber": 93,
     "nameZh": "镎",
-    "pinyin": "ná"
+    "pinyin": "ná",
+    "description": "第一个超铀元素。"
   },
   {
     "atomicNumber": 94,
     "nameZh": "钚",
-    "pinyin": "bù"
+    "pinyin": "bù",
+    "description": "用于核武器和太空探测器的电源。"
   },
   {
     "atomicNumber": 95,
     "nameZh": "镅",
-    "pinyin": "méi"
+    "pinyin": "méi",
+    "description": "用于烟雾探测器。"
   },
   {
     "atomicNumber": 96,
     "nameZh": "锔",
-    "pinyin": "jú"
+    "pinyin": "jú",
+    "description": "以居里夫妇命名。"
   },
   {
     "atomicNumber": 97,
     "nameZh": "锫",
-    "pinyin": "péi"
+    "pinyin": "péi",
+    "description": "以加州伯克利命名。"
   },
   {
     "atomicNumber": 98,
     "nameZh": "锎",
-    "pinyin": "kāi"
+    "pinyin": "kāi",
+    "description": "用于便携式中子源。"
   },
   {
     "atomicNumber": 99,
     "nameZh": "锿",
-    "pinyin": "āi"
+    "pinyin": "āi",
+    "description": "以爱因斯坦命名。"
   },
   {
     "atomicNumber": 100,
     "nameZh": "镄",
-    "pinyin": "fèi"
+    "pinyin": "fèi",
+    "description": "以费米命名。"
   },
   {
     "atomicNumber": 101,
     "nameZh": "钔",
-    "pinyin": "mén"
+    "pinyin": "mén",
+    "description": "以门捷列夫命名。"
   },
   {
     "atomicNumber": 102,
     "nameZh": "锘",
-    "pinyin": "nuò"
+    "pinyin": "nuò",
+    "description": "以诺贝尔命名。"
   },
   {
     "atomicNumber": 103,
     "nameZh": "铹",
-    "pinyin": "láo"
+    "pinyin": "láo",
+    "description": "锕系元素中最后一个。"
   },
   {
     "atomicNumber": 104,
     "nameZh": "𬬻",
-    "pinyin": "lú"
+    "pinyin": "lú",
+    "description": "以卢瑟福命名的人造元素。"
   },
   {
     "atomicNumber": 105,
     "nameZh": "𬭊",
-    "pinyin": "dù"
+    "pinyin": "dù",
+    "description": "以杜布纳命名。"
   },
   {
     "atomicNumber": 106,
     "nameZh": "𬭳",
-    "pinyin": "xǐ"
+    "pinyin": "xǐ",
+    "description": "以西博格命名。"
   },
   {
     "atomicNumber": 107,
     "nameZh": "𬭛",
-    "pinyin": "bō"
+    "pinyin": "bō",
+    "description": "以玻尔命名。"
   },
   {
     "atomicNumber": 108,
     "nameZh": "𬭶",
-    "pinyin": "hēi"
+    "pinyin": "hēi",
+    "description": "以黑森州命名。"
   },
   {
     "atomicNumber": 109,
     "nameZh": "鿏",
-    "pinyin": "mài"
+    "pinyin": "mài",
+    "description": "以迈特纳命名。"
   },
   {
     "atomicNumber": 110,
     "nameZh": "𫟼",
-    "pinyin": "dá"
+    "pinyin": "dá",
+    "description": "以达姆施塔特命名。"
   },
   {
     "atomicNumber": 111,
     "nameZh": "𬬭",
-    "pinyin": "lún"
+    "pinyin": "lún",
+    "description": "以伦琴命名。"
   },
   {
     "atomicNumber": 112,
     "nameZh": "鿔",
-    "pinyin": "gē"
+    "pinyin": "gē",
+    "description": "以哥白尼命名。"
   },
   {
     "atomicNumber": 113,
     "nameZh": "鉨",
-    "pinyin": "nǐ"
+    "pinyin": "nǐ",
+    "description": "日本发现，意为'日本'。"
   },
   {
     "atomicNumber": 114,
     "nameZh": "鈇",
-    "pinyin": "fū"
+    "pinyin": "fū",
+    "description": "以弗廖罗夫命名。"
   },
   {
     "atomicNumber": 115,
     "nameZh": "鏌",
-    "pinyin": "mò"
+    "pinyin": "mò",
+    "description": "以莫斯科命名。"
   },
   {
     "atomicNumber": 116,
     "nameZh": "鉝",
-    "pinyin": "lì"
+    "pinyin": "lì",
+    "description": "以利弗莫尔命名。"
   },
   {
     "atomicNumber": 117,
     "nameZh": "鿬",
-    "pinyin": "tián"
+    "pinyin": "tián",
+    "description": "以田纳西州命名。"
   },
   {
     "atomicNumber": 118,
     "nameZh": "鿫",
-    "pinyin": "ào"
+    "pinyin": "ào",
+    "description": "目前已知最重的元素。"
   }
 ]

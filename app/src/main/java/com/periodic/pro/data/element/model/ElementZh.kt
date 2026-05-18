@@ -7,4 +7,5 @@ data class ElementZh(
     val atomicNumber: Int,
     val nameZh: String,
     val pinyin: String,
+    val description: String? = null,
 )
