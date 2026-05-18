@@ -41,7 +41,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -170,6 +172,7 @@ private fun LearnListContent(
             val importantHeaderIndex = if (hasCore) coreCount else 0
             val otherHeaderIndex = importantHeaderIndex + (if (hasImportant) state.importantItems.size + 1 else 0)
             val categoryMap = state.categoryMap
+            val scope = rememberCoroutineScope()
 
             // 快速跳转按钮
             Row(
@@ -179,18 +182,18 @@ private fun LearnListContent(
                 horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
             ) {
                 Button(
-                    onClick = { listState.scrollToItem(0) },
+                    onClick = { scope.launch { listState.scrollToItem(0) } },
                     colors = ButtonDefaults.buttonColors(containerColor = LearnBadgeColors.CoreBg),
                     contentPadding = PaddingValues(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp4),
                 ) { Text(stringResource(R.string.learn_level_core), color = LearnBadgeColors.Core, style = MaterialTheme.typography.labelMedium) }
                 Button(
-                    onClick = { listState.scrollToItem(importantHeaderIndex) },
+                    onClick = { scope.launch { listState.scrollToItem(importantHeaderIndex) } },
                     enabled = hasImportant,
                     colors = ButtonDefaults.buttonColors(containerColor = LearnBadgeColors.ImportantBg),
                     contentPadding = PaddingValues(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp4),
                 ) { Text(stringResource(R.string.learn_level_important), color = LearnBadgeColors.Important, style = MaterialTheme.typography.labelMedium) }
                 Button(
-                    onClick = { listState.scrollToItem(otherHeaderIndex) },
+                    onClick = { scope.launch { listState.scrollToItem(otherHeaderIndex) } },
                     enabled = hasOther,
                     colors = ButtonDefaults.buttonColors(containerColor = LearnBadgeColors.OtherBg),
                     contentPadding = PaddingValues(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp4),
