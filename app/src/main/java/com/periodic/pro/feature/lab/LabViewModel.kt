@@ -41,6 +41,7 @@ class LabViewModel(
             is LabIntent.FilterByType -> filterByType(intent.type)
             is LabIntent.SelectReaction -> selectReaction(intent.reactionId)
             is LabIntent.NavigateToDetail -> navigateToDetail(intent.atomicNumber)
+            is LabIntent.SaveScroll -> saveScroll(intent.index, intent.offset)
             LabIntent.BackToList -> backToList()
         }
     }
@@ -122,6 +123,10 @@ class LabViewModel(
         viewModelScope.launch {
             _effect.send(LabEffect.NavigateToDetail(atomicNumber))
         }
+    }
+
+    private fun saveScroll(index: Int, offset: Int) {
+        _state.update { it.copy(listScrollIndex = index, listScrollOffset = offset) }
     }
 
     private fun backToList() {

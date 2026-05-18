@@ -47,6 +47,8 @@ data class LabUiState(
     val errorMessage: String? = null,
     /** 原子序数 → 元素符号映射 */
     val symbolMap: Map<Int, String> = emptyMap(),
+    val listScrollIndex: Int = 0,
+    val listScrollOffset: Int = 0,
 ) {
     val isReady: Boolean get() = !isLoading && errorMessage == null
 

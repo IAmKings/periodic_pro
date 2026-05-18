@@ -25,6 +25,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -100,9 +102,15 @@ fun LabScreen(
         }
     }
 
+    val listState = rememberLazyListState(
+        initialFirstVisibleItemIndex = state.listScrollIndex,
+        initialFirstVisibleItemScrollOffset = state.listScrollOffset,
+    )
+
     when (state.navMode) {
         LabNavMode.LIST -> LabListContent(
             state = state,
+            listState = listState,
             onIntent = vm::handle,
             modifier = modifier,
         )
@@ -127,6 +135,7 @@ fun LabScreen(
 @Composable
 private fun LabListContent(
     state: LabUiState,
+    listState: LazyListState,
     onIntent: (LabIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -173,6 +182,7 @@ private fun LabListContent(
             }
         } else {
             LazyColumn(
+                state = listState,
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding),
@@ -237,6 +247,7 @@ private fun LabListContent(
                                 ReactionListItem(
                                     reaction = reaction,
                                     onClick = {
+                                        onIntent(LabIntent.SaveScroll(listState.firstVisibleItemIndex, listState.firstVisibleItemScrollOffset))
                                         onIntent(LabIntent.SelectReaction(reaction.id))
                                     },
                                 )

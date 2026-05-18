@@ -22,6 +22,9 @@ sealed interface LabIntent {
     /** 点击涉及元素，跳转到元素详情 */
     data class NavigateToDetail(val atomicNumber: Int) : LabIntent
 
+    /** 保存滚动位置 */
+    data class SaveScroll(val index: Int, val offset: Int) : LabIntent
+
     /** 返回反应列表 */
     data object BackToList : LabIntent
 }
