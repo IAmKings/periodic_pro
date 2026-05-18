@@ -265,7 +265,7 @@ private fun PeriodicTableCell(
         modifier = modifier
             .padding(1.dp)
             .clip(shape)
-            .background(categoryColor.copy(alpha = 0.5f))
+            .background(categoryColor.copy(alpha = 0.7f))
             .alpha(alpha)
             .then(
                 if (isSelected) {
