@@ -362,17 +362,19 @@ private fun ExtraInfoRow(
     value: String,
     modifier: Modifier = Modifier,
 ) {
-    Row(modifier = modifier) {
+    Row(modifier = modifier.fillMaxWidth()) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.width(56.dp),
+            modifier = Modifier.width(72.dp),
+            maxLines = 1,
         )
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.weight(1f),
         )
     }
 }
