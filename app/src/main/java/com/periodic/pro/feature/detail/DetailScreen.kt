@@ -591,6 +591,7 @@ private fun buildProperties(
         PropertyItem(
             name = labelElectronConfig,
             value = element.electronConfiguration,
+            valueAnnotated = electronConfigToAnnotated(element.electronConfiguration),
         ),
     )
 }

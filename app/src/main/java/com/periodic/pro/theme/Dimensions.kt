@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 object Dimensions {
     val Dp0: Dp = 0.dp
     val Dp4: Dp = 4.dp
+    val Dp6: Dp = 6.dp
     val Dp8: Dp = 8.dp
     val Dp12: Dp = 12.dp
     val Dp16: Dp = 16.dp
