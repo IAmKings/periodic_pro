@@ -55,6 +55,10 @@ import com.periodic.pro.R
 import com.periodic.pro.data.lab.LabRepository
 import com.periodic.pro.data.lab.model.ChemicalReaction
 import com.periodic.pro.data.element.model.Category
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.shape.RoundedCornerShape
+import com.periodic.pro.data.element.ElectronShells
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.LocalCategoryColors
