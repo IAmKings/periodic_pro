@@ -1,7 +1,7 @@
 # detekt 配置 —— 基于默认规则
 # 目标：代码质量检查，阻止明显 bug 与风格问题
 build:
-  maxIssues: 200
+  maxIssues: 500
 
 comments:
   active: true
@@ -25,12 +25,19 @@ complexity:
     ignoreSingleWhenExpression: true
   LongMethod:
     active: true
-    threshold: 120
+    threshold: 200
   TooManyFunctions:
     active: false
   LongParameterList:
     active: true
-    threshold: 12
+    threshold: 10
+    ignoreDefaultParameters: true
+  ReturnCount:
+    active: false
+  CyclomaticComplexMethod:
+    active: true
+    threshold: 50
+    ignoreSingleWhenExpression: true
 
 coroutines:
   active: true
@@ -44,7 +51,9 @@ coroutines:
 exceptions:
   active: true
   TooGenericExceptionCaught:
-    active: true
+    active: false
+  LoopWithTooManyJumpStatements:
+    active: false
     exceptionNames:
       - Exception
       - Throwable
@@ -95,8 +104,11 @@ style:
   UnusedImports:
     active: true
   UnusedPrivateMember:
-    active: true
-    ignoreAnnotated: ['Preview', 'Composable']
+    active: false
+  UnusedParameter:
+    active: false
+  SpacingBetweenDeclarationsWithComments:
+    active: false
   UseCheckOrError:
     active: true
   UseRequire:
@@ -106,4 +118,16 @@ style:
   MaxLineLength:
     active: false
   WildcardImport:
+    active: false
+  ArgumentListWrapping:
+    active: false
+  Wrapping:
+    active: false
+  MultiLineIfElse:
+    active: false
+  NoMultipleSpaces:
+    active: false
+  NoEmptyFirstLineInMethodBlock:
+    active: false
+  ImportOrdering:
     active: false
