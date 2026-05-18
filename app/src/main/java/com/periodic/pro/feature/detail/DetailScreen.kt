@@ -433,7 +433,7 @@ private fun ExtraInfoSection(
 
         // === 相关化学反应 ===
         if (reactions.isNotEmpty()) {
-            var expanded by remember { mutableStateOf(false) }
+            var expanded by rememberSaveable { mutableStateOf(false) }
             val displayReactions = if (expanded) reactions else reactions.take(5)
 
             Spacer(modifier = Modifier.height(Dimensions.Dp16))
