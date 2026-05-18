@@ -362,7 +362,10 @@ private fun ExtraInfoRow(
     value: String,
     modifier: Modifier = Modifier,
 ) {
-    Row(modifier = modifier.fillMaxWidth()) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
