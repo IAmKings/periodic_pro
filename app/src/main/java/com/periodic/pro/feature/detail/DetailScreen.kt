@@ -571,13 +571,13 @@ private fun buildProperties(
         ),
         PropertyItem(
             name = labelMeltingPoint,
-            value = formatDouble(element.meltingPoint),
-            unit = "K",
+            value = element.meltingPoint?.let { formatDouble(it - 273.15) },
+            unit = "\u2103",
         ),
         PropertyItem(
             name = labelBoilingPoint,
-            value = formatDouble(element.boilingPoint),
-            unit = "K",
+            value = element.boilingPoint?.let { formatDouble(it - 273.15) },
+            unit = "\u2103",
         ),
         PropertyItem(
             name = labelElectronegativity,
