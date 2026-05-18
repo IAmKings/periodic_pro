@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.clickable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -72,6 +73,7 @@ data class PropertyItem(
     val value: String?,
     val unit: String? = null,
     val valueAnnotated: AnnotatedString? = null,
+    val onClick: (() -> Unit)? = null,
 )
 
 @Composable
@@ -79,7 +81,11 @@ private fun PropertyCell(
     prop: PropertyItem,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier.then(
+            if (prop.onClick != null) Modifier.clickable { prop.onClick() } else Modifier
+        )
+    ) {
         Text(
             text = prop.name,
             style = MaterialTheme.typography.labelMedium,

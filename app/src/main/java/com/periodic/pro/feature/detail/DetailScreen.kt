@@ -313,19 +313,9 @@ private fun ElementDetailContent(
                 labelIonizationEnergy = stringResource(R.string.property_ionization_energy),
                 labelElectronConfig = stringResource(R.string.property_electron_configuration),
                 showCelsius = showCelsius,
+                onToggleTemp = { showCelsius = !showCelsius },
             ),
             modifier = Modifier.padding(vertical = Dimensions.Dp8),
-        )
-
-        // 温度单位切换
-        Text(
-            text = if (showCelsius) "\u2103 / K" else "K / \u2103",
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .align(Alignment.End)
-                .padding(end = Dimensions.Dp16)
-                .clickable { showCelsius = !showCelsius },
         )
 
         HorizontalDivider(
@@ -572,6 +562,7 @@ private fun buildProperties(
     labelIonizationEnergy: String,
     labelElectronConfig: String,
     showCelsius: Boolean,
+    onToggleTemp: () -> Unit,
 ): List<PropertyItem> {
     val tempUnit = if (showCelsius) "\u2103" else "K"
     val tempConvert: (Double?) -> Double? = if (showCelsius) { { it?.minus(273.15) } } else { { it } }
@@ -590,11 +581,13 @@ private fun buildProperties(
             name = labelMeltingPoint,
             value = tempConvert(element.meltingPoint)?.let { formatDouble(it) },
             unit = tempUnit,
+            onClick = onToggleTemp,
         ),
         PropertyItem(
             name = labelBoilingPoint,
             value = tempConvert(element.boilingPoint)?.let { formatDouble(it) },
             unit = tempUnit,
+            onClick = onToggleTemp,
         ),
         PropertyItem(
             name = labelElectronegativity,
