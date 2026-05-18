@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.navArgument
 import com.periodic.pro.feature.category.CategoryScreen
@@ -67,10 +68,14 @@ fun PeriodicNav(
 
         // === Table (周期表) ===
         composable(
-            route = Routes.TABLE,
+            route = "${Routes.TABLE}?query={query}",
+            arguments = listOf(
+                navArgument("query") { type = NavType.StringType; defaultValue = "" },
+            ),
         ) {
+            val query = it.arguments?.getString("query") ?: ""
             TableScreen(
-                initialQuery = "",
+                initialQuery = query,
                 onNavigateToDetail = { atomicNumber ->
                     navController.navigate(Routes.detail(atomicNumber))
                 },
