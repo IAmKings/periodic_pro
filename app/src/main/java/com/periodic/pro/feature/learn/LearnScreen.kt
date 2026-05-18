@@ -185,8 +185,8 @@ private fun LearnListContent(
                 ),
                 verticalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
             ) {
-                // 快速跳转按钮（LazyColumn第一项，始终可见）
-                item(key = "jump_buttons") {
+                // 快速跳转按钮（stickyHeader吸顶，始终可见）
+                stickyHeader(key = "jump_buttons") {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
