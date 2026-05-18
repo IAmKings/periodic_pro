@@ -267,8 +267,9 @@ private fun ElementDetailContent(
         FlowRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = Dimensions.Dp32),
+                .padding(horizontal = Dimensions.Dp16),
             horizontalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
             verticalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
         ) {
             shells.forEachIndexed { index, count ->
@@ -278,7 +279,7 @@ private fun ElementDetailContent(
                             color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                             shape = RoundedCornerShape(8.dp),
                         )
-                        .padding(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp6),
+                        .padding(horizontal = Dimensions.Dp20, vertical = Dimensions.Dp6),
                 ) {
                     Text(
                         text = "${ElectronShells.shellNames.getOrElse(index) { "?" }} $count",
