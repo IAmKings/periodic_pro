@@ -605,6 +605,8 @@ private fun DetailContentHydrogenPreview() {
             onNavigateBack = {},
             onNavigateToLearn = {},
             onNavigateToDiscover = {},
+            onNavigateToLab = {},
+            onNavigateToLabDetail = {},
         )
     }
 }
@@ -646,6 +648,8 @@ private fun DetailContentIronPreview() {
             onNavigateBack = {},
             onNavigateToLearn = {},
             onNavigateToDiscover = {},
+            onNavigateToLab = {},
+            onNavigateToLabDetail = {},
         )
     }
 }
