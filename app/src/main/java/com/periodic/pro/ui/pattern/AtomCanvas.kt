@@ -88,7 +88,8 @@ fun AtomCanvas(
         label = "pulse",
     )
 
-    val nucleusRadius = ((20f + atomicNumber * 0.3f) * scale).coerceIn(20f * scale, 55f * scale)
+    // 最小核半径确保双字母符号（He/Fe/Zn等）不超出圆圈
+    val nucleusRadius = ((20f + atomicNumber * 0.3f) * scale).coerceIn(30f * scale, 55f * scale)
 
     Box(
         modifier = modifier.fillMaxWidth().height((240 * scale).dp),
