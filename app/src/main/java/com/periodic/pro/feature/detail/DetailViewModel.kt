@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.periodic.pro.data.element.ElementRepository
 import com.periodic.pro.data.favorites.FavoritesRepository
+import com.periodic.pro.data.lab.LabRepository
+import com.periodic.pro.data.lab.model.ChemicalReaction
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,6 +15,7 @@ import kotlinx.coroutines.launch
 class DetailViewModel(
     private val elementRepo: ElementRepository,
     private val favoritesRepo: FavoritesRepository,
+    private val labRepo: LabRepository,
     private val atomicNumber: Int,
 ) : ViewModel() {
 
@@ -25,9 +28,19 @@ class DetailViewModel(
     }
 
     private fun loadElement() {
-        val element = elementRepo.getByNumber(atomicNumber)
-        val zhName = elementRepo.getZh(atomicNumber)?.nameZh
-        _state.update { it.copy(element = element, zhName = zhName, isLoading = false) }
+        viewModelScope.launch {
+            val element = elementRepo.getByNumber(atomicNumber)
+            val zhName = elementRepo.getZh(atomicNumber)?.nameZh
+            val reactions = labRepo.getByElement(atomicNumber)
+            _state.update {
+                it.copy(
+                    element = element,
+                    zhName = zhName,
+                    reactions = reactions,
+                    isLoading = false,
+                )
+            }
+        }
     }
 
     private fun observeFavorite() {

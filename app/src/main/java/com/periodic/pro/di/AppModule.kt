@@ -35,7 +35,7 @@ val appModule = module {
     viewModel { params -> CompareViewModel(get(), params.get()) }
     viewModel { HomeViewModel(get()) }
     viewModel { FavoritesViewModel(get(), get()) }
-    viewModel { params -> DetailViewModel(get(), get(), params.get()) }
+    viewModel { params -> DetailViewModel(get(), get(), get(), params.get()) }
     single { DiscoverRepository(androidContext()) }
     single { LearnRepository(androidContext()) }
     single { LabRepository(androidContext()) }

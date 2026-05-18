@@ -189,6 +189,7 @@ private fun DetailContent(
                 ElementDetailContent(
                     element = element,
                     zhName = state.zhName,
+                    reactions = state.reactions,
                     onNavigateToLearn = onNavigateToLearn,
                     onNavigateToDiscover = onNavigateToDiscover,
                     onNavigateToLab = onNavigateToLab,
@@ -209,6 +210,7 @@ private fun DetailContent(
 private fun ElementDetailContent(
     element: Element,
     zhName: String?,
+    reactions: List<ChemicalReaction>,
     onNavigateToLearn: (Int) -> Unit,
     onNavigateToDiscover: () -> Unit,
     onNavigateToLab: (Int) -> Unit,
@@ -220,13 +222,11 @@ private fun ElementDetailContent(
     var savedPosition by rememberSaveable { mutableStateOf(0) }
 
     LaunchedEffect(Unit) {
-        // 先恢复已保存的滚动位置（等待布局测量完成）
         snapshotFlow { scrollState.maxValue }
             .first { it > 0 }
         if (savedPosition > 0) {
             scrollState.scrollTo(savedPosition.coerceAtMost(scrollState.maxValue))
         }
-        // 然后持续保存滚动位置（跳过初始值0避免覆盖已恢复的值）
         snapshotFlow { scrollState.value }
             .drop(1)
             .collect { savedPosition = it }
@@ -281,6 +281,7 @@ private fun ElementDetailContent(
         // === 4. 额外信息区 ===
         ExtraInfoSection(
             element = element,
+            reactions = reactions,
             onNavigateToLearn = onNavigateToLearn,
             onNavigateToDiscover = onNavigateToDiscover,
             onNavigateToLab = onNavigateToLab,
@@ -366,6 +367,7 @@ private fun ElementInfoSection(
 @Composable
 private fun ExtraInfoSection(
     element: Element,
+    reactions: List<ChemicalReaction>,
     onNavigateToLearn: (Int) -> Unit,
     onNavigateToDiscover: () -> Unit,
     onNavigateToLab: (Int) -> Unit,
@@ -430,12 +432,6 @@ private fun ExtraInfoSection(
         }
 
         // === 相关化学反应 ===
-        val context = LocalContext.current
-        var reactions by remember { mutableStateOf<List<ChemicalReaction>>(emptyList()) }
-        LaunchedEffect(element.atomicNumber) {
-            val repo = LabRepository(context)
-            reactions = repo.getByElement(element.atomicNumber)
-        }
         if (reactions.isNotEmpty()) {
             Spacer(modifier = Modifier.height(Dimensions.Dp16))
             HorizontalDivider(modifier = Modifier.padding(horizontal = Dimensions.Dp16))
