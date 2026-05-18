@@ -245,6 +245,36 @@ private fun ElementDetailContent(
             symbol = element.symbol,
         )
 
+        // 电子壳层标签
+        val shells = remember(element.atomicNumber) {
+            ElectronShells.getElectronShells(element.atomicNumber)
+        }
+        androidx.compose.foundation.layout.ExperimentalLayoutApi
+        FlowRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = Dimensions.Dp16),
+            horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp6),
+            verticalArrangement = Arrangement.spacedBy(Dimensions.Dp4),
+        ) {
+            shells.forEachIndexed { index, count ->
+                Box(
+                    modifier = Modifier
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                            shape = RoundedCornerShape(8.dp),
+                        )
+                        .padding(horizontal = Dimensions.Dp8, vertical = Dimensions.Dp4),
+                ) {
+                    Text(
+                        text = "${ElectronShells.shellNames.getOrElse(index) { "?" }} $count",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+        }
+
         // === 2. 元素基本信息区 ===
         ElementInfoSection(
             element = element,
