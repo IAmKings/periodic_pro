@@ -189,10 +189,7 @@ fun PeriodicNav(
                     navController.navigate(Routes.detail(num))
                 },
             )
-            // 自动选中对应元素
-            LaunchedEffect(atomicNumber) {
-                // TODO: LearnScreen暂不支持initialAtomicNumber参数，需后续添加
-            }
+            // TODO: LearnScreen暂不支持initialAtomicNumber参数，需后续添加自动选中
         }
 
         // === Lab (化学实验室) ===
