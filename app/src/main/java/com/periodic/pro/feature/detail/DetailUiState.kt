@@ -7,6 +7,7 @@ data class DetailUiState(
     val zhName: String? = null,
     val isLoading: Boolean = true,
     val isFavorite: Boolean = false,
+    val scrollPosition: Int = 0,
 ) {
     val isReady: Boolean get() = element != null && !isLoading
 }

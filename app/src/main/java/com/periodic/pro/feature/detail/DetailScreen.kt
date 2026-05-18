@@ -185,6 +185,8 @@ private fun DetailContent(
                 ElementDetailContent(
                     element = element,
                     zhName = state.zhName,
+                    scrollPosition = state.scrollPosition,
+                    onSaveScroll = { onIntent(DetailIntent.SaveScroll(it)) },
                     onNavigateToLearn = onNavigateToLearn,
                     onNavigateToDiscover = onNavigateToDiscover,
                     onNavigateToLab = onNavigateToLab,
@@ -205,6 +207,8 @@ private fun DetailContent(
 private fun ElementDetailContent(
     element: Element,
     zhName: String?,
+    scrollPosition: Int,
+    onSaveScroll: (Int) -> Unit,
     onNavigateToLearn: (Int) -> Unit,
     onNavigateToDiscover: () -> Unit,
     onNavigateToLab: (Int) -> Unit,
@@ -212,12 +216,14 @@ private fun ElementDetailContent(
     modifier: Modifier = Modifier,
 ) {
     val categoryColor = LocalCategoryColors.current.forCategory(element.category)
+    val scrollState = rememberScrollState(initial = scrollPosition)
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(scrollState),
     ) {
+        val currentScroll = scrollState.value
         // === 1. AtomCanvas（原子动画头部） ===
         AtomCanvas(
             atomicNumber = element.atomicNumber,
@@ -262,10 +268,10 @@ private fun ElementDetailContent(
         // === 4. 额外信息区 ===
         ExtraInfoSection(
             element = element,
-            onNavigateToLearn = onNavigateToLearn,
-            onNavigateToDiscover = onNavigateToDiscover,
-            onNavigateToLab = onNavigateToLab,
-            onNavigateToLabDetail = onNavigateToLabDetail,
+            onNavigateToLearn = { onSaveScroll(currentScroll); onNavigateToLearn(it) },
+            onNavigateToDiscover = { onSaveScroll(currentScroll); onNavigateToDiscover() },
+            onNavigateToLab = { onSaveScroll(currentScroll); onNavigateToLab(it) },
+            onNavigateToLabDetail = { onSaveScroll(currentScroll); onNavigateToLabDetail(it) },
         )
 
         Spacer(modifier = Modifier.height(Dimensions.Dp32))

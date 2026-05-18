@@ -46,6 +46,9 @@ class DetailViewModel(
             DetailIntent.NavigateBack -> {
                 // handled by navigation callback in the Screen layer
             }
+            is DetailIntent.SaveScroll -> {
+                _state.update { it.copy(scrollPosition = intent.position) }
+            }
         }
     }
 }
