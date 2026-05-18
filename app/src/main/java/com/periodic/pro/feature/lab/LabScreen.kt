@@ -81,6 +81,7 @@ import org.koin.androidx.compose.koinViewModel
 fun LabScreen(
     onNavigateToDetail: (Int) -> Unit,
     initialReactionId: String? = null,
+    onNavigateBack: () -> Unit = {},
     modifier: Modifier = Modifier,
     vm: LabViewModel = koinViewModel(),
 ) {
@@ -108,7 +109,10 @@ fun LabScreen(
         LabNavMode.DETAIL -> LabDetailContent(
             reaction = state.selectedReaction,
             symbolMap = state.symbolMap,
-            onBack = { vm.handle(LabIntent.BackToList) },
+            onBack = {
+                if (initialReactionId != null) onNavigateBack()
+                else vm.handle(LabIntent.BackToList)
+            },
             onNavigateToDetail = { atomicNumber ->
                 vm.handle(LabIntent.NavigateToDetail(atomicNumber))
             },
