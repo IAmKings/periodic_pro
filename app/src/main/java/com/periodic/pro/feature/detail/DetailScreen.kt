@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
@@ -187,8 +188,6 @@ private fun DetailContent(
                 ElementDetailContent(
                     element = element,
                     zhName = state.zhName,
-                    scrollPosition = state.scrollPosition,
-                    onSaveScroll = { onIntent(DetailIntent.SaveScroll(it)) },
                     onNavigateToLearn = onNavigateToLearn,
                     onNavigateToDiscover = onNavigateToDiscover,
                     onNavigateToLab = onNavigateToLab,
@@ -209,8 +208,6 @@ private fun DetailContent(
 private fun ElementDetailContent(
     element: Element,
     zhName: String?,
-    scrollPosition: Int,
-    onSaveScroll: (Int) -> Unit,
     onNavigateToLearn: (Int) -> Unit,
     onNavigateToDiscover: () -> Unit,
     onNavigateToLab: (Int) -> Unit,
@@ -218,15 +215,8 @@ private fun ElementDetailContent(
     modifier: Modifier = Modifier,
 ) {
     val categoryColor = LocalCategoryColors.current.forCategory(element.category)
-    val scrollState = rememberScrollState()
-
-    // 从外部返回时恢复滚动位置（等待布局测量完成）
-    LaunchedEffect(scrollPosition) {
-        if (scrollPosition > 0) {
-            snapshotFlow { scrollState.maxValue }
-                .first { it > 0 }
-            scrollState.scrollTo(scrollPosition.coerceAtMost(scrollState.maxValue))
-        }
+    val scrollState = rememberSaveable(saver = androidx.compose.foundation.ScrollState.Saver) {
+        androidx.compose.foundation.ScrollState(0)
     }
 
     Column(
@@ -278,10 +268,10 @@ private fun ElementDetailContent(
         // === 4. 额外信息区 ===
         ExtraInfoSection(
             element = element,
-            onNavigateToLearn = { onSaveScroll(scrollState.value); onNavigateToLearn(it) },
-            onNavigateToDiscover = { onSaveScroll(scrollState.value); onNavigateToDiscover() },
-            onNavigateToLab = { onSaveScroll(scrollState.value); onNavigateToLab(it) },
-            onNavigateToLabDetail = { onSaveScroll(scrollState.value); onNavigateToLabDetail(it) },
+            onNavigateToLearn = onNavigateToLearn,
+            onNavigateToDiscover = onNavigateToDiscover,
+            onNavigateToLab = onNavigateToLab,
+            onNavigateToLabDetail = onNavigateToLabDetail,
         )
 
         Spacer(modifier = Modifier.height(Dimensions.Dp32))
