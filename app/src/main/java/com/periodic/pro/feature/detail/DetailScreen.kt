@@ -34,6 +34,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.first
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -218,10 +220,12 @@ private fun ElementDetailContent(
     val categoryColor = LocalCategoryColors.current.forCategory(element.category)
     val scrollState = rememberScrollState()
 
-    // 从外部返回时恢复滚动位置
+    // 从外部返回时恢复滚动位置（等待布局测量完成）
     LaunchedEffect(scrollPosition) {
         if (scrollPosition > 0) {
-            scrollState.scrollTo(scrollPosition)
+            snapshotFlow { scrollState.maxValue }
+                .first { it > 0 }
+            scrollState.scrollTo(scrollPosition.coerceAtMost(scrollState.maxValue))
         }
     }
 
