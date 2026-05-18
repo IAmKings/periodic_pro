@@ -93,11 +93,20 @@ class TableViewModel(
     }
 
     private fun selectSeries(atomicNumbers: List<Int>) {
-        _state.update {
-            it.copy(
-                isMultiSelectMode = true,
-                selectedIds = it.selectedIds + atomicNumbers.toSet(),
-            )
+        _state.update { cur ->
+            val set = atomicNumbers.toSet()
+            if (cur.selectedIds.containsAll(set)) {
+                // 已全选 → 切换为取消选择
+                cur.copy(
+                    isMultiSelectMode = false,
+                    selectedIds = cur.selectedIds - set,
+                )
+            } else {
+                cur.copy(
+                    isMultiSelectMode = true,
+                    selectedIds = cur.selectedIds + set,
+                )
+            }
         }
     }
 
