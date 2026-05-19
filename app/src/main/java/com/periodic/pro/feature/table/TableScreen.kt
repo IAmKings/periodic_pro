@@ -81,6 +81,7 @@ private val categoryEntries = listOf(
 @Composable
 fun TableScreen(
     initialQuery: String = "",
+    enterMultiSelect: Boolean = false,
     onNavigateToDetail: (Int) -> Unit,
     onNavigateToCompare: (List<Int>) -> Unit,
     modifier: Modifier = Modifier,
@@ -94,6 +95,13 @@ fun TableScreen(
     LaunchedEffect(initialQuery) {
         if (initialQuery.isNotEmpty()) {
             viewModel.handle(TableIntent.Search(initialQuery))
+        }
+    }
+
+    // 从 Compare 进入时自动进入多选模式
+    LaunchedEffect(enterMultiSelect) {
+        if (enterMultiSelect) {
+            viewModel.handle(TableIntent.EnterMultiSelect)
         }
     }
 

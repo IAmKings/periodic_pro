@@ -61,12 +61,17 @@ fun PeriodicNav(
 
         // === Table (周期表) ===
         composable(
-            route = "${Routes.TABLE}?query={query}",
-            arguments = listOf(navArgument("query") { type = NavType.StringType; defaultValue = "" }),
+            route = "${Routes.TABLE}?query={query}&enterMultiSelect={enterMultiSelect}",
+            arguments = listOf(
+                navArgument("query") { type = NavType.StringType; defaultValue = "" },
+                navArgument("enterMultiSelect") { type = NavType.BoolType; defaultValue = false },
+            ),
         ) {
             val query = it.arguments?.getString("query") ?: ""
+            val enterMultiSelect = it.arguments?.getBoolean("enterMultiSelect") ?: false
             TableScreen(
                 initialQuery = query,
+                enterMultiSelect = enterMultiSelect,
                 onNavigateToDetail = { atomicNumber ->
                     navController.navigateRestorable(Routes.detail(atomicNumber))
                 },
@@ -94,7 +99,7 @@ fun PeriodicNav(
             )
         }
 
-        // === Compare (元素对比) ===
+        // === Compare (元素对比 — 二级页面，非底部Tab) ===
         composable(
             route = Routes.COMPARE,
             arguments = listOf(navArgument("ids") { type = NavType.StringType; defaultValue = "" }),
@@ -104,7 +109,13 @@ fun PeriodicNav(
             CompareScreen(
                 ids = ids,
                 onNavigateBack = { navController.popBackStack() },
-                onNavigateToTable = { navController.navigateTab(Routes.TABLE) },
+                onNavigateToTable = {
+                    navController.navigate("${Routes.TABLE}?enterMultiSelect=true") {
+                        popUpTo(Routes.HOME) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
             )
         }
 
