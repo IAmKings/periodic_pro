@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Psychology
 import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.Science
 import androidx.compose.material.icons.filled.TableChart
@@ -68,6 +69,7 @@ fun HomeScreen(
     onNavigateToCompare: () -> Unit,
     onNavigateToLearn: () -> Unit = {},
     onNavigateToLab: () -> Unit = {},
+    onNavigateToQuiz: () -> Unit = {},
     onNavigateToFavorites: () -> Unit,
     modifier: Modifier = Modifier,
     vm: HomeViewModel = koinViewModel(),
@@ -82,6 +84,7 @@ fun HomeScreen(
         onNavigateToCompare = onNavigateToCompare,
         onNavigateToLearn = onNavigateToLearn,
         onNavigateToLab = onNavigateToLab,
+        onNavigateToQuiz = onNavigateToQuiz,
         onNavigateToFavorites = onNavigateToFavorites,
         modifier = modifier,
     )
@@ -99,6 +102,7 @@ private fun HomeContent(
     onNavigateToCompare: () -> Unit,
     onNavigateToLearn: () -> Unit,
     onNavigateToLab: () -> Unit,
+    onNavigateToQuiz: () -> Unit,
     onNavigateToFavorites: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -200,9 +204,9 @@ private fun HomeContent(
                 modifier = Modifier.weight(1f),
             )
             DashboardCard(
-                icon = Icons.AutoMirrored.Outlined.CompareArrows,
-                title = stringResource(R.string.home_dashboard_compare),
-                onClick = onNavigateToCompare,
+                icon = Icons.Filled.Psychology,
+                title = "测试",
+                onClick = onNavigateToQuiz,
                 modifier = Modifier.weight(1f),
             )
         }
@@ -322,6 +326,7 @@ private fun HomeContentPreview() {
             onNavigateToCompare = {},
             onNavigateToLearn = {},
             onNavigateToLab = {},
+            onNavigateToQuiz = {},
             onNavigateToFavorites = {},
         )
     }

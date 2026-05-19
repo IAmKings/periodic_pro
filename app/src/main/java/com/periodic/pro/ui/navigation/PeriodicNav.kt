@@ -57,6 +57,7 @@ fun PeriodicNav(
                 },
                 onNavigateToLearn = { rootNavController?.navigate("learn") },
                 onNavigateToLab = { rootNavController?.navigate("lab") },
+                onNavigateToQuiz = { rootNavController?.navigate("quiz") },
                 onNavigateToFavorites = { navController.navigateTab(Routes.FAVORITES) },
             )
         }

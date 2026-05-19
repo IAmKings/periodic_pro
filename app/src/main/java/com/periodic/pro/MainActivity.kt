@@ -30,6 +30,7 @@ import com.periodic.pro.data.update.UpdateService
 import com.periodic.pro.feature.compare.CompareScreen
 import com.periodic.pro.feature.lab.LabScreen
 import com.periodic.pro.feature.learn.LearnScreen
+import com.periodic.pro.feature.quiz.QuizScreen
 import com.periodic.pro.theme.PeriodicProTheme
 import com.periodic.pro.ui.components.UpdateDialog
 import com.periodic.pro.ui.navigation.PeriodicNavSuite
@@ -96,6 +97,16 @@ private fun RootNav(context: Context) {
                 onNavigateToDetail = { rootNavController.popBackStack("main", inclusive = false) },
                 onNavigateBack = { rootNavController.popBackStack() },
             )
+        }
+
+        composable(
+            route = "quiz",
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) },
+            popEnterTransition = { slideInHorizontally(initialOffsetX = { -it }) },
+            popExitTransition = { slideOutHorizontally(targetOffsetX = { it }) },
+        ) {
+            QuizScreen(onBack = { rootNavController.popBackStack() })
         }
 
         composable(
