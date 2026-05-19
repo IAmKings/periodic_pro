@@ -99,7 +99,7 @@ fun TableScreen(
         if (initialQuery.isNotEmpty()) {
             viewModel.handle(TableIntent.Search(initialQuery))
             cursorAtEnd = true
-            kotlinx.coroutines.delay(100)
+            kotlinx.coroutines.delay(300)
             cursorAtEnd = false
         }
     }

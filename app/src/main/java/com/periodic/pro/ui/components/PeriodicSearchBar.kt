@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextRange
@@ -47,7 +48,8 @@ fun PeriodicSearchBar(
 ) {
     if (cursorAtEnd) {
         val tfv = remember(query) { TextFieldValue(query, TextRange(query.length)) }
-        OutlinedTextField(
+        key(query) {
+            OutlinedTextField(
             value = tfv,
             onValueChange = { onQueryChange(it.text) },
             modifier = modifier.fillMaxWidth(),
@@ -56,7 +58,12 @@ fun PeriodicSearchBar(
             singleLine = true,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(onSearch = { onSubmit() }),
-            leadingIcon = { Icon(Icons.Default.Search, contentDescription = searchContentDescription) },
+            leadingIcon = {
+                Icon(
+                    Icons.Default.Search,
+                    contentDescription = searchContentDescription
+                )
+            },
             trailingIcon = {
                 if (query.isNotEmpty()) {
                     IconButton(onClick = { onQueryChange("") }) {
@@ -65,53 +72,55 @@ fun PeriodicSearchBar(
                 }
             },
         )
+        }
     } else {
         OutlinedTextField(
             value = query,
             onValueChange = onQueryChange,
-        modifier = modifier.fillMaxWidth(),
-        placeholder = { Text(placeholder) },
-        shape = MaterialTheme.shapes.small,
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Search,
-        ),
-        keyboardActions = KeyboardActions(
-            onSearch = { onSubmit() },
-        ),
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = searchContentDescription,
-            )
-        },
-        trailingIcon = {
-            if (query.isNotEmpty()) {
-                IconButton(onClick = { onQueryChange("") }) {
-                    Icon(
-                        imageVector = Icons.Default.Clear,
-                        contentDescription = clearContentDescription,
-                    )
+            modifier = modifier.fillMaxWidth(),
+            placeholder = { Text(placeholder) },
+            shape = MaterialTheme.shapes.small,
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search,
+            ),
+            keyboardActions = KeyboardActions(
+                onSearch = { onSubmit() },
+            ),
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = searchContentDescription,
+                )
+            },
+            trailingIcon = {
+                if (query.isNotEmpty()) {
+                    IconButton(onClick = { onQueryChange("") }) {
+                        Icon(
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = clearContentDescription,
+                        )
+                    }
                 }
-            }
-        },
-    )
-}
-
-@Preview(name = "Light Empty", showBackground = true)
-@Preview(name = "Dark Empty", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun PeriodicSearchBarEmptyPreview() {
-    PeriodicProTheme {
-        PeriodicSearchBar(query = "", onQueryChange = {}, placeholder = "Search elements...")
+            },
+        )
     }
-}
 
-@Preview(name = "Light Filled", showBackground = true)
-@Preview(name = "Dark Filled", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun PeriodicSearchBarFilledPreview() {
-    PeriodicProTheme {
-        PeriodicSearchBar(query = "H", onQueryChange = {}, placeholder = "Search elements...")
+    @Preview(name = "Light Empty", showBackground = true)
+    @Preview(name = "Dark Empty", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+    @Composable
+    fun PeriodicSearchBarEmptyPreview() {
+        PeriodicProTheme {
+            PeriodicSearchBar(query = "", onQueryChange = {}, placeholder = "Search elements...")
+        }
+    }
+
+    @Preview(name = "Light Filled", showBackground = true)
+    @Preview(name = "Dark Filled", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+    @Composable
+    fun PeriodicSearchBarFilledPreview() {
+        PeriodicProTheme {
+            PeriodicSearchBar(query = "H", onQueryChange = {}, placeholder = "Search elements...")
+        }
     }
 }
