@@ -45,13 +45,30 @@ fun PeriodicSearchBar(
     clearContentDescription: String? = null,
     cursorAtEnd: Boolean = false,
 ) {
-    val textFieldValue = remember(query, cursorAtEnd) {
-        if (cursorAtEnd) TextFieldValue(query, TextRange(query.length))
-        else TextFieldValue(query)
-    }
-    OutlinedTextField(
-        value = textFieldValue,
-        onValueChange = { onQueryChange(it.text) },
+    if (cursorAtEnd) {
+        val tfv = remember(query) { TextFieldValue(query, TextRange(query.length)) }
+        OutlinedTextField(
+            value = tfv,
+            onValueChange = { onQueryChange(it.text) },
+            modifier = modifier.fillMaxWidth(),
+            placeholder = { Text(placeholder) },
+            shape = MaterialTheme.shapes.small,
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(onSearch = { onSubmit() }),
+            leadingIcon = { Icon(Icons.Default.Search, contentDescription = searchContentDescription) },
+            trailingIcon = {
+                if (query.isNotEmpty()) {
+                    IconButton(onClick = { onQueryChange("") }) {
+                        Icon(Icons.Default.Clear, contentDescription = clearContentDescription)
+                    }
+                }
+            },
+        )
+    } else {
+        OutlinedTextField(
+            value = query,
+            onValueChange = onQueryChange,
         modifier = modifier.fillMaxWidth(),
         placeholder = { Text(placeholder) },
         shape = MaterialTheme.shapes.small,
