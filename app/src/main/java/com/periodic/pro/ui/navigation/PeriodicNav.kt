@@ -47,7 +47,10 @@ fun PeriodicNav(
         // === Home ===
         composable(Routes.HOME) {
             HomeScreen(
-                onNavigateToTable = { query -> navController.navigateTab(Routes.table(query)) },
+                onNavigateToTable = { query ->
+                    if (query.isBlank()) navController.navigateTab(Routes.TABLE)
+                    else navController.navigateRestorable(Routes.table(query))
+                },
                 onNavigateToDetail = { atomicNumber ->
                     navController.navigateRestorable(Routes.detail(atomicNumber))
                 },
