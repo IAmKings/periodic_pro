@@ -28,6 +28,8 @@ import androidx.navigation.navArgument
 import com.periodic.pro.data.update.ApkInstaller
 import com.periodic.pro.data.update.UpdateService
 import com.periodic.pro.feature.compare.CompareScreen
+import com.periodic.pro.feature.lab.LabScreen
+import com.periodic.pro.feature.learn.LearnScreen
 import com.periodic.pro.theme.PeriodicProTheme
 import com.periodic.pro.ui.components.UpdateDialog
 import com.periodic.pro.ui.navigation.PeriodicNavSuite
@@ -62,6 +64,38 @@ private fun RootNav(context: Context) {
             AutoUpdateHost(context = context) {
                 PeriodicNavSuite(rootNavController = rootNavController)
             }
+        }
+
+        composable(
+            route = "learn?atomicNumber={atomicNumber}",
+            arguments = listOf(navArgument("atomicNumber") { type = NavType.IntType; defaultValue = 0 }),
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) },
+            popEnterTransition = { slideInHorizontally(initialOffsetX = { -it }) },
+            popExitTransition = { slideOutHorizontally(targetOffsetX = { it }) },
+        ) { backStackEntry ->
+            val atomicNumber = backStackEntry.arguments?.getInt("atomicNumber") ?: 0
+            LearnScreen(
+                initialAtomicNumber = atomicNumber,
+                onNavigateToDetail = { rootNavController.popBackStack("main", inclusive = false) },
+                onNavigateBack = { rootNavController.popBackStack() },
+            )
+        }
+
+        composable(
+            route = "lab?reactionId={reactionId}",
+            arguments = listOf(navArgument("reactionId") { type = NavType.StringType; defaultValue = ""; nullable = true }),
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) },
+            popEnterTransition = { slideInHorizontally(initialOffsetX = { -it }) },
+            popExitTransition = { slideOutHorizontally(targetOffsetX = { it }) },
+        ) { backStackEntry ->
+            val reactionId = backStackEntry.arguments?.getString("reactionId")?.takeIf { it.isNotEmpty() }
+            LabScreen(
+                initialReactionId = reactionId,
+                onNavigateToDetail = { rootNavController.popBackStack("main", inclusive = false) },
+                onNavigateBack = { rootNavController.popBackStack() },
+            )
         }
 
         composable(

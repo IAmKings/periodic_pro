@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.window.core.layout.WindowWidthSizeClass
@@ -55,8 +56,6 @@ private val navItems = listOf(
     NavItem(R.string.tab_table, Icons.Filled.TableChart, Icons.Outlined.TableChart, Routes.TABLE),
     NavItem(R.string.tab_favorites, Icons.Filled.Star, Icons.Outlined.StarBorder, Routes.FAVORITES),
     NavItem(R.string.tab_discover, Icons.Filled.Explore, Icons.Outlined.Explore, Routes.DISCOVER),
-    NavItem(R.string.tab_learn, Icons.Filled.School, Icons.Outlined.School, Routes.LEARN),
-    NavItem(R.string.tab_lab, Icons.Filled.Science, Icons.Outlined.Science, Routes.LAB),
     NavItem(R.string.tab_settings, Icons.Filled.Settings, Icons.Outlined.Settings, Routes.PROFILE),
 )
 

@@ -9,13 +9,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.periodic.pro.feature.category.CategoryScreen
-import com.periodic.pro.feature.compare.CompareScreen
 import com.periodic.pro.feature.detail.DetailScreen
 import com.periodic.pro.feature.discover.DiscoverScreen
 import com.periodic.pro.feature.favorites.FavoritesScreen
 import com.periodic.pro.feature.home.HomeScreen
-import com.periodic.pro.feature.lab.LabScreen
-import com.periodic.pro.feature.learn.LearnScreen
 import com.periodic.pro.feature.profile.ProfileScreen
 import com.periodic.pro.feature.table.TableScreen
 
@@ -56,6 +53,8 @@ fun PeriodicNav(
                     navController.navigateRestorable(Routes.detail(atomicNumber))
                 },
                 onNavigateToCompare = { rootNavController?.navigate("compare") },
+                onNavigateToLearn = { rootNavController?.navigate("learn") },
+                onNavigateToLab = { rootNavController?.navigate("lab") },
                 onNavigateToFavorites = { navController.navigateTab(Routes.FAVORITES) },
             )
         }
@@ -91,11 +90,11 @@ fun PeriodicNav(
             DetailScreen(
                 atomicNumber = atomicNumber,
                 onNavigateBack = { navController.popBackStack() },
-                onNavigateToLearn = { num -> navController.navigateRestorable(Routes.learnDetail(num)) },
+                onNavigateToLearn = { num -> rootNavController?.navigate("learn?atomicNumber=$num") },
                 onNavigateToDiscover = { navController.navigateTab(Routes.DISCOVER) },
-                onNavigateToLab = { _ -> navController.navigateRestorable(Routes.LAB) },
+                onNavigateToLab = { _ -> rootNavController?.navigate("lab") },
                 onNavigateToLabDetail = { reactionId ->
-                    navController.navigateRestorable("lab?reactionId=$reactionId")
+                    rootNavController?.navigate("lab?reactionId=$reactionId")
                 },
             )
         }
@@ -122,43 +121,6 @@ fun PeriodicNav(
         // === Profile (设置) ===
         composable(Routes.PROFILE) {
             ProfileScreen(
-                onNavigateBack = { navController.popBackStack() },
-            )
-        }
-
-        // === Learn (学习) ===
-        composable(Routes.LEARN) {
-            LearnScreen(
-                onNavigateToDetail = { atomicNumber ->
-                    navController.navigateRestorable(Routes.detail(atomicNumber))
-                },
-            )
-        }
-
-        // === Learn Detail (从详情跳转) ===
-        composable(
-            route = Routes.LEARN_DETAIL,
-            arguments = listOf(navArgument("atomicNumber") { type = NavType.IntType }),
-        ) { backStackEntry ->
-            val atomicNumber = backStackEntry.arguments?.getInt("atomicNumber") ?: 0
-            LearnScreen(
-                initialAtomicNumber = atomicNumber,
-                onNavigateToDetail = { num -> navController.navigateRestorable(Routes.detail(num)) },
-                onNavigateBack = { navController.popBackStack() },
-            )
-        }
-
-        // === Lab (化学实验室) ===
-        composable(
-            route = "${Routes.LAB}?reactionId={reactionId}",
-            arguments = listOf(navArgument("reactionId") { type = NavType.StringType; defaultValue = ""; nullable = true }),
-        ) { backStackEntry ->
-            val reactionId = backStackEntry.arguments?.getString("reactionId")?.takeIf { it.isNotEmpty() }
-            LabScreen(
-                initialReactionId = reactionId,
-                onNavigateToDetail = { atomicNumber ->
-                    navController.navigateRestorable(Routes.detail(atomicNumber))
-                },
                 onNavigateBack = { navController.popBackStack() },
             )
         }

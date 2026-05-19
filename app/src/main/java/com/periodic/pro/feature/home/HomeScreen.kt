@@ -20,7 +20,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material.icons.filled.School
+import androidx.compose.material.icons.filled.Science
 import androidx.compose.material.icons.filled.TableChart
 import androidx.compose.material.icons.automirrored.outlined.CompareArrows
 import androidx.compose.material3.Card
@@ -65,6 +66,8 @@ fun HomeScreen(
     onNavigateToTable: (String) -> Unit,
     onNavigateToDetail: (Int) -> Unit,
     onNavigateToCompare: () -> Unit,
+    onNavigateToLearn: () -> Unit = {},
+    onNavigateToLab: () -> Unit = {},
     onNavigateToFavorites: () -> Unit,
     modifier: Modifier = Modifier,
     vm: HomeViewModel = koinViewModel(),
@@ -77,6 +80,8 @@ fun HomeScreen(
         onElementClick = { atomicNumber -> onNavigateToDetail(atomicNumber) },
         onNavigateToTable = { onNavigateToTable("") },
         onNavigateToCompare = onNavigateToCompare,
+        onNavigateToLearn = onNavigateToLearn,
+        onNavigateToLab = onNavigateToLab,
         onNavigateToFavorites = onNavigateToFavorites,
         modifier = modifier,
     )
@@ -92,6 +97,8 @@ private fun HomeContent(
     onElementClick: (Int) -> Unit,
     onNavigateToTable: () -> Unit,
     onNavigateToCompare: () -> Unit,
+    onNavigateToLearn: () -> Unit,
+    onNavigateToLab: () -> Unit,
     onNavigateToFavorites: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -187,9 +194,9 @@ private fun HomeContent(
             horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp12),
         ) {
             DashboardCard(
-                icon = Icons.Filled.TableChart,
-                title = stringResource(R.string.home_dashboard_table),
-                onClick = onNavigateToTable,
+                icon = Icons.Filled.School,
+                title = "学习",
+                onClick = onNavigateToLearn,
                 modifier = Modifier.weight(1f),
             )
             DashboardCard(
@@ -210,16 +217,15 @@ private fun HomeContent(
             horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp12),
         ) {
             DashboardCard(
-                icon = Icons.Filled.Favorite,
-                title = stringResource(R.string.home_dashboard_favorites),
-                onClick = onNavigateToFavorites,
+                icon = Icons.Filled.Science,
+                title = "实验室",
+                onClick = onNavigateToLab,
                 modifier = Modifier.weight(1f),
             )
             DashboardCard(
-                icon = Icons.Filled.MoreHoriz,
-                title = stringResource(R.string.home_dashboard_more),
-                onClick = {},
-                enabled = false,
+                icon = Icons.Filled.Favorite,
+                title = stringResource(R.string.home_dashboard_favorites),
+                onClick = onNavigateToFavorites,
                 modifier = Modifier.weight(1f),
             )
         }
@@ -314,6 +320,8 @@ private fun HomeContentPreview() {
             onElementClick = {},
             onNavigateToTable = {},
             onNavigateToCompare = {},
+            onNavigateToLearn = {},
+            onNavigateToLab = {},
             onNavigateToFavorites = {},
         )
     }
