@@ -52,7 +52,9 @@ fun PeriodicNav(
                 onNavigateToDetail = { atomicNumber ->
                     navController.navigateRestorable(Routes.detail(atomicNumber))
                 },
-                onNavigateToCompare = { rootNavController?.navigate("compare") },
+                onNavigateToCompare = {
+                    navController.navigateTab("${Routes.TABLE}?enterMultiSelect=true")
+                },
                 onNavigateToLearn = { rootNavController?.navigate("learn") },
                 onNavigateToLab = { rootNavController?.navigate("lab") },
                 onNavigateToFavorites = { navController.navigateTab(Routes.FAVORITES) },
