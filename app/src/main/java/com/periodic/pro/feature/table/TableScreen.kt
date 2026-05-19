@@ -98,10 +98,12 @@ fun TableScreen(
         }
     }
 
-    // 从 Compare 进入时自动进入多选模式
+    // 根据入口切换状态：对比→多选，其他→重置多选
     LaunchedEffect(enterMultiSelect) {
         if (enterMultiSelect) {
             viewModel.handle(TableIntent.EnterMultiSelect)
+        } else {
+            viewModel.handle(TableIntent.ExitMultiSelect)
         }
     }
 
