@@ -93,12 +93,14 @@ fun TableScreen(
     val viewModel = remember { TableViewModel(elementRepo, favoritesRepo) }
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    // 从 Home 搜索进入时自动填入搜索 query + 光标置末尾
+    // 从 Home 搜索进入时自动填入搜索 query + 光标置末尾（仅一次）
     var cursorAtEnd by remember { mutableStateOf(false) }
     LaunchedEffect(initialQuery) {
         if (initialQuery.isNotEmpty()) {
             viewModel.handle(TableIntent.Search(initialQuery))
             cursorAtEnd = true
+            kotlinx.coroutines.delay(100)
+            cursorAtEnd = false
         }
     }
 
