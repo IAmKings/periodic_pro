@@ -227,9 +227,9 @@ private fun HomeContent(
                 modifier = Modifier.weight(1f),
             )
             DashboardCard(
-                icon = Icons.Filled.Favorite,
-                title = stringResource(R.string.home_dashboard_favorites),
-                onClick = onNavigateToFavorites,
+                icon = Icons.AutoMirrored.Outlined.CompareArrows,
+                title = stringResource(R.string.home_dashboard_compare),
+                onClick = onNavigateToCompare,
                 modifier = Modifier.weight(1f),
             )
         }
