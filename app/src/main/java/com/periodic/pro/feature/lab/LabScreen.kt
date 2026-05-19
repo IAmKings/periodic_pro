@@ -112,6 +112,7 @@ fun LabScreen(
             state = state,
             listState = listState,
             onIntent = vm::handle,
+            onBack = onNavigateBack,
             modifier = modifier,
         )
         LabNavMode.DETAIL -> LabDetailContent(
@@ -137,6 +138,7 @@ private fun LabListContent(
     state: LabUiState,
     listState: LazyListState,
     onIntent: (LabIntent) -> Unit,
+    onBack: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -148,6 +150,14 @@ private fun LabListContent(
                         text = stringResource(R.string.screen_lab),
                         style = MaterialTheme.typography.titleLarge,
                     )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.detail_back),
+                        )
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,

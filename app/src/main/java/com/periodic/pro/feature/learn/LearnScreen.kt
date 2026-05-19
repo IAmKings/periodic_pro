@@ -108,6 +108,7 @@ fun LearnScreen(
             state = state,
             listState = listState,
             onIntent = vm::handle,
+            onBack = onNavigateBack,
             modifier = modifier,
         )
         LearnNavMode.DETAIL -> LearnDetailContent(
@@ -133,6 +134,7 @@ private fun LearnListContent(
     state: LearnUiState,
     listState: LazyListState,
     onIntent: (LearnIntent) -> Unit,
+    onBack: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -144,6 +146,14 @@ private fun LearnListContent(
                         text = stringResource(R.string.screen_learn),
                         style = MaterialTheme.typography.titleLarge,
                     )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.detail_back),
+                        )
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
