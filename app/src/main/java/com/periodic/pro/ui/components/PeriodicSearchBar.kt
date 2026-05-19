@@ -14,6 +14,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.periodic.pro.theme.PeriodicProTheme
@@ -40,10 +42,16 @@ fun PeriodicSearchBar(
     onSubmit: () -> Unit = {},
     searchContentDescription: String? = null,
     clearContentDescription: String? = null,
+    cursorAtEnd: Boolean = false,
 ) {
+    val textFieldValue = if (cursorAtEnd) {
+        TextFieldValue(query, TextRange(query.length))
+    } else {
+        TextFieldValue(query)
+    }
     OutlinedTextField(
-        value = query,
-        onValueChange = onQueryChange,
+        value = textFieldValue,
+        onValueChange = { onQueryChange(it.text) },
         modifier = modifier.fillMaxWidth(),
         placeholder = { Text(placeholder) },
         shape = MaterialTheme.shapes.small,

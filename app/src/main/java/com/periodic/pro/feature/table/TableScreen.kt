@@ -91,10 +91,12 @@ fun TableScreen(
     val viewModel = remember { TableViewModel(elementRepo, favoritesRepo) }
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    // 从 Home 搜索进入时自动填入搜索 query
+    // 从 Home 搜索进入时自动填入搜索 query + 光标置末尾
+    var cursorAtEnd by remember { mutableStateOf(false) }
     LaunchedEffect(initialQuery) {
         if (initialQuery.isNotEmpty()) {
             viewModel.handle(TableIntent.Search(initialQuery))
+            cursorAtEnd = true
         }
     }
 
@@ -184,7 +186,11 @@ fun TableScreen(
             // 搜索框
             PeriodicSearchBar(
                 query = state.searchQuery,
-                onQueryChange = { viewModel.handle(TableIntent.Search(it)) },
+                onQueryChange = {
+                    cursorAtEnd = false
+                    viewModel.handle(TableIntent.Search(it))
+                },
+                cursorAtEnd = cursorAtEnd,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = Dimensions.Dp16, vertical = Dimensions.Dp8),
