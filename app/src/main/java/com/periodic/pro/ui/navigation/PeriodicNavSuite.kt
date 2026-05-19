@@ -71,7 +71,9 @@ private val navItems = listOf(
  *       替换已 deprecated 的 WindowWidthSizeClass 枚举比较。
  */
 @Composable
-fun PeriodicNavSuite() {
+fun PeriodicNavSuite(
+    rootNavController: NavHostController? = null,
+) {
     val navController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStackEntry?.destination
@@ -121,6 +123,7 @@ fun PeriodicNavSuite() {
         ) {
             PeriodicNav(
                 navController = navController,
+                rootNavController = rootNavController,
             )
         }
     }

@@ -37,6 +37,7 @@ private fun NavHostController.navigateTab(route: String) {
 @Composable
 fun PeriodicNav(
     navController: NavHostController,
+    rootNavController: NavHostController? = null,
     modifier: Modifier = Modifier,
 ) {
     NavHost(
@@ -54,7 +55,7 @@ fun PeriodicNav(
                 onNavigateToDetail = { atomicNumber ->
                     navController.navigateRestorable(Routes.detail(atomicNumber))
                 },
-                onNavigateToCompare = { navController.navigateTab(Routes.COMPARE) },
+                onNavigateToCompare = { rootNavController?.navigate("compare/") },
                 onNavigateToFavorites = { navController.navigateTab(Routes.FAVORITES) },
             )
         }
@@ -76,7 +77,7 @@ fun PeriodicNav(
                     navController.navigateRestorable(Routes.detail(atomicNumber))
                 },
                 onNavigateToCompare = { ids ->
-                    if (ids.isNotEmpty()) navController.navigateRestorable(Routes.compare(ids))
+                    if (ids.isNotEmpty()) rootNavController?.navigate("compare/${ids.joinToString(",")}")
                 },
             )
         }
@@ -95,26 +96,6 @@ fun PeriodicNav(
                 onNavigateToLab = { _ -> navController.navigateRestorable(Routes.LAB) },
                 onNavigateToLabDetail = { reactionId ->
                     navController.navigateRestorable("lab?reactionId=$reactionId")
-                },
-            )
-        }
-
-        // === Compare (元素对比 — 二级页面，非底部Tab) ===
-        composable(
-            route = Routes.COMPARE,
-            arguments = listOf(navArgument("ids") { type = NavType.StringType; defaultValue = "" }),
-        ) { backStackEntry ->
-            val ids = (backStackEntry.arguments?.getString("ids") ?: "")
-                .split(",").mapNotNull { it.toIntOrNull() }
-            CompareScreen(
-                ids = ids,
-                onNavigateBack = { navController.popBackStack() },
-                onNavigateToTable = {
-                    navController.navigate("${Routes.TABLE}?enterMultiSelect=true") {
-                        popUpTo(Routes.HOME) { saveState = true }
-                        launchSingleTop = true
-                        restoreState = true
-                    }
                 },
             )
         }

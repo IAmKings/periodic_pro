@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -16,10 +18,17 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.periodic.pro.data.update.ApkInstaller
 import com.periodic.pro.data.update.UpdateService
+import com.periodic.pro.feature.compare.CompareScreen
 import com.periodic.pro.theme.PeriodicProTheme
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.ui.components.UpdateDialog
 import com.periodic.pro.ui.navigation.PeriodicNavSuite
 import org.koin.java.KoinJavaComponent.get
@@ -30,21 +39,54 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             PeriodicProTheme {
-                AutoUpdateHost(
-                    context = this@MainActivity,
-                ) {
-                    PeriodicNavSuite()
-                }
+                RootNav(context = this@MainActivity)
             }
         }
     }
 }
 
 /**
+ * 根导航宿主 — 两层架构：
+ * - "main" 路由：带底部 Tab 的主框架
+ * - "compare/{ids}" 路由：全屏二级页面（无 Tab，带滑动动画）
+ */
+@Composable
+private fun RootNav(context: Context) {
+    val rootNavController = rememberNavController()
+
+    NavHost(
+        navController = rootNavController,
+        startDestination = "main",
+    ) {
+        composable("main") {
+            AutoUpdateHost(context = context) {
+                PeriodicNavSuite(rootNavController = rootNavController)
+            }
+        }
+
+        composable(
+            route = "compare/{ids}",
+            arguments = listOf(navArgument("ids") { type = NavType.StringType; defaultValue = "" }),
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) },
+            popEnterTransition = { slideInHorizontally(initialOffsetX = { -it }) },
+            popExitTransition = { slideOutHorizontally(targetOffsetX = { it }) },
+        ) { backStackEntry ->
+            val ids = (backStackEntry.arguments?.getString("ids") ?: "")
+                .split(",").mapNotNull { it.toIntOrNull() }
+            CompareScreen(
+                ids = ids,
+                onNavigateBack = { rootNavController.popBackStack() },
+                onNavigateToTable = {
+                    rootNavController.popBackStack("main", inclusive = false)
+                },
+            )
+        }
+    }
+}
+
+/**
  * 自动更新宿主。
- *
- * 在应用启动后 2 秒自动检查更新（一天最多弹一次），
- * 若有新版本显示 UpdateDialog。
  */
 @Composable
 private fun AutoUpdateHost(
@@ -55,13 +97,11 @@ private fun AutoUpdateHost(
     val apkInstaller = remember { get<ApkInstaller>(ApkInstaller::class.java) }
     val updateState by updateService.state.collectAsStateWithLifecycle()
 
-    // 启动时自动检查
     LaunchedEffect(Unit) {
         kotlinx.coroutines.delay(2000L)
         updateService.onAppStart(BuildConfig.VERSION_NAME)
     }
 
-    // 从设置页返回后恢复挂起的下载任务
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -76,7 +116,6 @@ private fun AutoUpdateHost(
     Box(modifier = Modifier.fillMaxSize()) {
         content()
 
-        // 全局弹窗
         if (updateState.shouldShowDialog && updateState.result is com.periodic.pro.data.update.UpdateResult.Available) {
             val result = updateState.result as com.periodic.pro.data.update.UpdateResult.Available
             UpdateDialog(
@@ -84,9 +123,7 @@ private fun AutoUpdateHost(
                 currentVersion = result.currentVersion,
                 downloadProgress = updateState.downloadProgress,
                 downloadFailed = updateState.downloadFailed,
-                onCancelDownload = {
-                    apkInstaller.cancelDownload()
-                },
+                onCancelDownload = { apkInstaller.cancelDownload() },
                 onDismiss = { updateService.dismissDialog() },
                 onSnooze = { updateService.snooze() },
                 onSkipVersion = {
