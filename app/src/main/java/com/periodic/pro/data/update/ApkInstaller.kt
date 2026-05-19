@@ -64,7 +64,7 @@ class ApkInstaller(
         val versionTag = release.tagName.removePrefix("v")
         val fileName = "PeriodicPro-v$versionTag.apk"
         val apkFile = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
             fileName,
         )
 
