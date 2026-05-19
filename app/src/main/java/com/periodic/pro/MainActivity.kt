@@ -65,7 +65,7 @@ private fun RootNav(context: Context) {
         }
 
         composable(
-            route = "compare/{ids}",
+            route = "compare?ids={ids}",
             arguments = listOf(navArgument("ids") { type = NavType.StringType; defaultValue = "" }),
             enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
             exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) },

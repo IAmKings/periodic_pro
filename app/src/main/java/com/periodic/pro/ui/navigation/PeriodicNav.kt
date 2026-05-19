@@ -55,7 +55,7 @@ fun PeriodicNav(
                 onNavigateToDetail = { atomicNumber ->
                     navController.navigateRestorable(Routes.detail(atomicNumber))
                 },
-                onNavigateToCompare = { rootNavController?.navigate("compare/") },
+                onNavigateToCompare = { rootNavController?.navigate("compare") },
                 onNavigateToFavorites = { navController.navigateTab(Routes.FAVORITES) },
             )
         }
@@ -77,7 +77,7 @@ fun PeriodicNav(
                     navController.navigateRestorable(Routes.detail(atomicNumber))
                 },
                 onNavigateToCompare = { ids ->
-                    if (ids.isNotEmpty()) rootNavController?.navigate("compare/${ids.joinToString(",")}")
+                    if (ids.isNotEmpty()) rootNavController?.navigate("compare?ids=${ids.joinToString(",")}")
                 },
             )
         }
