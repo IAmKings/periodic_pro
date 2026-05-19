@@ -91,7 +91,7 @@ fun PeriodicNavSuite() {
             navigationSuiteItems = {
                 navItems.forEach { item ->
                     val selected = currentDestination?.hierarchy
-                        ?.any { it.route == item.route } == true
+                        ?.any { it.route?.substringBefore('?') == item.route } == true
                     val showBadge = item.route == Routes.PROFILE && updateState.hasNewVersion
                     item(
                         selected = selected,
