@@ -93,14 +93,12 @@ fun TableScreen(
     val viewModel = remember { TableViewModel(elementRepo, favoritesRepo) }
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    // 从 Home 搜索进入时自动填入搜索 query + 光标置末尾（仅一次）
-    var cursorAtEnd by remember { mutableStateOf(false) }
+    // 从 Home 搜索进入时自动填入搜索 query，key自增强制重建搜索栏以重置光标
+    var searchBarRestartKey by remember { mutableIntStateOf(0) }
     LaunchedEffect(initialQuery) {
         if (initialQuery.isNotEmpty()) {
             viewModel.handle(TableIntent.Search(initialQuery))
-            cursorAtEnd = true
-            kotlinx.coroutines.delay(300)
-            cursorAtEnd = false
+            searchBarRestartKey++
         }
     }
 
@@ -188,18 +186,16 @@ fun TableScreen(
                 .padding(padding),
         ) {
             // 搜索框
-            PeriodicSearchBar(
-                query = state.searchQuery,
-                onQueryChange = {
-                    cursorAtEnd = false
-                    viewModel.handle(TableIntent.Search(it))
-                },
-                cursorAtEnd = cursorAtEnd,
+            key(searchBarRestartKey) {
+                PeriodicSearchBar(
+                    query = state.searchQuery,
+                    onQueryChange = { viewModel.handle(TableIntent.Search(it)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = Dimensions.Dp16, vertical = Dimensions.Dp8),
                 placeholder = stringResource(R.string.search_elements),
             )
+            } // key(searchBarRestartKey)
 
             // 分类筛选 Chips
             LazyRow(
