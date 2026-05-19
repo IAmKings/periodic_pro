@@ -54,8 +54,8 @@ private data class NavItem(
 private val navItems = listOf(
     NavItem(R.string.tab_home, Icons.Filled.Home, Icons.Outlined.Home, Routes.HOME),
     NavItem(R.string.tab_table, Icons.Filled.TableChart, Icons.Outlined.TableChart, Routes.TABLE),
-    NavItem(R.string.tab_favorites, Icons.Filled.Star, Icons.Outlined.StarBorder, Routes.FAVORITES),
     NavItem(R.string.tab_discover, Icons.Filled.Explore, Icons.Outlined.Explore, Routes.DISCOVER),
+    NavItem(R.string.tab_favorites, Icons.Filled.Star, Icons.Outlined.StarBorder, Routes.FAVORITES),
     NavItem(R.string.tab_settings, Icons.Filled.Settings, Icons.Outlined.Settings, Routes.PROFILE),
 )
 
