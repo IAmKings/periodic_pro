@@ -18,6 +18,16 @@
 - **元素知识测验**：4 种题型（符号/名称/分类/原子序数）+ 得分统计
 - **自动更新**：GitHub Release 检测 + 应用内下载 + 进度对话框 + 安装
 
+## 界面截图
+
+| 首页 | 周期表 | 元素详情 |
+|------|--------|----------|
+| ![首页](screens/1-main.png) | ![周期表](screens/2-periodic.png) | ![元素详情](screens/3-element-detail.png) |
+
+| 发现页 | 设置 | 实验室 | 学习资料 |
+|--------|------|--------|----------|
+| ![发现页](screens/4-discover.png) | ![设置](screens/5-setting.png) | ![实验室](screens/6-lab.png) | ![学习资料](screens/7-learn.png) |
+
 ## 技术栈
 
 | 类别 | 技术 |
