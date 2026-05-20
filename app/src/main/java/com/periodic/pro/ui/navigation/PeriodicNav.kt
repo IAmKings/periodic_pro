@@ -25,9 +25,8 @@ private fun NavHostController.navigateRestorable(route: String) {
 
 private fun NavHostController.navigateTab(route: String) {
     navigate(route) {
-        popUpTo(graph.findStartDestination().id) { saveState = true }
+        popUpTo(graph.findStartDestination().id)
         launchSingleTop = true
-        restoreState = true
     }
 }
 
