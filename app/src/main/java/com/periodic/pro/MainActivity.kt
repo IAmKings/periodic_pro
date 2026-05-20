@@ -145,7 +145,7 @@ private fun RootNav(context: Context) {
                 ids = ids,
                 onNavigateBack = { rootNavController.popBackStack() },
                 onNavigateToTable = {
-                    rootNavController.popBackStack("main", inclusive = false)
+                    rootNavController.popBackStack()
                 },
             )
         }

@@ -32,7 +32,16 @@ class TableViewModel(
         when (intent) {
             TableIntent.LoadElements -> loadElements()
             is TableIntent.Search -> {
-                _state.update { it.copy(searchQuery = intent.query) }
+                val query = intent.query.trim().lowercase()
+                val cur = _state.value
+                val isEmpty = if (query.isEmpty()) false
+                else cur.elements.none { element ->
+                    element.symbol.lowercase().contains(query) ||
+                        element.name.lowercase().contains(query) ||
+                        (query.toIntOrNull() != null && element.atomicNumber.toString().contains(query)) ||
+                        cur.zhMap[element.atomicNumber]?.nameZh?.contains(query) == true
+                }
+                _state.update { it.copy(searchQuery = intent.query, isSearchEmpty = isEmpty) }
             }
             is TableIntent.FilterByCategory -> {
                 _state.update { it.copy(selectedCategory = intent.category) }

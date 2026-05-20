@@ -162,4 +162,27 @@
     <string name="update_dialog_skip_version">跳过此版本</string>
     <string name="update_download_title">下载更新</string>
     <string name="update_download_desc">正在下载 %s</string>
+
+    <!-- Quiz Screen -->
+    <string name="quiz_title">元素测试</string>
+    <string name="quiz_restart">重新开始</string>
+    <string name="quiz_next">下一题</string>
+    <string name="quiz_end">结束测验</string>
+    <string name="quiz_correct">正确!</string>
+    <string name="quiz_wrong">错误，正确答案：%s</string>
+    <string name="quiz_result_title">测验结束</string>
+    <string name="quiz_score">得分：%1$d / %2$d</string>
+    <string name="quiz_perfect">满分! 太厉害了!</string>
+    <string name="quiz_review_wrong">错题回顾</string>
+    <string name="quiz_retry">再测一次</string>
+    <string name="quiz_wrong_title">错题列表（共 %1$d 题）</string>
+    <string name="quiz_streak">连击!</string>
+
+    <!-- Table Screen -->
+    <string name="table_search_empty">没有找到匹配的元素，请尝试调整关键词</string>
+
+    <!-- Quiz Wrong Review -->
+    <string name="quiz_wrong_review_label">第 %1$d 题</string>
+    <string name="quiz_wrong_user_answer">你的回答：</string>
+    <string name="quiz_wrong_correct_answer">正确答案：</string>
 </resources>

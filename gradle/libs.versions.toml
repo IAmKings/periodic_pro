@@ -30,9 +30,6 @@ kotlinx-serialization = "1.7.3"
 # Coroutines
 kotlinx-coroutines = "1.9.0"
 
-# Telephoto
-telephoto = "0.13.0"
-
 # Haze (locked at 1.6.x due to Kotlin 2.0.x compatibility; 1.7.2 requires Kotlin 2.2.x)
 haze = "1.6.0"
 
@@ -76,9 +73,6 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 
 # Coroutines
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
-
-# Telephoto (手势缩放)
-telephoto-zoomable = { group = "me.saket.telephoto", name = "zoomable", version.ref = "telephoto" }
 
 # Haze (毛玻璃)
 haze = { group = "dev.chrisbanes.haze", name = "haze", version.ref = "haze" }

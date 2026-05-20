@@ -3,13 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
-    id("io.gitlab.arturbosch.detekt")
-}
-
-detekt {
-    config = files("${rootDir}/config/detekt/detekt.yml")
-    buildUponDefaultConfig = true
-    parallel = true
 }
 
 android {
@@ -20,8 +13,8 @@ android {
         applicationId = "com.periodic.pro"
         minSdk = 24
         targetSdk = 35
-        versionCode = 16
-        versionName = "0.3.1"
+        versionCode = 17
+        versionName = "0.3.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -127,17 +120,11 @@ dependencies {
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
 
-    // Telephoto
-    implementation(libs.telephoto.zoomable)
-
     // Haze
     implementation(libs.haze)
 
     // Adaptive Navigation Suite
     implementation(libs.compose.adaptive.navigation.suite)
-
-    // Detekt formatting plugin
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
 
     // Test
     testImplementation(libs.junit)

@@ -23,6 +23,8 @@ data class TableUiState(
     val isMultiSelectMode: Boolean = false,
     val selectedIds: Set<Int> = emptySet(),
     val isLoading: Boolean = true,
+    /** 搜索已激活且没有任何匹配结果 */
+    val isSearchEmpty: Boolean = false,
 ) {
     /**
      * 多选模式下非空即为选中状态。

@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -41,6 +42,7 @@ import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.data.element.model.ElementZh
 import com.periodic.pro.theme.CATEGORY_CELL_ALPHA
+import com.periodic.pro.theme.CATEGORY_CELL_DARK_ALPHA
 import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.forCategory
 
@@ -272,12 +274,13 @@ private fun PeriodicTableCell(
 ) {
     val categoryColor = LocalCategoryColors.current.forCategory(element.category)
     val shape = RoundedCornerShape(4.dp)
+    val cellBgAlpha = if (isSystemInDarkTheme()) CATEGORY_CELL_DARK_ALPHA else CATEGORY_CELL_ALPHA
 
     Box(
         modifier = modifier
             .padding(1.dp)
             .clip(shape)
-            .background(categoryColor.copy(alpha = CATEGORY_CELL_ALPHA))
+            .background(categoryColor.copy(alpha = cellBgAlpha))
             .alpha(alpha)
             .then(
                 if (isSelected) {

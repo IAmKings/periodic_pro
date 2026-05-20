@@ -232,6 +232,19 @@ fun TableScreen(
                         style = MaterialTheme.typography.bodyLarge,
                     )
                 }
+            } else if (state.isSearchEmpty) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = stringResource(R.string.table_search_empty),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             } else {
                 Box(modifier = Modifier.weight(1f)) {
                     PeriodicTableGrid(

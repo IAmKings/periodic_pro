@@ -53,8 +53,10 @@ data class CategoryColors(
 )
 
 // ===== 分类颜色透明度 Token =====
-/** 元素卡片背景（周期表单元格） */
+/** 元素卡片背景（周期表单元格，浅色模式） */
 const val CATEGORY_CELL_ALPHA = 0.85f
+/** 元素卡片背景 alpha，深色模式提升对比度 */
+const val CATEGORY_CELL_DARK_ALPHA = 0.92f
 /** 元素圆形标记背景（学习/发现列表） */
 const val CATEGORY_CIRCLE_ALPHA = 0.15f
 
