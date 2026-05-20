@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 21
+- **Total Sessions**: 22
 - **Last Active**: 2026-05-20
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~746 | Active |
+| `journal-1.md` | ~780 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 22 | 2026-05-20 | chore(quality): P0~P3代码质量梳理 + 版本0.3.3 | `3a4489d`, `7c3f62f` | `master` |
 | 21 | 2026-05-20 | chore(polish): 应用打磨 — P0 UX断点 + P1 一致性 + P2 工程完善 + 版本0.3.2 | `84b947d` | `master` |
 | 20 | 2026-05-20 | docs: README新增界面截图 | `592f2a4` | `master` |
 | 19 | 2026-05-20 | docs: 更新 README.md — 同步至v0.3.1项目状态 | `7fae28a` | `master` |
