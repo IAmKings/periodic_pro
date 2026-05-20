@@ -8,7 +8,7 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 19
+- **Total Sessions**: 20
 - **Last Active**: 2026-05-20
 <!-- @@@/auto:current-status -->
 
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~680 | Active |
+| `journal-1.md` | ~713 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 20 | 2026-05-20 | docs: README新增界面截图 | `592f2a4` | `master` |
 | 19 | 2026-05-20 | docs: 更新 README.md — 同步至v0.3.1项目状态 | `7fae28a` | `master` |
 | 18 | 2026-05-20 | fix(nav): Learn/Lab页面元素跳转到Detail二级页面 + 版本0.3.1 | `71c4b4a` | `master` |
 | 17 | 2026-05-20 | fix(search): cursorAtEndTrigger光标定位修复 + feat(detail): 元素详情页改为二级全屏页面 | `c398feb`, `1043e86`, `f77dbb1` | `master` |

@@ -678,3 +678,36 @@ README.md 严重过时，半年来新增功能未反映。更新：功能列表7
 ### Next Steps
 
 - None - task complete
+
+
+## Session 20: docs: README新增界面截图
+
+**Date**: 2026-05-20
+**Task**: docs: README新增界面截图
+**Branch**: `master`
+
+### Summary
+
+README.md新增「界面截图」区块，引用screens/目录下7张运行时截图：首页(1-main)、周期表(2-periodic)、元素详情(3-element-detail)、发现页(4-discover)、设置(5-setting)、实验室(6-lab)、学习资料(7-learn)。
+
+### Main Changes
+
+(Add details)
+
+### Git Commits
+
+| Hash | Message |
+|------|---------|
+| `592f2a4` | (see git log) |
+
+### Testing
+
+- [OK] (Add test results)
+
+### Status
+
+[OK] **Completed**
+
+### Next Steps
+
+- None - task complete
