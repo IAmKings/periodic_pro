@@ -27,6 +27,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -93,12 +95,12 @@ fun TableScreen(
     val viewModel = remember { TableViewModel(elementRepo, favoritesRepo) }
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    // 从 Home 搜索进入时自动填入搜索 query，key自增强制重建搜索栏以重置光标
-    var searchBarRestartKey by remember { mutableIntStateOf(0) }
+    // 从 Home 搜索进入时自动填入搜索 query + 光标置末尾
+    var cursorTrigger by remember { mutableIntStateOf(0) }
     LaunchedEffect(initialQuery) {
         if (initialQuery.isNotEmpty()) {
             viewModel.handle(TableIntent.Search(initialQuery))
-            searchBarRestartKey++
+            cursorTrigger++
         }
     }
 
@@ -186,16 +188,15 @@ fun TableScreen(
                 .padding(padding),
         ) {
             // 搜索框
-            key(searchBarRestartKey) {
-                PeriodicSearchBar(
+            PeriodicSearchBar(
                     query = state.searchQuery,
                     onQueryChange = { viewModel.handle(TableIntent.Search(it)) },
+                    cursorAtEndTrigger = cursorTrigger,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = Dimensions.Dp16, vertical = Dimensions.Dp8),
                 placeholder = stringResource(R.string.search_elements),
             )
-            } // key(searchBarRestartKey)
 
             // 分类筛选 Chips
             LazyRow(

@@ -13,7 +13,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.periodic.pro.theme.PeriodicProTheme
@@ -27,10 +31,26 @@ fun PeriodicSearchBar(
     onSubmit: () -> Unit = {},
     searchContentDescription: String? = null,
     clearContentDescription: String? = null,
+    cursorAtEndTrigger: Int = 0,
 ) {
+    var textState by remember { mutableStateOf(TextFieldValue(query)) }
+    var lastTrigger by remember { mutableStateOf(cursorAtEndTrigger) }
+
+    // cursorAtEndTrigger自增时置光标到末尾（仅一次）
+    if (cursorAtEndTrigger != lastTrigger) {
+        lastTrigger = cursorAtEndTrigger
+        textState = TextFieldValue(query, TextRange(query.length))
+    } else if (textState.text != query) {
+        // 外部query变化（非用户输入）→ 同步文本但保留光标
+        textState = textState.copy(text = query)
+    }
+
     OutlinedTextField(
-        value = query,
-        onValueChange = onQueryChange,
+        value = textState,
+        onValueChange = {
+            textState = it
+            onQueryChange(it.text)
+        },
         modifier = modifier.fillMaxWidth(),
         placeholder = { Text(placeholder) },
         shape = MaterialTheme.shapes.small,
