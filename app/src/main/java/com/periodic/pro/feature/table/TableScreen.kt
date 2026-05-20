@@ -37,14 +37,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.R
 import com.periodic.pro.data.element.model.Category
-import com.periodic.pro.data.element.ElementRepository
-import com.periodic.pro.data.favorites.FavoritesRepository
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.forCategory
 import com.periodic.pro.ui.components.CategoryChip
 import com.periodic.pro.ui.components.PeriodicSearchBar
-import org.koin.compose.koinInject
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * 分类条目定义：ID（Category）与中文显示名。
@@ -82,15 +80,13 @@ private val categoryEntries = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TableScreen(
-    initialQuery: String = "",
-    enterMultiSelect: Boolean = false,
     onNavigateToDetail: (Int) -> Unit,
     onNavigateToCompare: (List<Int>) -> Unit,
     modifier: Modifier = Modifier,
+    initialQuery: String = "",
+    enterMultiSelect: Boolean = false,
 ) {
-    val elementRepo = koinInject<ElementRepository>()
-    val favoritesRepo = koinInject<FavoritesRepository>()
-    val viewModel = remember { TableViewModel(elementRepo, favoritesRepo) }
+    val viewModel: TableViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     // 从 Home 搜索进入时自动填入搜索 query + 光标置末尾

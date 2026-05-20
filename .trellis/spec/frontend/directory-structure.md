@@ -49,7 +49,6 @@ periodic-pro/
 │   ├── Shapes.kt                # M3 Shape 三档 + RoundedCornerShape token
 │   ├── Dimensions.kt            # 8pt Grid 间距常量
 │   ├── Elevation.kt             # 4 层 Elevation token（Shadow1/Shadow2/Floating/Modal）
-│   ├── CategoryColors.kt        # @Immutable data class + LocalCategoryColors (staticCompositionLocalOf)
 │   └── PeriodicProTheme.kt      # 深浅色 ColorScheme + ThemeProvider，注入 CategoryColors / Dimensions / Elevation
 │
 ├── data/                        # 数据层
@@ -62,12 +61,23 @@ periodic-pro/
 │   ├── favorites/
 │   │   ├── FavoritesDataStore.kt    # DataStore Preferences，key="favorite_ids"
 │   │   └── FavoritesRepository.kt   # Flow<Set<AtomicNumber>>
+│   ├── discover/
+│   │   ├── DiscoverRepository.kt
+│   │   └── model/
+│   ├── lab/
+│   │   ├── LabRepository.kt
+│   │   └── model/
+│   ├── learn/
+│   │   ├── LearnRepository.kt
+│   │   └── model/
+│   ├── update/
+│   │   ├── UpdateRepository.kt
+│   │   ├── UpdatePreferences.kt
+│   │   ├── UpdateService.kt
+│   │   ├── GitHubRelease.kt
+│   │   └── ApkInstaller.kt
 │   └── theme/
 │       └── ThemePreferenceRepository.kt  # Flow<ThemeMode> { System, Light, Dark }
-│
-├── domain/                      # 领域层（仅当 UseCase 跨多个 Repository 时使用，否则可省）
-│   └── usecase/
-│       └── SearchElementsUseCase.kt
 │
 ├── ui/
 │   ├── components/              # 02 Components（细粒度可复用 Composable）
@@ -75,18 +85,17 @@ periodic-pro/
 │   │   ├── ElementCard.kt
 │   │   ├── CategoryChip.kt
 │   │   ├── PeriodicSearchBar.kt
-│   │   └── GlassSurface.kt      # Haze 1.7.x 包装（见 component-guidelines）
+│   │   └── GlassSurface.kt      # Haze 1.6.x 包装（见 component-guidelines）
 │   ├── pattern/                 # 03 Patterns（粗粒度复合 UI）
 │   │   ├── PropertyGrid.kt
-│   │   ├── ComparisonTable.kt
 │   │   ├── AtomCanvas.kt        # Canvas 2D 原子动画
 │   │   └── EmptyState.kt
 │   └── navigation/              # 全局导航
 │       ├── Routes.kt            # @Serializable 路由对象 / data class（type-safe）
-│       ├── PeriodicNav.kt       # 单 NavHost；按 feature 拼装 nested graph
+│       ├── PeriodicNav.kt       # 内层 NavHost；Tab 内子路由
 │       └── PeriodicNavSuite.kt  # NavigationSuiteScaffold 包装，使用 currentWindowAdaptiveInfo()
 │
-└── feature/                     # 业务屏（每屏 4 件套）
+└── feature/                     # 业务屏（每屏 4 件套 + Effect）
     ├── home/
     │   ├── HomeScreen.kt        # @Composable HomeScreen(vm = koinViewModel()) + HomeContent(state, onIntent)
     │   ├── HomeViewModel.kt
@@ -106,12 +115,46 @@ periodic-pro/
     │   ├── CompareScreen.kt
     │   ├── CompareViewModel.kt
     │   ├── CompareUiState.kt
-    │   └── CompareIntent.kt
-    └── favorites/
-        ├── FavoritesScreen.kt
-        ├── FavoritesViewModel.kt
-        ├── FavoritesUiState.kt
-        └── FavoritesIntent.kt
+    │   ├── CompareIntent.kt
+    │   └── CompareEffect.kt
+    ├── favorites/
+    │   ├── FavoritesScreen.kt
+    │   ├── FavoritesViewModel.kt
+    │   ├── FavoritesUiState.kt
+    │   └── FavoritesIntent.kt
+    ├── category/
+    │   ├── CategoryScreen.kt
+    │   ├── CategoryViewModel.kt
+    │   ├── CategoryUiState.kt
+    │   └── CategoryIntent.kt
+    ├── discover/
+    │   ├── DiscoverScreen.kt
+    │   ├── DiscoverViewModel.kt
+    │   ├── DiscoverUiState.kt
+    │   ├── DiscoverIntent.kt
+    │   └── DiscoverEffect.kt
+    ├── learn/
+    │   ├── LearnScreen.kt
+    │   ├── LearnViewModel.kt
+    │   ├── LearnUiState.kt
+    │   ├── LearnIntent.kt
+    │   └── LearnEffect.kt
+    ├── lab/
+    │   ├── LabScreen.kt
+    │   ├── LabViewModel.kt
+    │   ├── LabUiState.kt
+    │   ├── LabIntent.kt
+    │   └── LabEffect.kt
+    ├── quiz/
+    │   ├── QuizScreen.kt
+    │   ├── QuizViewModel.kt
+    │   ├── QuizUiState.kt
+    │   └── QuizIntent.kt
+    └── profile/
+        ├── ProfileScreen.kt
+        ├── ProfileViewModel.kt
+        ├── ProfileUiState.kt
+        └── ProfileIntent.kt
 ```
 
 ---
@@ -150,7 +193,7 @@ periodic-pro/
 
 依据研究 `navigation-suite-scaffold.md`：
 
-- 单个全局 `NavHost`（在 `PeriodicNav.kt`），每个 Tab 用 `navigation<XxxGraph>(startDestination = ...) { ... }` 嵌套子图
+- 双层 `NavHost`：rootNav（MainActivity）管理全屏二级页面（detail / learn / lab / quiz / compare）；内层 `PeriodicNav` 管理 Tab 子路由（home / table / favorites / discover / category / profile）
 - 路由全部用 `@Serializable` 对象 / data class，禁止字符串路由
 - 适配代码统一用 `currentWindowAdaptiveInfo().windowSizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_EXPANDED_LOWER_BOUND)`，**禁止**使用已 deprecated 的 `WindowWidthSizeClass.COMPACT/MEDIUM/EXPANDED` 枚举比较
 

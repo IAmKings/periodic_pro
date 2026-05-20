@@ -46,10 +46,10 @@ fun UpdateDialog(
     onSnooze: () -> Unit,
     onSkipVersion: () -> Unit,
     onUpdate: () -> Unit,
+    modifier: Modifier = Modifier,
     downloadProgress: Float = -1f,
     downloadFailed: Boolean = false,
     onCancelDownload: () -> Unit = {},
-    modifier: Modifier = Modifier,
 ) {
     val isDownloading = downloadProgress >= 0f && downloadProgress < 1f
     val apkSize = release.assets
@@ -87,14 +87,14 @@ fun UpdateDialog(
                     )
                     Spacer(modifier = Modifier.height(Dimensions.Dp4))
                     Text(
-                        text = "下载中 ${(downloadProgress * 100).toInt()}%",
+                        text = stringResource(R.string.update_downloading, (downloadProgress * 100).toInt()),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 } else if (downloadFailed) {
                     // === 下载失败 ===
                     Text(
-                        text = "下载失败，请检查网络后重试",
+                        text = stringResource(R.string.update_download_failed),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.error,
                     )
@@ -144,12 +144,12 @@ fun UpdateDialog(
             if (isDownloading) {
                 PeriodicButton(
                     onClick = onCancelDownload,
-                    text = "取消下载",
+                    text = stringResource(R.string.update_cancel_download),
                 )
             } else if (downloadFailed) {
                 PeriodicButton(
                     onClick = onUpdate,
-                    text = "重试",
+                    text = stringResource(R.string.update_retry),
                 )
             } else {
                 PeriodicButton(

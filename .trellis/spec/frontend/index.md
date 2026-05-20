@@ -1,6 +1,6 @@
 # Android Compose 客户端规范总入口
 
-> 本目录是 **Periodic Pro** Android 客户端的开发规范。技术栈：**Kotlin 2.x + Jetpack Compose + Material 3 + MVVM + StateFlow + Koin + Navigation Compose（type-safe）+ DataStore**，单 module 包分层。
+> 本目录是 **Periodic Pro** Android 客户端的开发规范。技术栈：**Kotlin 2.x + Jetpack Compose + Material 3 + MVVM + StateFlow + Koin + 双层 NavHost + Navigation Compose + DataStore**，单 module 包分层。
 
 ---
 
@@ -52,11 +52,11 @@
 | 架构范式 | MVVM + StateFlow + UDF（sealed Intent） |
 | 工程结构 | 单 module + 包分层（按 feature 包；不拆 Gradle module） |
 | DI | **Koin**（不用 Hilt，避免 KSP 编译开销） |
-| 导航 | `androidx.navigation.compose` 2.8+ **type-safe**（`@Serializable` 路由） |
+| 导航 | **双层 NavHost**（root 全屏二级页面 + inner Tab）+ Navigation Compose |
 | 持久化 | DataStore Preferences（不引 Room） |
 | 数据源 | `assets/elements.json`（英文主表）+ `assets/elements_zh.json`（中文映射） |
-| 毛玻璃 | **`dev.chrisbanes.haze:haze:1.7.2`**（锁版本，不上 2.0 alpha） |
-| 周期表手势 | `me.saket.telephoto:zoomable` |
+| 毛玻璃 | **`dev.chrisbanes.haze:haze:1.6.0`**（锁版本，不上 2.0 alpha） |
+| 周期表手势 | 原生 Compose（`horizontalScroll` + `combinedClickable`） |
 | 适配 | `currentWindowAdaptiveInfo()` + `NavigationSuiteScaffold` |
 
 详细论证见任务 `.trellis/tasks/05-10-compose-app-bootstrap/prd.md`「Decision (ADR-lite)」与 `research/*.md` 4 份调研。

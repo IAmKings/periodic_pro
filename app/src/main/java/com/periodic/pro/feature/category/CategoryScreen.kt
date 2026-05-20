@@ -73,8 +73,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun CategoryScreen(
     onNavigateToDetail: (Int) -> Unit,
-    initialCategoryId: String? = null,
     modifier: Modifier = Modifier,
+    initialCategoryId: String? = null,
 ) {
     val viewModel: CategoryViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()

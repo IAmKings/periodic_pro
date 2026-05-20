@@ -67,11 +67,11 @@ fun HomeScreen(
     onNavigateToTable: (String) -> Unit,
     onNavigateToDetail: (Int) -> Unit,
     onNavigateToCompare: () -> Unit,
+    onNavigateToFavorites: () -> Unit,
+    modifier: Modifier = Modifier,
     onNavigateToLearn: () -> Unit = {},
     onNavigateToLab: () -> Unit = {},
     onNavigateToQuiz: () -> Unit = {},
-    onNavigateToFavorites: () -> Unit,
-    modifier: Modifier = Modifier,
     vm: HomeViewModel = koinViewModel(),
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
@@ -199,13 +199,13 @@ private fun HomeContent(
         ) {
             DashboardCard(
                 icon = Icons.Filled.School,
-                title = "学习",
+                title = stringResource(R.string.home_dashboard_learn),
                 onClick = onNavigateToLearn,
                 modifier = Modifier.weight(1f),
             )
             DashboardCard(
                 icon = Icons.Filled.Psychology,
-                title = "测试",
+                title = stringResource(R.string.home_dashboard_quiz),
                 onClick = onNavigateToQuiz,
                 modifier = Modifier.weight(1f),
             )

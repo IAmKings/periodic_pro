@@ -48,9 +48,9 @@ fun AtomCanvas(
     atomicNumber: Int,
     period: Int,
     categoryColor: Color,
+    modifier: Modifier = Modifier,
     symbol: String = "",
     scale: Float = 1.5f,
-    modifier: Modifier = Modifier,
 ) {
     val shells = remember(atomicNumber) { ElectronShells.getElectronShells(atomicNumber) }
     // 最小核半径确保双字母符号

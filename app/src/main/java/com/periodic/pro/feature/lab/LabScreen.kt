@@ -82,9 +82,9 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun LabScreen(
     onNavigateToDetail: (Int) -> Unit,
+    modifier: Modifier = Modifier,
     initialReactionId: String? = null,
     onNavigateBack: () -> Unit = {},
-    modifier: Modifier = Modifier,
     vm: LabViewModel = koinViewModel(),
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
@@ -138,8 +138,8 @@ private fun LabListContent(
     state: LabUiState,
     listState: LazyListState,
     onIntent: (LabIntent) -> Unit,
-    onBack: () -> Unit = {},
     modifier: Modifier = Modifier,
+    onBack: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,

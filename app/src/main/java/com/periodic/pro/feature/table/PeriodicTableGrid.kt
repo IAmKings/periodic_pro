@@ -61,8 +61,8 @@ fun PeriodicTableGrid(
     selectedIds: Set<Int>,
     onElementClick: (Int) -> Unit,
     onElementLongClick: (Int) -> Unit,
-    onSelectSeries: (List<Int>) -> Unit = {},
     modifier: Modifier = Modifier,
+    onSelectSeries: (List<Int>) -> Unit = {},
 ) {
     val gridMap = remember(elements) { buildGridMap(elements) }
 

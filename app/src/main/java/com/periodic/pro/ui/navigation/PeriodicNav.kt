@@ -32,8 +32,8 @@ private fun NavHostController.navigateTab(route: String) {
 @Composable
 fun PeriodicNav(
     navController: NavHostController,
-    rootNavController: NavHostController? = null,
     modifier: Modifier = Modifier,
+    rootNavController: NavHostController? = null,
 ) {
     NavHost(
         navController = navController,

@@ -6,7 +6,7 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,7 +63,7 @@ fun PeriodicProTheme(
     // 尝试从 Koin 获取 ThemePreferenceRepository；Preview 等场景无 Koin 时 fallback 到参数
     val themeRepo = runCatching { koinInject<ThemePreferenceRepository>() }.getOrNull()
     val themeMode by (
-        themeRepo?.themeMode?.collectAsState(ThemeMode.SYSTEM)
+        themeRepo?.themeMode?.collectAsStateWithLifecycle(ThemeMode.SYSTEM)
             ?: remember { mutableStateOf(ThemeMode.SYSTEM) }
         )
 

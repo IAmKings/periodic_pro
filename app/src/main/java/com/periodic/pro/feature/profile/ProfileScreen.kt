@@ -139,8 +139,8 @@ private fun ProfileContent(
     state: ProfileUiState,
     onIntent: (ProfileIntent) -> Unit,
     onNavigateBack: () -> Unit,
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -332,7 +332,7 @@ private fun UpdateSection(
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(Dimensions.Dp8))
             Text(
-                text = "更新中...",
+                text = stringResource(R.string.profile_downloading_update),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

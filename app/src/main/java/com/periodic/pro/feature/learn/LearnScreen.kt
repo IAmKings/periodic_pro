@@ -77,9 +77,9 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun LearnScreen(
     onNavigateToDetail: (Int) -> Unit,
+    modifier: Modifier = Modifier,
     initialAtomicNumber: Int = 0,
     onNavigateBack: () -> Unit = {},
-    modifier: Modifier = Modifier,
     vm: LearnViewModel = koinViewModel(),
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
@@ -134,8 +134,8 @@ private fun LearnListContent(
     state: LearnUiState,
     listState: LazyListState,
     onIntent: (LearnIntent) -> Unit,
-    onBack: () -> Unit = {},
     modifier: Modifier = Modifier,
+    onBack: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,

@@ -14,6 +14,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,7 +37,7 @@ fun PeriodicSearchBar(
     cursorAtEndTrigger: Int = 0,
 ) {
     var textState by remember { mutableStateOf(TextFieldValue(query)) }
-    var lastTrigger by remember { mutableStateOf(cursorAtEndTrigger) }
+    var lastTrigger by remember { mutableIntStateOf(cursorAtEndTrigger) }
 
     // cursorAtEndTrigger自增时置光标到末尾（仅一次）
     if (cursorAtEndTrigger != lastTrigger) {

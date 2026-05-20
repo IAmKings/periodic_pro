@@ -8,7 +8,6 @@ import com.periodic.pro.data.lab.LabRepository
 import com.periodic.pro.data.learn.LearnRepository
 import com.periodic.pro.data.theme.ThemePreferenceRepository
 import com.periodic.pro.data.update.ApkInstaller
-import com.periodic.pro.data.permission.PermissionsManager
 import com.periodic.pro.data.update.UpdatePreferences
 import com.periodic.pro.data.update.UpdateRepository
 import com.periodic.pro.data.update.UpdateService
@@ -21,6 +20,7 @@ import com.periodic.pro.feature.home.HomeViewModel
 import com.periodic.pro.feature.lab.LabViewModel
 import com.periodic.pro.feature.learn.LearnViewModel
 import com.periodic.pro.feature.profile.ProfileViewModel
+import com.periodic.pro.feature.quiz.QuizViewModel
 import com.periodic.pro.feature.table.TableViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
@@ -43,10 +43,10 @@ val appModule = module {
     single { UpdateRepository(androidContext()) }
     single { UpdatePreferences(androidContext()) }
     single { UpdateService(get(), get()) }
-    single { PermissionsManager(androidContext()) }
     single { ApkInstaller(androidContext()) }
     viewModel { ProfileViewModel(get(), get(), get()) }
     viewModel { DiscoverViewModel(get(), get()) }
     viewModel { LearnViewModel(get(), get()) }
     viewModel { LabViewModel(get(), get()) }
+    viewModel { QuizViewModel(get()) }
 }

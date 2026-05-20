@@ -1,4 +1,4 @@
-# 周期表 Pro (Periodic Pro) · v0.3.1
+# 周期表 Pro (Periodic Pro) · v0.3.2
 
 一款基于 Jetpack Compose 的交互式化学元素周期表 Android 应用。
 
@@ -121,8 +121,8 @@ keytool -genkey -v -keystore release.keystore -alias periodicpro \
 
 3. 推送 tag 触发发布：
 ```bash
-git tag v0.3.1
-git push origin v0.3.1
+git tag v0.3.2
+git push origin v0.3.2
 ```
 
 ## 设计资产

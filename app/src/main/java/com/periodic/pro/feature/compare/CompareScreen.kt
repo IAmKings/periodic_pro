@@ -1,7 +1,6 @@
 package com.periodic.pro.feature.compare
 
 import android.content.res.Configuration
-import java.util.Locale
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -48,6 +47,7 @@ import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.PeriodicProTheme
 import com.periodic.pro.theme.forCategory
+import com.periodic.pro.util.formatDouble
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -416,19 +416,6 @@ private fun PropertyValueCell(
 }
 
 // ===== Helpers =====
-
-/**
- * 格式化 Double? 值：整数不显示小数，小数最多 2 位，去除尾部零。
- * null 返回 null（显示 "—"）。
- */
-private fun formatDouble(value: Double?): String? {
-    if (value == null) return null
-    return if (value == value.toLong().toDouble()) {
-        value.toLong().toString()
-    } else {
-        String.format(Locale.US, "%.2f", value).trimEnd('0').trimEnd('.')
-    }
-}
 
 // ===== Preview Data =====
 

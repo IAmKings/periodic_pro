@@ -33,6 +33,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -67,6 +68,7 @@ import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.PeriodicProTheme
 import com.periodic.pro.theme.forCategory
 import com.periodic.pro.ui.components.PeriodicOutlinedButton
+import com.periodic.pro.util.formatDouble
 import com.periodic.pro.ui.components.PeriodicTextButton
 import com.periodic.pro.ui.components.PropertyChip
 import com.periodic.pro.ui.pattern.AtomCanvas
@@ -74,7 +76,6 @@ import com.periodic.pro.ui.pattern.PropertyGrid
 import com.periodic.pro.ui.pattern.PropertyItem
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
-import java.util.Locale
 
 /**
  * 元素详情屏入口。
@@ -88,11 +89,11 @@ import java.util.Locale
 fun DetailScreen(
     atomicNumber: Int,
     onNavigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
     onNavigateToLearn: (Int) -> Unit = {},
     onNavigateToDiscover: () -> Unit = {},
     onNavigateToLab: (Int) -> Unit = {},
     onNavigateToLabDetail: (String) -> Unit = {},
-    modifier: Modifier = Modifier,
 ) {
     val viewModel: DetailViewModel = koinViewModel { parametersOf(atomicNumber) }
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -227,7 +228,7 @@ private fun ElementDetailContent(
 ) {
     val categoryColor = LocalCategoryColors.current.forCategory(element.category)
     val scrollState = rememberScrollState()
-    var savedPosition by rememberSaveable { mutableStateOf(0) }
+    var savedPosition by rememberSaveable { mutableIntStateOf(0) }
 
     LaunchedEffect(Unit) {
         snapshotFlow { scrollState.maxValue }
@@ -474,7 +475,7 @@ private fun ExtraInfoSection(
         Spacer(modifier = Modifier.height(Dimensions.Dp16))
         PeriodicOutlinedButton(
             onClick = { onNavigateToLearn(element.atomicNumber) },
-            text = "学习资料",
+            text = stringResource(R.string.detail_learning_material),
             modifier = Modifier.fillMaxWidth(),
         )
 
@@ -487,7 +488,7 @@ private fun ExtraInfoSection(
             HorizontalDivider(modifier = Modifier.padding(horizontal = Dimensions.Dp16))
             Spacer(modifier = Modifier.height(Dimensions.Dp12))
             Text(
-                text = "相关化学反应",
+                text = stringResource(R.string.detail_related_reactions),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -520,7 +521,7 @@ private fun ExtraInfoSection(
             if (reactions.size > 5) {
                 PeriodicTextButton(
                     onClick = { expanded = !expanded },
-                    text = if (expanded) "收起 ↑" else "查看全部 ${reactions.size} 个反应 ↓",
+                    text = if (expanded) stringResource(R.string.detail_collapse) else stringResource(R.string.detail_expand_reactions, reactions.size),
                 )
             }
         }
@@ -649,20 +650,6 @@ private fun electronConfigToAnnotated(config: String): AnnotatedString {
             append(ch)
             i++
         }
-    }
-}
-
-/**
- * 格式化 Double? 值：最多2位小数，去除尾部零。
- * null 返回 null，由 PropertyGrid 显示 "—"。
- */
-private fun formatDouble(value: Double?): String? {
-    if (value == null) return null
-    return if (value == value.toLong().toDouble()) {
-        // 整数值（如 atomicRadius）
-        value.toLong().toString()
-    } else {
-        String.format(Locale.US, "%.2f", value).trimEnd('0').trimEnd('.')
     }
 }
 

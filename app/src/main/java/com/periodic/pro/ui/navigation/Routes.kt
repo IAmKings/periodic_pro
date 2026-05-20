@@ -22,14 +22,10 @@ object Routes {
     fun detail(atomicNumber: Int) = "detail/$atomicNumber"
     fun compare(ids: List<Int>) = "compare?ids=${ids.joinToString(",")}"
     const val LEARN = "learn"
-    const val LEARN_DETAIL = "learn/{atomicNumber}"
 
     const val LAB = "lab"
-    const val LAB_DETAIL = "lab/{reactionId}"
 
     fun categoryDetail(categoryId: String) = "category/$categoryId"
-    fun learnDetail(atomicNumber: Int) = "learn/$atomicNumber"
-    fun labDetail(reactionId: String) = "lab/$reactionId"
 
     /**
      * 构建带搜索 query 的 table 路由。
