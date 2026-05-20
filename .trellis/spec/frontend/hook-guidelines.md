@@ -181,8 +181,87 @@ fun AtomCanvas(z: Int, modifier: Modifier = Modifier) {
 
 ---
 
+## 8. TextField 光标控制
+
+### 问题场景
+
+导航跳转后需要程序化将光标移到输入文本末尾（如首页搜索 → 周期表携带 query）。
+
+### 错误方案（已踩坑）
+
+| 方案 | 问题 |
+|------|------|
+| `key(query)` 重建 `OutlinedTextField` | Compose 默认 `selection=TextRange(0)`，光标回到头部 |
+| `delay(300) + cursorAtEnd` 标记 | 时序不可靠，快速导航时失效 |
+| `onGloballyPositioned` + `InputConnection.setSelection` | 异步回调，增加复杂度，无必要 |
+
+### 正确方案：`cursorAtEndTrigger` + `TextFieldValue`
+
+用自增触发器 `cursorAtEndTrigger: Int`，触发时在同帧内创建 `TextFieldValue(query, TextRange(query.length))`，光标同步到位。
+
+```kotlin
+// PeriodicSearchBar.kt — 搜索栏组件
+@Composable
+fun PeriodicSearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    cursorAtEndTrigger: Int = 0,  // 自增触发器
+    // ...
+) {
+    var textState by remember { mutableStateOf(TextFieldValue(query)) }
+    var lastTrigger by remember { mutableStateOf(cursorAtEndTrigger) }
+
+    // 触发器自增 → 光标置末尾（仅一帧）
+    if (cursorAtEndTrigger != lastTrigger) {
+        lastTrigger = cursorAtEndTrigger
+        textState = TextFieldValue(query, TextRange(query.length))
+    } else if (textState.text != query) {
+        // 外部 query 变化 → 同步文本但保留光标
+        textState = textState.copy(text = query)
+    }
+
+    OutlinedTextField(
+        value = textState,
+        onValueChange = { textState = it; onQueryChange(it.text) },
+        // ...
+    )
+}
+```
+
+```kotlin
+// TableScreen.kt — 调用方
+var cursorTrigger by remember { mutableIntStateOf(0) }
+LaunchedEffect(initialQuery) {
+    if (initialQuery.isNotEmpty()) {
+        viewModel.handle(TableIntent.Search(initialQuery))
+        cursorTrigger++  // 触发光标定位
+    }
+}
+
+PeriodicSearchBar(
+    query = state.searchQuery,
+    cursorAtEndTrigger = cursorTrigger,
+    // ...
+)
+```
+
+### 为什么这比 `InputConnection.setSelection` 好
+
+- **同步**：`TextFieldValue` 在同一 composition 帧内完成，不等布局回调
+- **可组合**：纯 Compose API，不依赖平台 `InputConnection`
+- **无副作用**：不走 `SideEffect` / `onGloballyPositioned`，避免额外重组
+
+### 关键约束
+
+1. `cursorAtEndTrigger` 变化时，必须在**同一帧**设置 `TextFieldValue(text, TextRange(length))`——不能再等一帧
+2. 正常用户输入走 `onValueChange` 直接更新 `textState`，保留用户光标位置
+3. 外部 `query` 变化（非触发器）走 `else if` 分支，只更新文本不改光标
+
+---
+
 ## Anti-patterns
 
 1. **不要**在 Composable 顶层直接 `remember { ViewModel() }` 或 `remember { Repository() }`——业务对象通过 Koin 注入 ViewModel，再由 Composable `koinViewModel()` 拿
 2. **不要**在 `LaunchedEffect(Unit)` 里发起一次性查询然后写回本地 state——这是把业务逻辑藏在 UI 层。改放 ViewModel `init {}`
 3. **不要**用 `collectAsState()` 而非 `collectAsStateWithLifecycle()`——前者在 App 退到后台时仍在收集，电量与无谓重组双输
+4. **不要**用 `key(query)` 重建 `TextField` 来重置光标——默认 `selection=TextRange(0)`，光标会在头部。用 `TextFieldValue(text, TextRange(length))` 替代
