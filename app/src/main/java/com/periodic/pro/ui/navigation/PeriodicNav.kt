@@ -9,7 +9,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.periodic.pro.feature.category.CategoryScreen
-import com.periodic.pro.feature.detail.DetailScreen
 import com.periodic.pro.feature.discover.DiscoverScreen
 import com.periodic.pro.feature.favorites.FavoritesScreen
 import com.periodic.pro.feature.home.HomeScreen
@@ -49,7 +48,7 @@ fun PeriodicNav(
                     else navController.navigateRestorable(Routes.table(query))
                 },
                 onNavigateToDetail = { atomicNumber ->
-                    navController.navigateRestorable(Routes.detail(atomicNumber))
+                    rootNavController?.navigate("detail/$atomicNumber")
                 },
                 onNavigateToCompare = {
                     navController.navigateTab("${Routes.TABLE}?enterMultiSelect=true")
@@ -75,28 +74,10 @@ fun PeriodicNav(
                 initialQuery = query,
                 enterMultiSelect = enterMultiSelect,
                 onNavigateToDetail = { atomicNumber ->
-                    navController.navigateRestorable(Routes.detail(atomicNumber))
+                    rootNavController?.navigate("detail/$atomicNumber")
                 },
                 onNavigateToCompare = { ids ->
                     if (ids.isNotEmpty()) rootNavController?.navigate("compare?ids=${ids.joinToString(",")}")
-                },
-            )
-        }
-
-        // === Detail (元素详情) ===
-        composable(
-            route = Routes.DETAIL,
-            arguments = listOf(navArgument("atomicNumber") { type = NavType.IntType }),
-        ) { backStackEntry ->
-            val atomicNumber = backStackEntry.arguments?.getInt("atomicNumber") ?: 0
-            DetailScreen(
-                atomicNumber = atomicNumber,
-                onNavigateBack = { navController.popBackStack() },
-                onNavigateToLearn = { num -> rootNavController?.navigate("learn?atomicNumber=$num") },
-                onNavigateToDiscover = { navController.navigateTab(Routes.DISCOVER) },
-                onNavigateToLab = { _ -> rootNavController?.navigate("lab") },
-                onNavigateToLabDetail = { reactionId ->
-                    rootNavController?.navigate("lab?reactionId=$reactionId")
                 },
             )
         }
@@ -105,7 +86,7 @@ fun PeriodicNav(
         composable(Routes.FAVORITES) {
             FavoritesScreen(
                 onNavigateToDetail = { atomicNumber ->
-                    navController.navigateRestorable(Routes.detail(atomicNumber))
+                    rootNavController?.navigate("detail/$atomicNumber")
                 },
                 onNavigateToTable = { navController.navigateTab(Routes.TABLE) },
             )
@@ -115,7 +96,7 @@ fun PeriodicNav(
         composable(Routes.DISCOVER) {
             DiscoverScreen(
                 onNavigateToDetail = { atomicNumber ->
-                    navController.navigateRestorable(Routes.detail(atomicNumber))
+                    rootNavController?.navigate("detail/$atomicNumber")
                 },
             )
         }
@@ -131,7 +112,7 @@ fun PeriodicNav(
         composable(Routes.CATEGORY) {
             CategoryScreen(
                 onNavigateToDetail = { atomicNumber ->
-                    navController.navigateRestorable(Routes.detail(atomicNumber))
+                    rootNavController?.navigate("detail/$atomicNumber")
                 },
             )
         }
@@ -144,7 +125,7 @@ fun PeriodicNav(
             val categoryId = backStackEntry.arguments?.getString("categoryId") ?: ""
             CategoryScreen(
                 onNavigateToDetail = { atomicNumber ->
-                    navController.navigateRestorable(Routes.detail(atomicNumber))
+                    rootNavController?.navigate("detail/$atomicNumber")
                 },
                 initialCategoryId = categoryId,
             )

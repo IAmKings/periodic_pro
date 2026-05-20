@@ -28,6 +28,7 @@ import androidx.navigation.navArgument
 import com.periodic.pro.data.update.ApkInstaller
 import com.periodic.pro.data.update.UpdateService
 import com.periodic.pro.feature.compare.CompareScreen
+import com.periodic.pro.feature.detail.DetailScreen
 import com.periodic.pro.feature.lab.LabScreen
 import com.periodic.pro.feature.learn.LearnScreen
 import com.periodic.pro.feature.quiz.QuizScreen
@@ -65,6 +66,27 @@ private fun RootNav(context: Context) {
             AutoUpdateHost(context = context) {
                 PeriodicNavSuite(rootNavController = rootNavController)
             }
+        }
+
+        composable(
+            route = "detail/{atomicNumber}",
+            arguments = listOf(navArgument("atomicNumber") { type = NavType.IntType }),
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }) },
+            popEnterTransition = { slideInHorizontally(initialOffsetX = { -it }) },
+            popExitTransition = { slideOutHorizontally(targetOffsetX = { it }) },
+        ) { backStackEntry ->
+            val atomicNumber = backStackEntry.arguments?.getInt("atomicNumber") ?: 0
+            DetailScreen(
+                atomicNumber = atomicNumber,
+                onNavigateBack = { rootNavController.popBackStack() },
+                onNavigateToLearn = { num -> rootNavController.navigate("learn?atomicNumber=$num") },
+                onNavigateToDiscover = { rootNavController.popBackStack("main", inclusive = false) },
+                onNavigateToLab = { _ -> rootNavController.navigate("lab") },
+                onNavigateToLabDetail = { reactionId ->
+                    rootNavController.navigate("lab?reactionId=$reactionId")
+                },
+            )
         }
 
         composable(
