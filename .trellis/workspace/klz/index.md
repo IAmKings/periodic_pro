@@ -8,8 +8,8 @@
 
 <!-- @@@auto:current-status -->
 - **Active File**: `journal-1.md`
-- **Total Sessions**: 16
-- **Last Active**: 2026-05-18
+- **Total Sessions**: 17
+- **Last Active**: 2026-05-20
 <!-- @@@/auto:current-status -->
 
 ---
@@ -19,7 +19,7 @@
 <!-- @@@auto:active-documents -->
 | File | Lines | Status |
 |------|-------|--------|
-| `journal-1.md` | ~579 | Active |
+| `journal-1.md` | ~614 | Active |
 <!-- @@@/auto:active-documents -->
 
 ---
@@ -29,6 +29,7 @@
 <!-- @@@auto:session-history -->
 | # | Date | Title | Commits | Branch |
 |---|------|-------|---------|--------|
+| 17 | 2026-05-20 | fix(search): cursorAtEndTrigger光标定位修复 + feat(detail): 元素详情页改为二级全屏页面 | `c398feb`, `1043e86`, `f77dbb1` | `master` |
 | 16 | 2026-05-18 | 多模块优化——Learn/Discover分类色、周期表/VerticalScroll、AtomCanvas重写 | `43891e3`, `6e9cc5a`, `fd3b241`, `b4c694a`, `e6c6980`, `530ea8e`, `60c7d54`, `60c7d54`, `932dc18`, `a72a3bf`, `6435d1a`, `368b951` | `master` |
 | 15 | 2026-05-18 | 应用内下载APK替换DownloadManager — 实时进度+状态机+取消/重试 | `0376194`, `91c881d`, `8bc810f`, `d2c48be`, `059eac3`, `c542df0`, `27c076b`, `4b77e05` | `master` |
 | 14 | 2026-05-17 | 优化周期表UI — 行列号+镧锕间隔+F-block多选 | `5634fcc`, `c388135`, `d494c0a`, `0bf94f6`, `be8bb5c`, `0e201c5`, `7cd3921` | `master` |
