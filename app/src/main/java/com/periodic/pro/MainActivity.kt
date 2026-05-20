@@ -100,7 +100,7 @@ private fun RootNav(context: Context) {
             val atomicNumber = backStackEntry.arguments?.getInt("atomicNumber") ?: 0
             LearnScreen(
                 initialAtomicNumber = atomicNumber,
-                onNavigateToDetail = { rootNavController.popBackStack("main", inclusive = false) },
+                onNavigateToDetail = { atomicNumber -> rootNavController.navigate("detail/$atomicNumber") },
                 onNavigateBack = { rootNavController.popBackStack() },
             )
         }
@@ -116,7 +116,7 @@ private fun RootNav(context: Context) {
             val reactionId = backStackEntry.arguments?.getString("reactionId")?.takeIf { it.isNotEmpty() }
             LabScreen(
                 initialReactionId = reactionId,
-                onNavigateToDetail = { rootNavController.popBackStack("main", inclusive = false) },
+                onNavigateToDetail = { atomicNumber -> rootNavController.navigate("detail/$atomicNumber") },
                 onNavigateBack = { rootNavController.popBackStack() },
             )
         }
