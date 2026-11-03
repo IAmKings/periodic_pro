@@ -1,0 +1,56 @@
+{
+  "brand": "周期表 Pro",
+  "deck_title": "元素 P · 正式图标",
+  "date": "2026-11-03",
+  "tagline": "探索 118 种化学元素",
+  "brief": "为学生与化学爱好者提供清晰、现代、可靠的元素查询与学习工具；用一枚独立单元，让 P 成为可记住的标记。",
+  "adjectives": [
+    "清晰",
+    "理性",
+    "现代",
+    "探索"
+  ],
+  "criteria": "保留用户选定 B 的几何结构；单色成立，小尺寸仍可识别；紫白配色与系统主题图标分别交付。",
+  "industry": "consumer-app",
+  "mockups": [
+    "app-icon",
+    "website",
+    "social",
+    "favicon-tab",
+    "sticker",
+    "badge"
+  ],
+  "nav": [
+    "周期表",
+    "学习",
+    "下载"
+  ],
+  "brand_color": "#6650A4",
+  "greyscale": false,
+  "final": true,
+  "concepts": [
+    {
+      "name": "元素 P",
+      "symbol": "masters/periodic-pro-symbol.svg",
+      "avatar": "masters/periodic-pro-symbol-small.svg",
+      "lockup": "masters/periodic-pro-horizontal.svg",
+      "stacked": "masters/periodic-pro-stacked.svg",
+      "symbol_on_tile": "masters/periodic-pro-symbol-reversed.svg",
+      "symbol_on_dark": "masters/periodic-pro-symbol-reversed.svg",
+      "lockup_on_dark": "variants/periodic-pro-horizontal-white.svg",
+      "idea": "P 的一角，成为独立的元素方块。",
+      "rationale": [
+        "P 关联 Periodic、Pro 与磷元素，延续原有识别。",
+        "32 单位笔画、16 单位间隙；小尺寸间隙加宽至 20。",
+        "反白笔画减细 1 单位，避免视觉膨胀。",
+        "名称用 Noto Sans CJK SC Medium，全部转为路径。"
+      ]
+    }
+  ],
+  "recommendation": "用户已选择 B。本展示中的网页、社交与学习活动为使用情境示意。实际应用仅替换 launcher 图标资源。",
+  "next_steps": [
+    "SVG 母版与 PNG 导出在 icon/ 内。",
+    "Android 资源已同步到 app/src/main/res/。",
+    "使用规则见 README.md 和 guidelines.html。"
+  ]
+}

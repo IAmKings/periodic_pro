@@ -23,6 +23,7 @@ periodic-pro/
 │       ├── test/                       # JUnit4 + MockK + turbine 单测
 │       └── androidTest/                # Compose UI Test
 ├── design/                             # 设计稿（4 张 PNG，只读参考）
+├── icon/                               # 已批准的图标母版、导出与使用规范
 ├── .trellis/                           # 任务与 spec
 ├── gradle/libs.versions.toml           # Version Catalog
 ├── settings.gradle.kts
@@ -30,6 +31,13 @@ periodic-pro/
 ```
 
 > **assets 双文件设计**依据：研究 `elements-dataset.md` 结论——开源数据集均不带中文，必须自建一份小映射文件，由 Repository 启动时合并。
+
+### Launcher 图标
+
+- 正式图形与配色见 `icon/README.md`；`icon/ic_launcher_*.xml` 交付副本须与 `res/drawable/` 对应文件保持一致。
+- API26+ 使用 `mipmap-anydpi-v26/ic_launcher.xml` 的前景、背景、monochrome 分层；API24–25 必须保留 `mipmap-anydpi/ic_launcher.xml` 回退。
+- 普通图标浅深色保持紫底白标，不增加旧图形的 `drawable-night` 覆盖；monochrome 仅含符号，由系统着色。
+- 修改后核对 SVG/Android 路径一致、108dp 画布的中心 66dp 安全区，并运行 `:app:processDebugResources`。
 
 ---
 

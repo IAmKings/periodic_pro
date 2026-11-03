@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>周期表 Pro · 图标使用规范</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f0eef4;color:#241d31;font-family:system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.65}.page{width:900px;min-height:1200px;margin:0 auto;padding:48px 58px;background:white}header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #6650a4;padding-bottom:22px}h1{font-size:27px;margin:0}h2{font-size:17px;margin:24px 0 8px;color:#4f378b}p{margin:6px 0}.muted{color:#6d647a;font-size:13px}.hero{display:flex;align-items:center;gap:32px;padding:24px 0}.hero>img{width:140px;height:140px}.hero .lock{width:440px;height:166px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}.chip{display:flex;align-items:center;gap:12px;margin-bottom:8px}.swatch{width:44px;height:44px;border-radius:10px;border:1px solid #ddd}ul{padding-left:19px;margin:4px 0}li{margin:6px 0}code{font-size:13px}footer{margin-top:22px;border-top:1px solid #e7e0ec;padding-top:12px;font-size:12px;color:#6d647a}@page{size:A4;margin:0}@media print{body{background:white}.page{width:210mm;min-height:297mm;padding:12mm 14mm;font-size:10pt}.hero{padding:12px 0}.hero>img{width:110px;height:110px}.hero .lock{width:350px;height:132px}h2{margin-top:17px}footer{font-size:8pt}}
+</style></head><body><main class="page">
+<header><div><h1>周期表 Pro · 图标使用规范</h1><p class="muted">B / 元素 P · 2026.11.03</p></div><span class="muted">v1.0</span></header>
+<div class="hero"><img src="masters/periodic-pro-app-icon.svg" alt="紫底白色元素 P 图标"><img class="lock" src="masters/periodic-pro-horizontal.svg" alt="周期表 Pro 横式组合"></div>
+<p>P 的一角，成为独立的元素方块。P 关联 Periodic、Pro 与磷元素；方块及间隙共同构成标识，不可拆改。</p>
+<div class="grid"><section><h2>01 / 品牌色</h2>
+<div class="chip"><span class="swatch" style="background:#6650a4"></span><div>品牌紫 <b>#6650A4</b><br><span class="muted">RGB 102 / 80 / 164 · CMYK 38 / 51 / 0 / 36</span></div></div>
+<div class="chip"><span class="swatch" style="background:#fff"></span><div>白 <b>#FFFFFF</b><br><span class="muted">RGB 255 / 255 / 255 · CMYK 0 / 0 / 0 / 0</span></div></div>
+<p class="muted">紫白对比约 6.46:1。CMYK 为近似换算；Pantone 未指定，印刷需打样。</p>
+<h2>02 / 留白与尺寸</h2><ul><li>单位 u 为主笔画宽度，母版 u = 32。</li><li>独立标识外部留白至少 1u。</li><li>符号最低 16px；≤32px 用 small 版本。</li><li>横式组合 ≥160px 宽，竖式 ≥128px 宽；更小仅用符号。</li></ul>
+<h2>03 / 背景与版本</h2><p>白底用紫色或黑色；深底用反白。反白笔画减细 1 单位，改善光学重量。图片背景先增加纯色承载面。</p>
+</section><section><h2>04 / Android</h2><ul><li>108dp 满画布分层；前景位于中心 66dp 直径安全圆内。</li><li>普通图标浅深色统一紫底白标。</li><li>monochrome 只包含形状，颜色交给系统。</li><li>Android 7.x 使用独立矢量回退；Android 8+ 使用 adaptive-icon。</li><li>商店图：512×512、sRGB、直角满底、无外部阴影。</li></ul>
+<h2>05 / 字标与禁用</h2><p>Noto Sans CJK SC Medium（SIL OFL 1.1）；交付字形已转曲，不依赖安装字体。</p><ul><li>勿拉伸、旋转或按包围盒重新居中。</li><li>勿填掉间隙、移动独立方块。</li><li>勿添加数字、描边、渐变、发光。</li><li>圆角预览不可代替直角商店原稿。</li></ul>
+<h2>06 / 文件入口</h2><p><code>masters/</code> 矢量母版 · <code>variants/</code> 单色组合<br><code>web/</code> favicon / 网页图标<br><code>ic_launcher_*.xml</code> Android 分层副本</p></section></div>
+<footer>详见 README.md。系统裁切与主题着色为静态验证，未安装至真机；未做商标检索。场景展示仅为使用情境示意。<br>主符号使用原始几何路径；名称字体来自 Noto CJK，字体文件未包含在交付中。</footer>
+</main></body></html>
