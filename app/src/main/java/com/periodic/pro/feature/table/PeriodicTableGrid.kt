@@ -7,8 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -23,33 +21,36 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.data.element.model.ElementZh
-import com.periodic.pro.theme.CATEGORY_CELL_ALPHA
-import com.periodic.pro.theme.CATEGORY_CELL_DARK_ALPHA
+import com.periodic.pro.theme.CategoryAlpha
 import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.forCategory
 
 /**
- * 周期表 18×10 网格布局。
+ * 周期表 18×10 网格 — Spectra 单元格规范（DESIGN.md §8.1）。
  *
- * 水平可滚动，每个元素单元格独立处理点击/长按。
+ * 水平可滚动；单元格 6dp 圆角 + 分类色 tint 底；
+ * 筛选淘汰 0.12 alpha；选中 2dp 分类色描边 + tint 加深。
  */
 @Composable
 fun PeriodicTableGrid(
@@ -64,8 +65,6 @@ fun PeriodicTableGrid(
     modifier: Modifier = Modifier,
     onSelectSeries: (List<Int>) -> Unit = {},
 ) {
-    val gridMap = remember(elements) { buildGridMap(elements) }
-
     val query = searchQuery.trim().lowercase()
     val matchedIds = remember(elements, zhMap, query) {
         if (query.isEmpty()) null
@@ -91,18 +90,15 @@ fun PeriodicTableGrid(
         // 镧系/锕系间隔
         val gapPx = with(density) { 8.dp.toPx() }.toInt()
 
-        // 行标签列宽
+        // 行标签列宽 / 列号行高
         val rowLabelWidthDp = with(density) { 24.dp }
-
-        // 列号行高
         val headerHeightDp = with(density) { 20.dp }
-
         val headerHeightPx = with(density) { headerHeightDp.toPx().toInt() }
 
-        // 计算 y 偏移（含间隔）：镧系前 gapPx*2，镧锕之间无额外间隔
+        // 计算 y 偏移（含间隔）：镧系前 gapPx*2
         fun yOffset(row: Int): Int {
             var y = headerHeightPx + row * cellPxInt
-            if (row >= 7) y += gapPx * 2 // 镧系前翻倍间隔
+            if (row >= 7) y += gapPx * 2
             return y
         }
 
@@ -150,20 +146,41 @@ fun PeriodicTableGrid(
 
             // === 主体：行号 + 元素区 ===
             Row {
-                // 左侧行号列（固定，顶部留白对齐元素区的列号行）
+                // 左侧行号列（固定）
                 Column(modifier = Modifier.width(rowLabelWidthDp)) {
                     Spacer(modifier = Modifier.height(headerHeightDp))
                     for (i in 0..6) {
-                        Box(modifier = Modifier.size(width = rowLabelWidthDp, height = cellDp), contentAlignment = Alignment.Center) {
-                            Text(rowLabels[i], style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Box(
+                            modifier = Modifier.size(width = rowLabelWidthDp, height = cellDp),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(
+                                rowLabels[i],
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
                         }
                     }
                     Spacer(modifier = Modifier.size(width = rowLabelWidthDp, height = gapDp * 2))
-                    Box(modifier = Modifier.size(width = rowLabelWidthDp, height = cellDp), contentAlignment = Alignment.Center) {
-                        Text(rowLabels[7], style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Box(
+                        modifier = Modifier.size(width = rowLabelWidthDp, height = cellDp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            rowLabels[7],
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
                     }
-                    Box(modifier = Modifier.size(width = rowLabelWidthDp, height = cellDp), contentAlignment = Alignment.Center) {
-                        Text(rowLabels[8], style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Box(
+                        modifier = Modifier.size(width = rowLabelWidthDp, height = cellDp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            rowLabels[8],
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
                     }
                 }
 
@@ -183,9 +200,9 @@ fun PeriodicTableGrid(
                             val isInSearch = matchedIds == null || element.atomicNumber in matchedIds
 
                             val alphaValue = when {
-                                matchedIds != null && !isInSearch -> 0.2f
-                                selectedCategory != null && element.category != selectedCategory -> 0.2f
-                                isMultiSelectMode && !isSelected -> 0.5f
+                                matchedIds != null && !isInSearch -> 0.12f
+                                selectedCategory != null && element.category != selectedCategory -> 0.12f
+                                isMultiSelectMode && !isSelected -> 0.4f
                                 else -> 1.0f
                             }
 
@@ -203,23 +220,25 @@ fun PeriodicTableGrid(
                         }
 
                         // F-block 标记
-                        if (gridMap[fBlockMarkerRow6] == null) {
+                        if (elements.none { it.atomicNumber in 57..71 }) {
                             FBlockMarker(
-                                rangeStart = 57,
-                                rangeEnd = 71,
+                                label = "57–71",
                                 onClick = { onSelectSeries((57..71).toList()) },
                                 modifier = Modifier
-                                    .offset { IntOffset(fBlockMarkerRow6.second * cellPxInt, yOffset(fBlockMarkerRow6.first)) }
+                                    .offset {
+                                        IntOffset(fBlockMarkerRow6.second * cellPxInt, yOffset(fBlockMarkerRow6.first))
+                                    }
                                     .size(cellDp),
                             )
                         }
-                        if (gridMap[fBlockMarkerRow7] == null) {
+                        if (elements.none { it.atomicNumber in 89..103 }) {
                             FBlockMarker(
-                                rangeStart = 89,
-                                rangeEnd = 103,
+                                label = "89–103",
                                 onClick = { onSelectSeries((89..103).toList()) },
                                 modifier = Modifier
-                                    .offset { IntOffset(fBlockMarkerRow7.second * cellPxInt, yOffset(fBlockMarkerRow7.first)) }
+                                    .offset {
+                                        IntOffset(fBlockMarkerRow7.second * cellPxInt, yOffset(fBlockMarkerRow7.first))
+                                    }
                                     .size(cellDp),
                             )
                         }
@@ -252,15 +271,6 @@ private fun stripTones(pinyin: String): String =
         .replace('\u01DB', 'v')  // ǜ
         .lowercase()
 
-private fun buildGridMap(elements: List<Element>): Map<Pair<Int, Int>, Element> {
-    val map = mutableMapOf<Pair<Int, Int>, Element>()
-    for (element in elements) {
-        val pos = getGridPosition(element)
-        map[pos] = element
-    }
-    return map
-}
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PeriodicTableCell(
@@ -273,8 +283,15 @@ private fun PeriodicTableCell(
     modifier: Modifier = Modifier,
 ) {
     val categoryColor = LocalCategoryColors.current.forCategory(element.category)
-    val shape = RoundedCornerShape(4.dp)
-    val cellBgAlpha = if (isSystemInDarkTheme()) CATEGORY_CELL_DARK_ALPHA else CATEGORY_CELL_ALPHA
+    val shape = MaterialTheme.shapes.extraSmall
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val cellBgAlpha = if (isSelected) {
+        CategoryAlpha.CELL_SELECTED
+    } else if (isDark) {
+        CategoryAlpha.CELL_DARK
+    } else {
+        CategoryAlpha.CELL
+    }
 
     Box(
         modifier = modifier
@@ -284,11 +301,11 @@ private fun PeriodicTableCell(
             .alpha(alpha)
             .then(
                 if (isSelected) {
-                    Modifier.border(2.dp, MaterialTheme.colorScheme.primary, shape)
+                    Modifier.border(2.dp, categoryColor, shape)
                 } else Modifier
             )
             .combinedClickable(
-                indication = null,
+                indication = ripple(),
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = onClick,
                 onLongClick = onLongClick,
@@ -316,7 +333,7 @@ private fun PeriodicTableCell(
             if (zhName != null) {
                 Text(
                     text = zhName,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     maxLines = 1,
@@ -328,12 +345,11 @@ private fun PeriodicTableCell(
 
 @Composable
 private fun FBlockMarker(
-    rangeStart: Int,
-    rangeEnd: Int,
+    label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val shape = RoundedCornerShape(4.dp)
+    val shape = MaterialTheme.shapes.extraSmall
     Box(
         modifier = modifier
             .padding(1.dp)
@@ -342,32 +358,12 @@ private fun FBlockMarker(
             .clickable { onClick() },
         contentAlignment = Alignment.Center,
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(horizontal = 2.dp, vertical = 1.dp),
-        ) {
-            Text(
-                text = "$rangeStart",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-                maxLines = 1,
-            )
-            Text(
-                text = "-",
-                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
-                maxLines = 1,
-            )
-            Text(
-                text = "$rangeEnd",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-                maxLines = 1,
-            )
-        }
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 

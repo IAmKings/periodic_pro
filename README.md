@@ -20,6 +20,8 @@
 
 ## 界面截图
 
+> UI 遵循 **Spectra 设计语言**（见 [DESIGN.md](DESIGN.md)）：中性石墨表面 + 光谱十色分类色 + 等宽数字排印。
+
 | 首页 | 周期表 | 元素详情 |
 |------|--------|----------|
 | ![首页](screens/1-main.png) | ![周期表](screens/2-periodic.png) | ![元素详情](screens/3-element-detail.png) |
@@ -27,6 +29,10 @@
 | 发现页 | 设置 | 实验室 | 学习资料 |
 |--------|------|--------|----------|
 | ![发现页](screens/4-discover.png) | ![设置](screens/5-setting.png) | ![实验室](screens/6-lab.png) | ![学习资料](screens/7-learn.png) |
+
+| 深色 · 首页 | 深色 · 周期表 |
+|------------|--------------|
+| ![深色首页](screens/9-dark-home.png) | ![深色周期表](screens/8-dark-table.png) |
 
 ## 技术栈
 

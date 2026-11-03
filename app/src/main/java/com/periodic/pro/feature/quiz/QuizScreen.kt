@@ -3,6 +3,7 @@ package com.periodic.pro.feature.quiz
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,12 +25,12 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -38,17 +39,24 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.R
 import org.koin.androidx.compose.koinViewModel
+import com.periodic.pro.theme.CategoryAlpha
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.LocalCategoryColors
+import com.periodic.pro.theme.Semantic
 import com.periodic.pro.theme.forCategory
+import com.periodic.pro.ui.components.PeriodicButton
+import com.periodic.pro.ui.components.PeriodicTopBar
 
+/**
+ * Quiz 屏 — Spectra（DESIGN.md §9.9）。
+ * 题目卡 + 进度条 + 通栏选项行（答对/答错语义色即时反馈）。
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuizScreen(
@@ -61,20 +69,17 @@ fun QuizScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        if (state.showEndScreen) stringResource(R.string.quiz_result_title)
-                        else stringResource(R.string.quiz_title),
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                },
+            PeriodicTopBar(
+                title = if (state.showEndScreen) stringResource(R.string.quiz_result_title)
+                else stringResource(R.string.quiz_title),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.detail_back))
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.detail_back),
+                        )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
             )
         },
     ) { padding ->
@@ -111,8 +116,7 @@ fun QuizScreen(
         } else {
             // === 答题页面 ===
             if (q == null) return@Scaffold
-            val categoryColors = LocalCategoryColors.current
-            val catColor = categoryColors.forCategory(q.element.category)
+            val catColor = LocalCategoryColors.current.forCategory(q.element.category)
 
             val question = questionText(
                 q,
@@ -130,22 +134,23 @@ fun QuizScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Spacer(modifier = Modifier.height(Dimensions.Dp8))
+
+                // 状态行：得分 / 连对 + 操作
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Row(horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp8)) {
-                        Box(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(8.dp))
-                                .background(MaterialTheme.colorScheme.primaryContainer)
-                                .padding(horizontal = 12.dp, vertical = 6.dp),
+                        Surface(
+                            shape = MaterialTheme.shapes.small,
+                            color = MaterialTheme.colorScheme.primaryContainer,
                         ) {
                             Text(
                                 "${state.score} / ${state.total}",
                                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                                 style = MaterialTheme.typography.labelLarge,
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                             )
                         }
                         AnimatedVisibility(visible = state.streak > 1) {
@@ -154,22 +159,21 @@ fun QuizScreen(
                                 tween(500),
                                 label = "pulse",
                             )
-                            Box(
-                                modifier = Modifier
-                                    .scale(pulse)
-                                    .clip(RoundedCornerShape(8.dp))
-                                    .background(MaterialTheme.colorScheme.tertiaryContainer)
-                                    .padding(horizontal = 12.dp, vertical = 6.dp),
+                            Surface(
+                                shape = MaterialTheme.shapes.small,
+                                color = MaterialTheme.colorScheme.tertiaryContainer,
+                                modifier = Modifier.scale(pulse),
                             ) {
                                 Text(
                                     "${state.streak} ${stringResource(R.string.quiz_streak)}",
                                     color = MaterialTheme.colorScheme.onTertiaryContainer,
                                     style = MaterialTheme.typography.labelLarge,
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                                 )
                             }
                         }
                     }
-                    Row(horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp8)) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp4)) {
                         TextButton(onClick = { vm.handle(QuizIntent.Retry) }) {
                             Text(
                                 stringResource(R.string.quiz_restart),
@@ -186,33 +190,50 @@ fun QuizScreen(
                         }
                     }
                 }
+
+                Spacer(modifier = Modifier.height(Dimensions.Dp8))
+
+                // 进度条（已答 = 得分 + 错题）
+                if (state.total > 0) {
+                    LinearProgressIndicator(
+                        progress = {
+                            ((state.score + state.wrongAnswers.size).toFloat() / state.total)
+                                .coerceIn(0f, 1f)
+                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        color = MaterialTheme.colorScheme.primary,
+                        trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(Dimensions.Dp24))
 
-                // 元素卡片
+                // 元素题目卡（周期表单元格同构：tint 底 + 分类色）
                 Box(
                     modifier = Modifier
-                        .size(96.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(catColor.copy(alpha = 0.85f))
-                        .border(1.dp, Color.White.copy(alpha = 0.2f), RoundedCornerShape(12.dp)),
+                        .size(104.dp)
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(catColor.copy(alpha = CategoryAlpha.CELL_SELECTED))
+                        .border(1.dp, catColor.copy(alpha = 0.4f), MaterialTheme.shapes.medium),
                     contentAlignment = Alignment.Center,
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             if (q.type == QuizType.ATOMIC_NUMBER) "?" else q.element.atomicNumber.toString(),
-                            color = Color.White.copy(alpha = 0.7f),
-                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.labelSmall,
                         )
                         Text(
                             if (q.type == QuizType.SYMBOL) "?" else q.element.symbol,
-                            color = Color.White,
+                            color = catColor,
                             fontSize = 28.sp,
-                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.titleLarge,
+                            textAlign = TextAlign.Center,
                         )
                         Text(
                             if (q.type == QuizType.NAME) "?" else q.zhName,
-                            color = Color.White.copy(alpha = 0.8f),
-                            fontSize = 14.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.labelMedium,
                         )
                     }
                 }
@@ -220,83 +241,87 @@ fun QuizScreen(
                 Text(
                     question,
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center,
                 )
                 Spacer(modifier = Modifier.height(Dimensions.Dp24))
 
-                Column(verticalArrangement = Arrangement.spacedBy(Dimensions.Dp12)) {
-                    q.options.chunked(2).forEach { row ->
-                        Row(horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp12)) {
-                            row.forEach { opt ->
-                                val correct = opt == q.correctAnswer
-                                val selected = opt == state.selectedAnswer
-                                val bg = when {
-                                    state.showResult && correct -> Color(0xFF22C55E).copy(alpha = 0.2f)
-                                    state.showResult && selected -> Color(0xFFEF4444).copy(alpha = 0.2f)
-                                    else -> MaterialTheme.colorScheme.surfaceVariant
-                                }
-                                val bd = when {
-                                    state.showResult && correct -> Color(0xFF22C55E).copy(alpha = 0.6f)
-                                    state.showResult && selected -> Color(0xFFEF4444).copy(alpha = 0.6f)
-                                    else -> MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
-                                }
-                                val tc = when {
-                                    state.showResult && correct -> Color(0xFF22C55E)
-                                    state.showResult && selected -> Color(0xFFEF4444)
-                                    else -> MaterialTheme.colorScheme.onSurface
-                                }
-                                Box(
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .height(52.dp)
-                                        .clip(RoundedCornerShape(12.dp))
-                                        .background(bg)
-                                        .border(1.dp, bd, RoundedCornerShape(12.dp))
-                                        .clickable(enabled = !state.showResult) {
-                                            vm.handle(QuizIntent.SelectOption(opt))
-                                        },
-                                    contentAlignment = Alignment.Center,
-                                ) {
-                                    Text(
-                                        opt,
-                                        color = tc,
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        textAlign = TextAlign.Center,
-                                    )
-                                }
-                            }
-                        }
+                // 选项 — 通栏行
+                Column(verticalArrangement = Arrangement.spacedBy(Dimensions.Dp8)) {
+                    q.options.forEach { opt ->
+                        QuizOptionRow(
+                            text = opt,
+                            correct = opt == q.correctAnswer,
+                            selected = opt == state.selectedAnswer,
+                            revealed = state.showResult,
+                            onClick = { vm.handle(QuizIntent.SelectOption(opt)) },
+                        )
                     }
                 }
-                Spacer(modifier = Modifier.height(Dimensions.Dp8))
+                Spacer(modifier = Modifier.height(Dimensions.Dp12))
                 if (state.showResult) {
                     val isCorrect = state.selectedAnswer == q.correctAnswer
                     Text(
                         if (isCorrect) stringResource(R.string.quiz_correct)
                         else stringResource(R.string.quiz_wrong, q.correctAnswer),
-                        color = if (isCorrect) Color(0xFF22C55E) else Color(0xFFEF4444),
+                        color = if (isCorrect) Semantic.colors.correct else Semantic.colors.wrong,
                         style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = FontWeight.SemiBold,
                     )
-                    Spacer(modifier = Modifier.height(Dimensions.Dp8))
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(44.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(MaterialTheme.colorScheme.primary)
-                            .clickable { vm.handle(QuizIntent.NextQuestion) },
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            stringResource(R.string.quiz_next),
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            style = MaterialTheme.typography.labelLarge,
-                        )
-                    }
+                    Spacer(modifier = Modifier.height(Dimensions.Dp12))
+                    PeriodicButton(
+                        onClick = { vm.handle(QuizIntent.NextQuestion) },
+                        text = stringResource(R.string.quiz_next),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
                 }
             }
         }
+    }
+}
+
+/**
+ * 通栏选项行：hairline 描边；揭示后 正确=绿 tint / 错选=红 tint。
+ */
+@Composable
+private fun QuizOptionRow(
+    text: String,
+    correct: Boolean,
+    selected: Boolean,
+    revealed: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val semantic = Semantic.colors
+    val bg = when {
+        revealed && correct -> semantic.correctContainer
+        revealed && selected -> semantic.wrongContainer
+        else -> MaterialTheme.colorScheme.surface
+    }
+    val bd = when {
+        revealed && correct -> semantic.correct.copy(alpha = 0.6f)
+        revealed && selected -> semantic.wrong.copy(alpha = 0.6f)
+        else -> MaterialTheme.colorScheme.outlineVariant
+    }
+    val tc = when {
+        revealed && correct -> semantic.correct
+        revealed && selected -> semantic.wrong
+        else -> MaterialTheme.colorScheme.onSurface
+    }
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .clip(MaterialTheme.shapes.small)
+            .background(bg)
+            .border(1.dp, bd, MaterialTheme.shapes.small)
+            .clickable(enabled = !revealed, onClick = onClick),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text,
+            color = tc,
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
@@ -319,12 +344,12 @@ private fun QuizResultContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        // 分数展示
+        // 分数大数字（displayMedium tnum）
         Text(
             text = stringResource(R.string.quiz_score, score, total),
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.Bold,
-            color = if (isPerfect) Color(0xFF22C55E) else MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.displayMedium,
+            color = if (isPerfect) Semantic.colors.correct else MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
         )
 
         Spacer(modifier = Modifier.height(Dimensions.Dp16))
@@ -334,8 +359,7 @@ private fun QuizResultContent(
             Text(
                 text = stringResource(R.string.quiz_perfect),
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF22C55E),
+                color = Semantic.colors.correct,
             )
             Spacer(modifier = Modifier.height(Dimensions.Dp8))
         }
@@ -344,7 +368,7 @@ private fun QuizResultContent(
 
         // 错题回顾按钮（有错题时才显示）
         if (wrongCount > 0) {
-            com.periodic.pro.ui.components.PeriodicButton(
+            PeriodicButton(
                 onClick = onReviewWrong,
                 text = stringResource(R.string.quiz_review_wrong),
                 modifier = Modifier.fillMaxWidth(),
@@ -353,7 +377,7 @@ private fun QuizResultContent(
         }
 
         // 再测一次按钮
-        com.periodic.pro.ui.components.PeriodicButton(
+        PeriodicButton(
             onClick = onRetry,
             text = stringResource(R.string.quiz_retry),
             modifier = Modifier.fillMaxWidth(),
@@ -399,7 +423,6 @@ private fun WrongReviewContent(
         Text(
             text = stringResource(R.string.quiz_wrong_title, wrongAnswers.size),
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = Dimensions.Dp16),
         )
 
@@ -415,47 +438,46 @@ private fun WrongReviewContent(
             ),
         ) {
             itemsIndexed(wrongAnswers) { index, wrong ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .padding(Dimensions.Dp16),
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium,
+                    color = MaterialTheme.colorScheme.surface,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
                 ) {
-                    Text(
-                        text = stringResource(R.string.quiz_wrong_review_label, index + 1),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    Spacer(modifier = Modifier.height(Dimensions.Dp4))
-                    Text(
-                        text = wrong.questionText,
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Medium,
-                    )
-                    Spacer(modifier = Modifier.height(Dimensions.Dp8))
-                    Text(
-                        text = stringResource(R.string.quiz_wrong_user_answer),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    Text(
-                        text = wrong.userAnswer,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color(0xFFEF4444),
-                    )
-                    Spacer(modifier = Modifier.height(Dimensions.Dp4))
-                    Text(
-                        text = stringResource(R.string.quiz_wrong_correct_answer),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    Text(
-                        text = wrong.correctAnswer,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color(0xFF22C55E),
-                        fontWeight = FontWeight.SemiBold,
-                    )
+                    Column(modifier = Modifier.padding(Dimensions.Dp16)) {
+                        Text(
+                            text = stringResource(R.string.quiz_wrong_review_label, index + 1),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Spacer(modifier = Modifier.height(Dimensions.Dp4))
+                        Text(
+                            text = wrong.questionText,
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                        Spacer(modifier = Modifier.height(Dimensions.Dp8))
+                        Text(
+                            text = stringResource(R.string.quiz_wrong_user_answer),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Text(
+                            text = wrong.userAnswer,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Semantic.colors.wrong,
+                        )
+                        Spacer(modifier = Modifier.height(Dimensions.Dp4))
+                        Text(
+                            text = stringResource(R.string.quiz_wrong_correct_answer),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        Text(
+                            text = wrong.correctAnswer,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Semantic.colors.correct,
+                        )
+                    }
                 }
             }
         }

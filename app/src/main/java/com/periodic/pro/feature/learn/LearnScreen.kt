@@ -3,8 +3,11 @@
 package com.periodic.pro.feature.learn
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,26 +25,23 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import kotlinx.coroutines.launch
@@ -49,30 +49,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.R
 import com.periodic.pro.data.learn.model.LearnItem
 import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.theme.Dimensions
-import com.periodic.pro.theme.Elevation
-import com.periodic.pro.theme.CATEGORY_CIRCLE_ALPHA
-import com.periodic.pro.theme.LearnBadgeColors
 import com.periodic.pro.theme.LocalCategoryColors
+import com.periodic.pro.theme.LocalSemanticColors
 import com.periodic.pro.theme.PeriodicProTheme
+import com.periodic.pro.theme.Semantic
 import com.periodic.pro.theme.forCategory
+import com.periodic.pro.theme.pressScale
+import com.periodic.pro.ui.components.PeriodicButton
+import com.periodic.pro.ui.components.PeriodicTopBar
+import com.periodic.pro.ui.components.SectionHeader
+import com.periodic.pro.ui.components.TextBadge
 import org.koin.androidx.compose.koinViewModel
 
 /**
- * Learn 屏入口。
- *
- * 展示元素学习资料列表，支持点击查看学习详情。
- *
- * @param onNavigateToDetail 导航到元素详情
- * @param modifier Modifier
+ * Learn 屏 — Spectra（DESIGN.md §9.7）。
+ * 等级分组列表（语义色 badge）+ 学习详情（分组卡）。
  */
 @Composable
 fun LearnScreen(
@@ -140,13 +139,8 @@ private fun LearnListContent(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.screen_learn),
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                },
+            PeriodicTopBar(
+                title = stringResource(R.string.screen_learn),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
@@ -155,9 +149,6 @@ private fun LearnListContent(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                ),
             )
         },
     ) { padding ->
@@ -209,7 +200,7 @@ private fun LearnListContent(
                 ),
                 verticalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
             ) {
-                // 快速跳转按钮（stickyHeader吸顶，始终可见）
+                // 快速跳转 chips（stickyHeader 吸顶）
                 stickyHeader(key = "jump_buttons") {
                     Row(
                         modifier = Modifier
@@ -218,23 +209,30 @@ private fun LearnListContent(
                             .padding(vertical = Dimensions.Dp4),
                         horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
                     ) {
-                        Button(
+                        JumpChip(
+                            label = stringResource(R.string.learn_level_core),
+                            tint = Semantic.colors.levelCore,
+                            container = Semantic.colors.levelCoreContainer,
+                            enabled = true,
                             onClick = { scope.launch { listState.scrollToItem(1) } },
-                            colors = ButtonDefaults.buttonColors(containerColor = LearnBadgeColors.CoreBg),
-                            contentPadding = PaddingValues(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp4),
-                        ) { Text(stringResource(R.string.learn_level_core), color = LearnBadgeColors.Core, style = MaterialTheme.typography.labelMedium) }
-                        Button(
-                            onClick = { scope.launch { listState.scrollToItem(importantSectionIndex) } },
+                            modifier = Modifier.weight(1f),
+                        )
+                        JumpChip(
+                            label = stringResource(R.string.learn_level_important),
+                            tint = Semantic.colors.levelImportant,
+                            container = Semantic.colors.levelImportantContainer,
                             enabled = hasImportant,
-                            colors = ButtonDefaults.buttonColors(containerColor = LearnBadgeColors.ImportantBg),
-                            contentPadding = PaddingValues(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp4),
-                        ) { Text(stringResource(R.string.learn_level_important), color = LearnBadgeColors.Important, style = MaterialTheme.typography.labelMedium) }
-                        Button(
-                            onClick = { scope.launch { listState.scrollToItem(otherSectionIndex) } },
+                            onClick = { scope.launch { listState.scrollToItem(importantSectionIndex) } },
+                            modifier = Modifier.weight(1f),
+                        )
+                        JumpChip(
+                            label = stringResource(R.string.learn_level_normal),
+                            tint = Semantic.colors.levelNormal,
+                            container = Semantic.colors.levelNormalContainer,
                             enabled = hasOther,
-                            colors = ButtonDefaults.buttonColors(containerColor = LearnBadgeColors.OtherBg),
-                            contentPadding = PaddingValues(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp4),
-                        ) { Text(stringResource(R.string.learn_level_normal), color = LearnBadgeColors.Other, style = MaterialTheme.typography.labelMedium) }
+                            onClick = { scope.launch { listState.scrollToItem(otherSectionIndex) } },
+                            modifier = Modifier.weight(1f),
+                        )
                     }
                 }
                 // Core section
@@ -242,7 +240,7 @@ private fun LearnListContent(
                     item(key = "section_core") {
                         LevelSectionHeader(
                             title = stringResource(R.string.learn_level_core),
-                            badgeColor = LearnBadgeColors.Core,
+                            badgeColor = Semantic.colors.levelCore,
                         )
                     }
                     items(state.coreItems, key = { "core_${it.atomicNumber}" }) { item ->
@@ -265,7 +263,7 @@ private fun LearnListContent(
                     item(key = "section_important") {
                         LevelSectionHeader(
                             title = stringResource(R.string.learn_level_important),
-                            badgeColor = LearnBadgeColors.Important,
+                            badgeColor = Semantic.colors.levelImportant,
                         )
                     }
                     items(
@@ -291,7 +289,7 @@ private fun LearnListContent(
                     item(key = "section_other") {
                         LevelSectionHeader(
                             title = stringResource(R.string.learn_level_normal),
-                            badgeColor = LearnBadgeColors.Other,
+                            badgeColor = Semantic.colors.levelNormal,
                         )
                     }
                     items(state.otherItems, key = { "other_${it.atomicNumber}" }) { item ->
@@ -318,6 +316,43 @@ private fun LearnListContent(
 }
 
 /**
+ * 等级跳转 Chip（语义色 tonal）。
+ */
+@Composable
+private fun JumpChip(
+    label: String,
+    tint: Color,
+    container: Color,
+    enabled: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val shape = MaterialTheme.shapes.small
+    Row(
+        modifier = modifier
+            .clip(shape)
+            .background(if (enabled) container else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+            .clickable(enabled = enabled, onClick = onClick)
+            .padding(vertical = Dimensions.Dp8),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(6.dp)
+                .background(if (enabled) tint else MaterialTheme.colorScheme.onSurfaceVariant, CircleShape),
+        )
+        Spacer(modifier = Modifier.width(Dimensions.Dp6))
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            color = if (enabled) tint else MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1,
+        )
+    }
+}
+
+/**
  * 等级分组的 Section 表头。
  */
 @Composable
@@ -335,21 +370,19 @@ private fun LevelSectionHeader(
         Box(
             modifier = Modifier
                 .size(8.dp)
-                .clip(RoundedCornerShape(4.dp))
-                .background(badgeColor),
+                .background(badgeColor, RoundedCornerShape(4.dp)),
         )
         Spacer(modifier = Modifier.width(Dimensions.Dp8))
         Text(
             text = title,
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSurface,
         )
     }
 }
 
 /**
- * 元素学习列表卡片。
+ * 元素学习列表卡：TextBadge 符号 + 标题 + 等级 badge + 摘要。
  */
 @Composable
 private fun LearnListItem(
@@ -359,30 +392,39 @@ private fun LearnListItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val badgeColor = when (item.level) {
-        "core" -> LearnBadgeColors.Core
-        "important" -> LearnBadgeColors.Important
-        else -> LearnBadgeColors.Other
-    }
-    val badgeBg = when (item.level) {
-        "core" -> LearnBadgeColors.CoreBg
-        "important" -> LearnBadgeColors.ImportantBg
-        else -> LearnBadgeColors.OtherBg
-    }
-    val badgeText = when (item.level) {
-        "core" -> stringResource(R.string.learn_badge_core)
-        "important" -> stringResource(R.string.learn_badge_important)
-        else -> stringResource(R.string.learn_badge_normal)
+    val semantic = LocalSemanticColors.current
+    val (badgeColor, badgeBg, badgeText) = when (item.level) {
+        "core" -> Triple(
+            semantic.levelCore,
+            semantic.levelCoreContainer,
+            stringResource(R.string.learn_badge_core),
+        )
+        "important" -> Triple(
+            semantic.levelImportant,
+            semantic.levelImportantContainer,
+            stringResource(R.string.learn_badge_important),
+        )
+        else -> Triple(
+            semantic.levelNormal,
+            semantic.levelNormalContainer,
+            stringResource(R.string.learn_badge_normal),
+        )
     }
 
-    Card(
+    val shape = MaterialTheme.shapes.medium
+    val interaction = remember { MutableInteractionSource() }
+
+    Surface(
         onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = Elevation.Shadow1),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-        ),
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(shape)
+            .pressScale(interaction),
+        shape = shape,
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = Dimensions.Dp0,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        interactionSource = interaction,
     ) {
         Row(
             modifier = Modifier
@@ -390,23 +432,12 @@ private fun LearnListItem(
                 .padding(Dimensions.Dp12),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            // Element symbol circle
-            Box(
-                modifier = Modifier
-                    .size(44.dp)
-                    .background(
-                        color = categoryColor.copy(alpha = CATEGORY_CIRCLE_ALPHA),
-                        shape = RoundedCornerShape(22.dp),
-                    ),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = symbol,
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = categoryColor,
-                )
-            }
+            // 元素符号圆标
+            TextBadge(
+                text = symbol,
+                tint = categoryColor,
+                size = Dimensions.Dp40,
+            )
 
             Spacer(modifier = Modifier.width(Dimensions.Dp12))
 
@@ -419,22 +450,22 @@ private fun LearnListItem(
                             symbol,
                         ),
                         style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f),
                     )
                     Spacer(modifier = Modifier.width(Dimensions.Dp8))
                     // Level badge
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(badgeBg)
-                            .padding(horizontal = 6.dp, vertical = 2.dp),
+                    Surface(
+                        shape = MaterialTheme.shapes.extraSmall,
+                        color = badgeBg,
                     ) {
                         Text(
                             text = badgeText,
                             style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold,
                             color = badgeColor,
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
                         )
                     }
                 }
@@ -479,13 +510,8 @@ private fun LearnDetailContent(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.learn_detail_title, item.atomicNumber, symbol),
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                },
+            PeriodicTopBar(
+                title = stringResource(R.string.learn_detail_title, item.atomicNumber, symbol),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
@@ -494,9 +520,6 @@ private fun LearnDetailContent(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                ),
             )
         },
     ) { padding ->
@@ -504,23 +527,19 @@ private fun LearnDetailContent(
             modifier = modifier
                 .fillMaxSize()
                 .padding(padding)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = Dimensions.Dp16),
         ) {
             DiscoveryStorySection(story = item.discoveryStory)
-            HorizontalDivider(
-                modifier = Modifier.padding(horizontal = Dimensions.Dp16),
-                thickness = 0.5.dp,
-            )
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             ApplicationsSection(applications = item.applications)
-            HorizontalDivider(
-                modifier = Modifier.padding(horizontal = Dimensions.Dp16),
-                thickness = 0.5.dp,
-            )
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             FunFactsSection(funFacts = item.funFacts)
             Spacer(modifier = Modifier.height(Dimensions.Dp8))
-            ViewDetailButton(
-                atomicNumber = item.atomicNumber,
-                onNavigateToDetail = onNavigateToDetail,
+            PeriodicButton(
+                onClick = { onNavigateToDetail(item.atomicNumber) },
+                text = stringResource(R.string.learn_view_detail),
+                modifier = Modifier.fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(Dimensions.Dp32))
         }
@@ -534,15 +553,14 @@ private fun DiscoveryStorySection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = Dimensions.Dp16, vertical = Dimensions.Dp16),
+            .padding(vertical = Dimensions.Dp16),
     ) {
-        SectionTitle(text = stringResource(R.string.learn_section_discovery))
-        Spacer(modifier = Modifier.height(Dimensions.Dp8))
+        SectionHeader(title = stringResource(R.string.learn_section_discovery))
+        Spacer(modifier = Modifier.height(Dimensions.Dp12))
         Text(
             text = story,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
-            lineHeight = MaterialTheme.typography.bodyMedium.lineHeight,
         )
     }
 }
@@ -554,10 +572,10 @@ private fun ApplicationsSection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = Dimensions.Dp16, vertical = Dimensions.Dp16),
+            .padding(vertical = Dimensions.Dp16),
     ) {
-        SectionTitle(text = stringResource(R.string.learn_section_applications))
-        Spacer(modifier = Modifier.height(Dimensions.Dp8))
+        SectionHeader(title = stringResource(R.string.learn_section_applications))
+        Spacer(modifier = Modifier.height(Dimensions.Dp12))
         applications.forEachIndexed { index, app ->
             Row(
                 modifier = Modifier
@@ -566,8 +584,7 @@ private fun ApplicationsSection(
             ) {
                 Text(
                     text = "${index + 1}.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.width(Dimensions.Dp20),
                 )
@@ -588,10 +605,10 @@ private fun FunFactsSection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = Dimensions.Dp16, vertical = Dimensions.Dp16),
+            .padding(vertical = Dimensions.Dp16),
     ) {
-        SectionTitle(text = stringResource(R.string.learn_section_funfacts))
-        Spacer(modifier = Modifier.height(Dimensions.Dp8))
+        SectionHeader(title = stringResource(R.string.learn_section_funfacts))
+        Spacer(modifier = Modifier.height(Dimensions.Dp12))
         funFacts.forEach { fact ->
             Row(
                 modifier = Modifier
@@ -613,50 +630,6 @@ private fun FunFactsSection(
             }
         }
     }
-}
-
-@Composable
-private fun ViewDetailButton(
-    atomicNumber: Int,
-    onNavigateToDetail: (Int) -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = Dimensions.Dp16),
-    ) {
-        Button(
-            onClick = { onNavigateToDetail(atomicNumber) },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(Dimensions.Dp12),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-            ),
-        ) {
-            Text(
-                text = stringResource(R.string.learn_view_detail),
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.SemiBold,
-            )
-        }
-    }
-}
-
-/**
- * Section 标题组件。
- */
-@Composable
-private fun SectionTitle(
-    text: String,
-    modifier: Modifier = Modifier,
-) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.titleMedium,
-        fontWeight = FontWeight.SemiBold,
-        color = MaterialTheme.colorScheme.onSurface,
-        modifier = modifier,
-    )
 }
 
 // ===== Preview =====

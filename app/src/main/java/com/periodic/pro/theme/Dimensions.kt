@@ -4,12 +4,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /**
- * 8pt Grid 间距系统。
- * 所有间距、内边距、尺寸必须为 8.dp 的整数倍。
- * Dp4 仅限极细线条/分割线。
+ * 8pt 网格间距系统。事实源：/DESIGN.md §5
+ * 所有间距为 4 的整数倍、以 8 为主；4dp/2dp 仅限发丝线与微调。
  */
 object Dimensions {
     val Dp0: Dp = 0.dp
+    val Dp2: Dp = 2.dp
     val Dp4: Dp = 4.dp
     val Dp6: Dp = 6.dp
     val Dp8: Dp = 8.dp

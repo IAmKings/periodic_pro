@@ -5,6 +5,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -21,8 +23,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,7 +32,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -41,16 +40,14 @@ import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.PeriodicProTheme
-import com.periodic.pro.ui.components.ElementCard
+import com.periodic.pro.ui.components.ElementTile
+import com.periodic.pro.ui.components.PeriodicTopBar
 import com.periodic.pro.ui.pattern.EmptyState
 import org.koin.androidx.compose.koinViewModel
 
 /**
- * Favorites 屏入口。
- *
- * @param onNavigateToDetail 导航到元素详情
- * @param onNavigateToTable 导航到周期表
- * @param modifier Modifier
+ * Favorites 屏 — Spectra（DESIGN.md §9.5）。
+ * TopBar 计数副标题（tnum）+ 通栏 ElementTile + 左滑删除（errorContainer）。
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,16 +62,13 @@ fun FavoritesScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.screen_favorites),
-                        style = MaterialTheme.typography.titleLarge,
-                    )
+            PeriodicTopBar(
+                title = stringResource(R.string.screen_favorites),
+                subtitle = if (!state.isLoading && !state.isEmpty) {
+                    stringResource(R.string.favorites_count, state.favorites.size)
+                } else {
+                    null
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                ),
             )
         },
     ) { padding ->
@@ -98,7 +92,7 @@ fun FavoritesScreen(
                     .padding(padding),
             ) {
                 EmptyState(
-                    icon = Icons.Filled.Favorite,
+                    icon = Icons.Filled.Star,
                     title = stringResource(R.string.favorites_empty_title),
                     subtitle = stringResource(R.string.favorites_empty_subtitle),
                     actionLabel = stringResource(R.string.favorites_empty_action),
@@ -133,7 +127,7 @@ private fun FavoritesList(
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(
+        contentPadding = PaddingValues(
             horizontal = Dimensions.Dp16,
             vertical = Dimensions.Dp8,
         ),
@@ -174,7 +168,7 @@ private fun FavoriteElementItem(
         },
     )
 
-    // Animate scale when being dismissed
+    // 删除时缩放动画
     val scale by animateFloatAsState(
         targetValue = if (isRemoved) 0.8f else 1f,
         label = "itemScale",
@@ -185,12 +179,12 @@ private fun FavoriteElementItem(
         modifier = Modifier.scale(scale),
         enableDismissFromStartToEnd = false,
         backgroundContent = {
-            // 删除背景：红色 + 删除图标
+            // 删除背景：errorContainer + onErrorContainer 图标
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(
-                        color = MaterialTheme.colorScheme.error,
+                        color = MaterialTheme.colorScheme.errorContainer,
                         shape = MaterialTheme.shapes.medium,
                     )
                     .padding(end = Dimensions.Dp24),
@@ -199,16 +193,17 @@ private fun FavoriteElementItem(
                 Icon(
                     imageVector = Icons.Filled.Delete,
                     contentDescription = stringResource(R.string.favorites_remove),
-                    tint = Color.White,
+                    tint = MaterialTheme.colorScheme.onErrorContainer,
                     modifier = Modifier.size(Dimensions.Dp24),
                 )
             }
         },
     ) {
-        ElementCard(
+        ElementTile(
             element = element,
             onClick = onClick,
             zhName = zhName,
+            trailingIcon = Icons.Filled.Star,
             modifier = Modifier.fillMaxWidth(),
         )
     }
@@ -245,11 +240,9 @@ private fun FavoritesListPreview() {
     PeriodicProTheme {
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(R.string.screen_favorites)) },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                    ),
+                PeriodicTopBar(
+                    title = stringResource(R.string.screen_favorites),
+                    subtitle = stringResource(R.string.favorites_count, 3),
                 )
             },
         ) { padding ->
@@ -272,12 +265,7 @@ private fun FavoritesEmptyPreview() {
     PeriodicProTheme {
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(R.string.screen_favorites)) },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                    ),
-                )
+                PeriodicTopBar(title = stringResource(R.string.screen_favorites))
             },
         ) { padding ->
             Box(
@@ -286,7 +274,7 @@ private fun FavoritesEmptyPreview() {
                     .padding(padding),
             ) {
                 EmptyState(
-                    icon = Icons.Filled.Favorite,
+                    icon = Icons.Filled.Star,
                     title = stringResource(R.string.favorites_empty_title),
                     subtitle = stringResource(R.string.favorites_empty_subtitle),
                     actionLabel = stringResource(R.string.favorites_empty_action),

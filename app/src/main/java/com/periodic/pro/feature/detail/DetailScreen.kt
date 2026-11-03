@@ -1,7 +1,11 @@
 package com.periodic.pro.feature.detail
 
 import android.content.res.Configuration
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.material.icons.Icons
@@ -27,9 +32,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,6 +42,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -45,32 +56,29 @@ import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.withStyle
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import com.periodic.pro.R
 import com.periodic.pro.data.lab.model.ChemicalReaction
 import com.periodic.pro.data.element.model.Category
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.shape.RoundedCornerShape
 import com.periodic.pro.data.element.ElectronShells
 import com.periodic.pro.data.element.model.Element
+import com.periodic.pro.theme.CategoryAlpha
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.PeriodicProTheme
+import com.periodic.pro.theme.PeriodicTextStyles
 import com.periodic.pro.theme.forCategory
 import com.periodic.pro.ui.components.PeriodicOutlinedButton
 import com.periodic.pro.util.formatDouble
 import com.periodic.pro.ui.components.PeriodicTextButton
+import com.periodic.pro.ui.components.PeriodicTopBar
 import com.periodic.pro.ui.components.PropertyChip
+import com.periodic.pro.ui.components.SectionHeader
 import com.periodic.pro.ui.pattern.AtomCanvas
 import com.periodic.pro.ui.pattern.PropertyGrid
 import com.periodic.pro.ui.pattern.PropertyItem
@@ -78,11 +86,7 @@ import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 /**
- * 元素详情屏入口。
- *
- * @param atomicNumber 原子序号
- * @param onNavigateBack 返回回调
- * @param modifier Modifier
+ * 元素详情屏 — Spectra「实验报告」布局（DESIGN.md §9.3）。
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -127,13 +131,8 @@ private fun DetailContent(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = state.element?.symbol ?: "",
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                },
+            PeriodicTopBar(
+                title = state.element?.symbol ?: "",
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(
@@ -144,6 +143,12 @@ private fun DetailContent(
                 },
                 actions = {
                     if (state.isReady) {
+                        // 收藏心形 — 点击弹跳（DESIGN.md §7）
+                        val scale by animateFloatAsState(
+                            targetValue = if (state.isFavorite) 1.15f else 1f,
+                            animationSpec = com.periodic.pro.theme.Motion.BounceSpring,
+                            label = "favoriteScale",
+                        )
                         IconButton(onClick = { onIntent(DetailIntent.ToggleFavorite) }) {
                             Icon(
                                 imageVector = if (state.isFavorite) {
@@ -157,13 +162,16 @@ private fun DetailContent(
                                 } else {
                                     MaterialTheme.colorScheme.onSurfaceVariant
                                 },
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .graphicsLayer {
+                                        scaleX = scale
+                                        scaleY = scale
+                                    },
                             )
                         }
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                ),
             )
         },
         modifier = modifier,
@@ -180,7 +188,6 @@ private fun DetailContent(
         } else {
             val element = state.element
             if (element == null) {
-                // Element not found
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
@@ -210,9 +217,7 @@ private fun DetailContent(
 }
 
 /**
- * 元素详情主内容。
- *
- * 从上到下：AtomCanvas、基本信息区、属性网格、额外信息。
+ * 元素详情主内容：Hero → 电子壳层 → 属性卡 → 档案卡 → 相关反应。
  */
 @Composable
 private fun ElementDetailContent(
@@ -229,6 +234,7 @@ private fun ElementDetailContent(
     val categoryColor = LocalCategoryColors.current.forCategory(element.category)
     val scrollState = rememberScrollState()
     var savedPosition by rememberSaveable { mutableIntStateOf(0) }
+    var showCelsiusState by rememberSaveable { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
         snapshotFlow { scrollState.maxValue }
@@ -246,17 +252,15 @@ private fun ElementDetailContent(
             .fillMaxSize()
             .verticalScroll(scrollState),
     ) {
-        // === 1. AtomCanvas（原子动画头部） ===
-        AtomCanvas(
-            atomicNumber = element.atomicNumber,
-            period = element.period ?: 1,
+        // === 1. Hero：分类色渐变 + 紧凑原子模型 + 元素标识 ===
+        DetailHero(
+            element = element,
+            zhName = zhName,
+            zhDescription = zhDescription,
             categoryColor = categoryColor,
-            symbol = element.symbol,
         )
 
-        Spacer(modifier = Modifier.height(Dimensions.Dp12))
-
-        // 电子壳层标签
+        // 电子壳层标签（tnum 小 chip 行）
         val shells = remember(element.atomicNumber) {
             ElectronShells.getElectronShells(element.atomicNumber)
         }
@@ -265,44 +269,39 @@ private fun ElementDetailContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = Dimensions.Dp16),
-            horizontalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
             verticalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
         ) {
             shells.forEachIndexed { index, count ->
-                Box(
-                    modifier = Modifier
-                        .background(
-                            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-                            shape = RoundedCornerShape(8.dp),
-                        )
-                        .padding(horizontal = Dimensions.Dp20, vertical = Dimensions.Dp6),
+                Surface(
+                    shape = MaterialTheme.shapes.small,
+                    color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
                 ) {
                     Text(
-                        text = "${ElectronShells.shellNames.getOrElse(index) { "?" }} $count",
-                        style = MaterialTheme.typography.labelLarge,
+                        text = "${ElectronShells.shellNames.getOrElse(index) { "?" }}$count",
+                        style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp6),
                     )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(Dimensions.Dp4))
+        Spacer(modifier = Modifier.height(Dimensions.Dp24))
 
-        // === 2. 元素基本信息区 ===
-        ElementInfoSection(
-            element = element,
-            zhName = zhName,
-            zhDescription = zhDescription,
-            categoryColor = categoryColor,
-        )
-
-        HorizontalDivider(
-            modifier = Modifier.padding(horizontal = Dimensions.Dp16),
-            thickness = 0.5.dp,
-        )
-
-        // === 3. 属性网格 ===
-        var showCelsius by remember { mutableStateOf(true) }
+        // === 2. 属性卡 ===
+        Column(modifier = Modifier.padding(horizontal = Dimensions.Dp16)) {
+            SectionHeader(
+                title = stringResource(R.string.detail_properties_section),
+                trailing = {
+                    TemperatureToggle(
+                        showCelsius = showCelsiusState,
+                        onToggle = { showCelsiusState = !showCelsiusState },
+                    )
+                },
+            )
+        }
+        Spacer(modifier = Modifier.height(Dimensions.Dp12))
         PropertyGrid(
             properties = buildProperties(
                 element = element,
@@ -314,18 +313,15 @@ private fun ElementDetailContent(
                 labelAtomicRadius = stringResource(R.string.property_atomic_radius),
                 labelIonizationEnergy = stringResource(R.string.property_ionization_energy),
                 labelElectronConfig = stringResource(R.string.property_electron_configuration),
-                showCelsius = showCelsius,
-                onToggleTemp = { showCelsius = !showCelsius },
+                showCelsius = showCelsiusState,
+                onToggleTemp = { showCelsiusState = !showCelsiusState },
             ),
-            modifier = Modifier.padding(vertical = Dimensions.Dp8),
-        )
-
-        HorizontalDivider(
             modifier = Modifier.padding(horizontal = Dimensions.Dp16),
-            thickness = 0.5.dp,
         )
 
-        // === 4. 额外信息区 ===
+        Spacer(modifier = Modifier.height(Dimensions.Dp24))
+
+        // === 3. 档案卡 ===
         ExtraInfoSection(
             element = element,
             reactions = reactions,
@@ -339,88 +335,133 @@ private fun ElementDetailContent(
     }
 }
 
+/** °C/K 分段切换（紧凑型） */
+@Composable
+private fun TemperatureToggle(
+    showCelsius: Boolean,
+    onToggle: () -> Unit,
+) {
+    val options = listOf("\u2103", "K")
+    val currentIndex = if (showCelsius) 0 else 1
+    Row(
+        modifier = Modifier
+            .clip(MaterialTheme.shapes.small)
+            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)),
+    ) {
+        options.forEachIndexed { index, label ->
+            val selected = index == currentIndex
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelMedium,
+                color = if (selected) {
+                    MaterialTheme.colorScheme.onPrimaryContainer
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.small)
+                    .background(
+                        if (selected) {
+                            MaterialTheme.colorScheme.primaryContainer
+                        } else {
+                            Color.Transparent
+                        }
+                    )
+                    .clickable { onToggle() }
+                    .padding(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp4),
+            )
+        }
+    }
+}
+
 /**
- * 元素基本信息区：原子序号、符号、中文名、英文名、分类标签、收藏按钮。
+ * Hero 区：分类色渐变底 + 左原子模型 / 右元素标识。
  */
 @Composable
-private fun ElementInfoSection(
+private fun DetailHero(
     element: Element,
     zhName: String?,
     zhDescription: String?,
     categoryColor: Color,
 ) {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = Dimensions.Dp16),
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        categoryColor.copy(alpha = CategoryAlpha.HERO),
+                        Color.Transparent,
+                    ),
+                ),
+            ),
     ) {
-        // 原子序号大数字
-        Text(
-            text = "${element.atomicNumber}",
-            style = MaterialTheme.typography.displayLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-        )
-
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = Dimensions.Dp8,
+                    end = Dimensions.Dp16,
+                    top = Dimensions.Dp8,
+                    bottom = Dimensions.Dp8,
+                ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            // 紧凑原子模型
+            AtomCanvas(
+                atomicNumber = element.atomicNumber,
+                period = element.period ?: 1,
+                categoryColor = categoryColor,
+                symbol = element.symbol,
+                scale = 0.62f,
+                modifier = Modifier.width(160.dp),
+            )
+
+            Spacer(modifier = Modifier.width(Dimensions.Dp8))
+
             Column(modifier = Modifier.weight(1f)) {
-                // 元素符号
+                // 原子序号大数字（displayLarge tnum）
+                Text(
+                    text = "${element.atomicNumber}",
+                    style = MaterialTheme.typography.displayLarge,
+                    color = categoryColor,
+                )
                 Text(
                     text = element.symbol,
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
-
-                // 中文名
                 if (zhName != null) {
                     Text(
-                        text = zhName,
-                        style = MaterialTheme.typography.titleMedium,
+                        text = "$zhName · ${element.name}",
+                        style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
                     )
                 }
-
-                // 英文名
-                Text(
-                    text = element.name,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
+                Spacer(modifier = Modifier.height(Dimensions.Dp8))
+                PropertyChip(
+                    text = element.category.displayName,
+                    selected = true,
+                    onClick = {},
+                    categoryColor = categoryColor,
                 )
-
-                // 元素描述
-                if (!zhDescription.isNullOrBlank()) {
+                if (zhDescription != null) {
                     Spacer(modifier = Modifier.height(Dimensions.Dp8))
                     Text(
                         text = zhDescription,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 3,
                     )
                 }
             }
         }
-
-        Spacer(modifier = Modifier.height(Dimensions.Dp12))
-
-        // 分类标签
-        PropertyChip(
-            text = element.category.displayName,
-            selected = true,
-            onClick = {},
-            categoryColor = categoryColor,
-        )
-
-        Spacer(modifier = Modifier.height(Dimensions.Dp16))
     }
 }
 
 /**
- * 额外信息区：发现者、发现年份、族、周期。
+ * 档案卡：发现者/年份/族/周期 + 学习资料入口 + 相关反应。
  */
 @Composable
 private fun ExtraInfoSection(
@@ -434,42 +475,51 @@ private fun ExtraInfoSection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = Dimensions.Dp16, vertical = Dimensions.Dp16),
+            .padding(horizontal = Dimensions.Dp16),
     ) {
-        Text(
-            text = stringResource(R.string.detail_more_info),
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-
+        SectionHeader(title = stringResource(R.string.detail_more_info))
         Spacer(modifier = Modifier.height(Dimensions.Dp12))
 
-        ExtraInfoRow(
-            label = stringResource(R.string.detail_discovered_by),
-            value = element.discoveredBy ?: "\u2014",
-        )
-
-        if (element.yearDiscovered != null) {
-            Spacer(modifier = Modifier.height(Dimensions.Dp8))
-            ExtraInfoRow(
-                label = stringResource(R.string.detail_year),
-                value = "${element.yearDiscovered}",
-            )
-        }
-
-        Spacer(modifier = Modifier.height(Dimensions.Dp8))
-        Row(modifier = Modifier.fillMaxWidth()) {
-            ExtraInfoRow(
-                label = stringResource(R.string.detail_group),
-                value = element.group?.toString() ?: "\u2014",
-                modifier = Modifier.weight(1f),
-            )
-            ExtraInfoRow(
-                label = stringResource(R.string.detail_period),
-                value = element.period?.toString() ?: "\u2014",
-                modifier = Modifier.weight(1f),
-            )
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.medium,
+            color = MaterialTheme.colorScheme.surface,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        ) {
+            Column(modifier = Modifier.padding(Dimensions.Dp16)) {
+                ExtraInfoRow(
+                    label = stringResource(R.string.detail_discovered_by),
+                    value = element.discoveredBy ?: "\u2014",
+                )
+                if (element.yearDiscovered != null) {
+                    HorizontalDivider(
+                        modifier = Modifier.padding(vertical = Dimensions.Dp8),
+                        thickness = 1.dp,
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                    )
+                    ExtraInfoRow(
+                        label = stringResource(R.string.detail_year),
+                        value = "${element.yearDiscovered}",
+                    )
+                }
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = Dimensions.Dp8),
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                )
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    ExtraInfoRow(
+                        label = stringResource(R.string.detail_group),
+                        value = element.group?.toString() ?: "\u2014",
+                        modifier = Modifier.weight(1f),
+                    )
+                    ExtraInfoRow(
+                        label = stringResource(R.string.detail_period),
+                        value = element.period?.toString() ?: "\u2014",
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
         }
 
         Spacer(modifier = Modifier.height(Dimensions.Dp16))
@@ -484,44 +534,24 @@ private fun ExtraInfoSection(
             var expanded by rememberSaveable { mutableStateOf(false) }
             val displayReactions = if (expanded) reactions else reactions.take(5)
 
-            Spacer(modifier = Modifier.height(Dimensions.Dp16))
-            HorizontalDivider(modifier = Modifier.padding(horizontal = Dimensions.Dp16))
+            Spacer(modifier = Modifier.height(Dimensions.Dp24))
+            SectionHeader(title = stringResource(R.string.detail_related_reactions))
             Spacer(modifier = Modifier.height(Dimensions.Dp12))
-            Text(
-                text = stringResource(R.string.detail_related_reactions),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(top = Dimensions.Dp4),
-            )
-            Spacer(modifier = Modifier.height(Dimensions.Dp8))
             displayReactions.forEach { reaction ->
-                Card(
+                ReactionRow(
+                    reaction = reaction,
                     onClick = { onNavigateToLabDetail(reaction.id) },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = MaterialTheme.shapes.small,
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
-                ) {
-                    Column(modifier = Modifier.padding(Dimensions.Dp12)) {
-                        Text(
-                            text = reaction.equation,
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
-                            color = MaterialTheme.colorScheme.onSurface,
-                        )
-                        Text(
-                            text = reaction.name,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(Dimensions.Dp4))
+                )
+                Spacer(modifier = Modifier.height(Dimensions.Dp8))
             }
             if (reactions.size > 5) {
                 PeriodicTextButton(
                     onClick = { expanded = !expanded },
-                    text = if (expanded) stringResource(R.string.detail_collapse) else stringResource(R.string.detail_expand_reactions, reactions.size),
+                    text = if (expanded) {
+                        stringResource(R.string.detail_collapse)
+                    } else {
+                        stringResource(R.string.detail_expand_reactions, reactions.size)
+                    },
                 )
             }
         }
@@ -529,7 +559,45 @@ private fun ExtraInfoSection(
 }
 
 /**
- * 额外信息行：标签 + 值。
+ * 反应行卡：等宽方程式 + 名称，发丝描边。
+ */
+@Composable
+private fun ReactionRow(
+    reaction: ChemicalReaction,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val shape = MaterialTheme.shapes.small
+    val interaction = remember { MutableInteractionSource() }
+    Surface(
+        onClick = onClick,
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(shape),
+        shape = shape,
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        interactionSource = interaction,
+    ) {
+        Column(modifier = Modifier.padding(Dimensions.Dp12)) {
+            Text(
+                text = reaction.equation,
+                style = PeriodicTextStyles.Equation,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Spacer(modifier = Modifier.height(Dimensions.Dp4))
+            Text(
+                text = reaction.name,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 1,
+            )
+        }
+    }
+}
+
+/**
+ * 档案行：标签 + 值（发丝分隔线由调用方控制）。
  */
 @Composable
 private fun ExtraInfoRow(
@@ -543,7 +611,7 @@ private fun ExtraInfoRow(
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.width(72.dp),
             maxLines = 1,
@@ -561,8 +629,6 @@ private fun ExtraInfoRow(
 
 /**
  * 根据 Element 数据构建 PropertyGrid 所需的属性列表。
- *
- * 通过参数传入已解析的中文属性名，避免在非 Composable 函数中调用 stringResource。
  */
 private fun buildProperties(
     element: Element,
@@ -635,15 +701,19 @@ private fun electronConfigToAnnotated(config: String): AnnotatedString {
         while (i < config.length) {
             val ch = config[i]
             if (ch.isDigit() && (i == 0 || !config[i - 1].isDigit())) {
-                // digit start — check if it follows a letter (superscript context)
                 val prev = if (i > 0) config[i - 1] else ' '
                 if (prev.isLetter() && prev != '[' && prev != ']') {
                     val start = i
                     while (i < config.length && config[i].isDigit()) i++
-                    withStyle(androidx.compose.ui.text.SpanStyle(
-                        baselineShift = androidx.compose.ui.text.style.BaselineShift.Superscript,
-                        fontSize = androidx.compose.ui.unit.TextUnit(11f, androidx.compose.ui.unit.TextUnitType.Sp),
-                    )) { append(config.substring(start, i)) }
+                    withStyle(
+                        SpanStyle(
+                            baselineShift = BaselineShift.Superscript,
+                            fontSize = androidx.compose.ui.unit.TextUnit(
+                                11f,
+                                androidx.compose.ui.unit.TextUnitType.Sp,
+                            ),
+                        )
+                    ) { append(config.substring(start, i)) }
                     continue
                 }
             }

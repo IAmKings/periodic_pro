@@ -18,7 +18,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.CompareArrows
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -33,8 +32,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,9 +43,12 @@ import com.periodic.pro.R
 import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.theme.Dimensions
+import com.periodic.pro.theme.FONT_FEATURE_TNUM
 import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.PeriodicProTheme
 import com.periodic.pro.theme.forCategory
+import com.periodic.pro.ui.pattern.EmptyState
+import com.periodic.pro.ui.components.PeriodicTopBar
 import com.periodic.pro.util.formatDouble
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -59,14 +61,11 @@ private val LABEL_COL_WIDTH = 88.dp
 /** 每列元素宽度 */
 private val ELEMENT_COL_WIDTH = 120.dp
 
-/** 表头区域高度（4dp 色条 + 符号 + 名称） */
+/** 表头区域高度（序号 + 符号 + 名称 + 色标） */
 private val HEADER_HEIGHT = 72.dp
 
 /** 每行数据行高度 */
 private val ROW_HEIGHT = 40.dp
-
-/** 色条高度 */
-private val COLOR_BAR_HEIGHT = 4.dp
 
 // ===== Public Screen =====
 
@@ -109,12 +108,12 @@ private fun CompareContent(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.screen_compare),
-                        style = MaterialTheme.typography.titleLarge,
-                    )
+            PeriodicTopBar(
+                title = stringResource(R.string.screen_compare),
+                subtitle = if (!state.isEmpty && !state.isLoading) {
+                    stringResource(R.string.compare_count, state.elements.size)
+                } else {
+                    null
                 },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
@@ -124,9 +123,6 @@ private fun CompareContent(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                ),
             )
         },
         modifier = modifier,
@@ -158,39 +154,12 @@ private fun CompareContent(
 private fun EmptyCompareContent(
     onNavigateToTable: () -> Unit,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(Dimensions.Dp32),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.CompareArrows,
-            contentDescription = null,
-            modifier = Modifier
-                .padding(bottom = Dimensions.Dp16)
-                .height(Dimensions.Dp48)
-                .width(Dimensions.Dp48),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-        )
-
-        Text(
-            text = stringResource(R.string.compare_empty_title),
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-        )
-
-        Spacer(modifier = Modifier.height(Dimensions.Dp24))
-
-        Button(onClick = onNavigateToTable) {
-            Text(
-                text = stringResource(R.string.compare_empty_action),
-                style = MaterialTheme.typography.labelLarge,
-            )
-        }
-    }
+    EmptyState(
+        icon = Icons.AutoMirrored.Filled.CompareArrows,
+        title = stringResource(R.string.compare_empty_title),
+        actionLabel = stringResource(R.string.compare_empty_action),
+        onAction = onNavigateToTable,
+    )
 }
 
 // ===== Comparison Table =====
@@ -282,12 +251,19 @@ private fun CompareTableContent(
 
         HorizontalDivider(thickness = 0.5.dp)
 
-        // === Data Rows ===
+        // === Data Rows（斑马纹 surface / surfaceDim）===
         properties.forEachIndexed { index, prop ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(ROW_HEIGHT),
+                    .height(ROW_HEIGHT)
+                    .background(
+                        if (index % 2 == 1) {
+                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)
+                        } else {
+                            Color.Transparent
+                        }
+                    ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 // Left fixed: property name
@@ -335,22 +311,21 @@ private fun ElementColumnHeader(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        // 4dp Category color bar
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(COLOR_BAR_HEIGHT)
-                .background(categoryColor),
+        Spacer(modifier = Modifier.height(Dimensions.Dp8))
+
+        // 原子序号（tnum）
+        Text(
+            text = "${element.atomicNumber}",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1,
         )
 
-        Spacer(modifier = Modifier.height(Dimensions.Dp4))
-
-        // Element symbol
+        // Element symbol（分类色）
         Text(
             text = element.symbol,
             style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = categoryColor,
             maxLines = 1,
         )
 
@@ -362,6 +337,15 @@ private fun ElementColumnHeader(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
+        )
+
+        // 底部分类色短横线（3dp 高，宽 24dp）
+        Spacer(modifier = Modifier.height(Dimensions.Dp6))
+        Box(
+            modifier = Modifier
+                .width(Dimensions.Dp24)
+                .height(3.dp)
+                .background(categoryColor, MaterialTheme.shapes.extraSmall),
         )
 
         Spacer(modifier = Modifier.height(Dimensions.Dp4))
@@ -402,7 +386,9 @@ private fun PropertyValueCell(
     ) {
         Text(
             text = value ?: "\u2014",
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                fontFeatureSettings = FONT_FEATURE_TNUM,
+            ),
             color = if (value != null) {
                 MaterialTheme.colorScheme.onSurface
             } else {

@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -102,14 +103,18 @@ fun UpdateDialog(
                     // === 正常状态：版本信息 ===
                     Text(
                         text = stringResource(R.string.update_dialog_new_version, release.tagName),
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontFeatureSettings = com.periodic.pro.theme.FONT_FEATURE_TNUM,
+                        ),
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.SemiBold,
                     )
                     Spacer(modifier = Modifier.height(Dimensions.Dp8))
                     Text(
                         text = stringResource(R.string.update_dialog_current_version, currentVersion),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontFeatureSettings = com.periodic.pro.theme.FONT_FEATURE_TNUM,
+                        ),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     if (apkSize.isNotEmpty()) {
@@ -123,15 +128,23 @@ fun UpdateDialog(
                     Text(
                         text = stringResource(R.string.update_dialog_release_notes),
                         style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                     Spacer(modifier = Modifier.height(Dimensions.Dp8))
-                    Text(
-                        text = releaseNotes,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
+                    // Release Notes — 沉降面卡片
+                    androidx.compose.material3.Surface(
+                        shape = MaterialTheme.shapes.small,
+                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                    ) {
+                        Text(
+                            text = releaseNotes,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(Dimensions.Dp12),
+                        )
+                    }
                     Spacer(modifier = Modifier.height(Dimensions.Dp16))
                     PeriodicTextButton(
                         onClick = onSkipVersion,

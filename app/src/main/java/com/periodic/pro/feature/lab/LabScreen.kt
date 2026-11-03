@@ -7,9 +7,12 @@
 package com.periodic.pro.feature.lab
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,26 +32,23 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,6 +57,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -65,19 +66,19 @@ import com.periodic.pro.R
 import com.periodic.pro.data.lab.model.ChemicalReaction
 import com.periodic.pro.data.lab.model.ReactionLevel
 import com.periodic.pro.data.lab.model.ReactionType
+import com.periodic.pro.theme.CategoryAlpha
 import com.periodic.pro.theme.Dimensions
-import com.periodic.pro.theme.Elevation
-import com.periodic.pro.theme.LabColors
 import com.periodic.pro.theme.PeriodicProTheme
+import com.periodic.pro.theme.PeriodicTextStyles
+import com.periodic.pro.theme.Semantic
+import com.periodic.pro.theme.pressScale
+import com.periodic.pro.ui.components.PeriodicTopBar
+import com.periodic.pro.ui.components.SectionHeader
 import org.koin.androidx.compose.koinViewModel
 
 /**
- * Lab 屏入口。
- *
- * 展示化学反应列表，支持按年级/类型筛选，点击查看反应详情。
- *
- * @param onNavigateToDetail 导航到元素详情
- * @param modifier Modifier
+ * Lab 屏 — Spectra（DESIGN.md §9.8）。
+ * 类型 Chip 行（语义色圆点）+ ReactionCard 列表 + 方程式详情。
  */
 @Composable
 fun LabScreen(
@@ -144,13 +145,8 @@ private fun LabListContent(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.screen_lab),
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                },
+            PeriodicTopBar(
+                title = stringResource(R.string.screen_lab),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
@@ -159,9 +155,6 @@ private fun LabListContent(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                ),
             )
         },
     ) { padding ->
@@ -282,53 +275,48 @@ private fun FilterChipsRow(
     onTypeFilter: (ReactionType?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val semantic = Semantic.colors
     Column(modifier = modifier.fillMaxWidth()) {
-        // Level filter chips
+        // 年级筛选（含"全部"）
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
             verticalArrangement = Arrangement.spacedBy(Dimensions.Dp4),
         ) {
-            // All
-            FilterChip(
+            LabFilterChip(
+                text = stringResource(R.string.lab_filter_all),
                 selected = !state.hasActiveFilter,
+                accent = MaterialTheme.colorScheme.primary,
                 onClick = {
                     onLevelFilter(null)
                     onTypeFilter(null)
                 },
-                label = { Text(stringResource(R.string.lab_filter_all)) },
             )
-            // Junior
-            FilterChip(
+            LabFilterChip(
+                text = stringResource(R.string.lab_level_junior),
                 selected = state.filter.activeLevel == ReactionLevel.JUNIOR &&
                     state.filter.activeType == null,
+                accent = semantic.junior,
                 onClick = {
                     onLevelFilter(ReactionLevel.JUNIOR)
                     onTypeFilter(null)
                 },
-                label = { Text(stringResource(R.string.lab_level_junior)) },
-                colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = LabColors.JuniorBadge.copy(alpha = 0.15f),
-                ),
             )
-            // Senior
-            FilterChip(
+            LabFilterChip(
+                text = stringResource(R.string.lab_level_senior),
                 selected = state.filter.activeLevel == ReactionLevel.SENIOR &&
                     state.filter.activeType == null,
+                accent = semantic.senior,
                 onClick = {
                     onLevelFilter(ReactionLevel.SENIOR)
                     onTypeFilter(null)
                 },
-                label = { Text(stringResource(R.string.lab_level_senior)) },
-                colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = LabColors.SeniorBadge.copy(alpha = 0.15f),
-                ),
             )
         }
 
         Spacer(modifier = Modifier.height(Dimensions.Dp4))
 
-        // Type filter chips
+        // 类型筛选
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
@@ -337,19 +325,62 @@ private fun FilterChipsRow(
             ReactionType.entries.forEach { type ->
                 val isSelected = state.filter.activeType == type &&
                     state.filter.activeLevel == null
-                FilterChip(
+                LabFilterChip(
+                    text = stringResource(typeLabelRes(type)),
                     selected = isSelected,
+                    accent = typeColor(type),
                     onClick = {
                         onTypeFilter(if (isSelected) null else type)
                         onLevelFilter(null)
                     },
-                    label = { Text(stringResource(typeLabelRes(type))) },
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = typeColor(type).copy(alpha = 0.15f),
-                    ),
                 )
             }
         }
+    }
+}
+
+/**
+ * 实验室筛选 Chip：语义色圆点 + tonal 选中（与 CategoryChip 同构）。
+ */
+@Composable
+private fun LabFilterChip(
+    text: String,
+    selected: Boolean,
+    accent: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val container = if (selected) {
+        accent.copy(alpha = CategoryAlpha.CHIP)
+    } else {
+        MaterialTheme.colorScheme.surface
+    }
+    val shape = MaterialTheme.shapes.small
+
+    Row(
+        modifier = modifier
+            .clip(shape)
+            .background(container)
+            .border(
+                width = 1.dp,
+                color = if (selected) accent.copy(alpha = 0.4f) else MaterialTheme.colorScheme.outlineVariant,
+                shape = shape,
+            )
+            .clickable(onClick = onClick)
+            .padding(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp8),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(if (selected) 8.dp else 6.dp)
+                .background(accent, CircleShape),
+        )
+        Spacer(modifier = Modifier.width(Dimensions.Dp8))
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelMedium,
+            color = if (selected) accent else MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 
@@ -367,65 +398,76 @@ private fun ReactionTypeHeader(
         Box(
             modifier = Modifier
                 .size(8.dp)
-                .clip(RoundedCornerShape(4.dp))
-                .background(typeColor(type)),
+                .background(typeColor(type), RoundedCornerShape(4.dp)),
         )
         Spacer(modifier = Modifier.width(Dimensions.Dp8))
         Text(
             text = stringResource(typeLabelRes(type)),
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSurface,
         )
     }
 }
 
+/**
+ * 反应卡：等宽方程式 + 名称 + 类型/难度 badge + 摘要。
+ */
 @Composable
 private fun ReactionListItem(
     reaction: ChemicalReaction,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
+    val shape = MaterialTheme.shapes.medium
+    val interaction = remember { MutableInteractionSource() }
+
+    Surface(
         onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = Elevation.Shadow1),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-        ),
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(shape)
+            .pressScale(interaction),
+        shape = shape,
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = Dimensions.Dp0,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        interactionSource = interaction,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(Dimensions.Dp12),
         ) {
-            // Equation (large)
+            // Equation — 等宽字体，可横向滚动不换行
             Text(
                 text = reaction.equation,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.Monospace,
-                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.titleSmall.copy(
+                    fontFamily = FontFamily.Monospace,
+                    fontWeight = FontWeight.Bold,
+                ),
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
             )
 
             Spacer(modifier = Modifier.height(Dimensions.Dp4))
 
             // Name + badges
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
                 Text(
                     text = reaction.name,
                     style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f),
                 )
                 Spacer(modifier = Modifier.width(Dimensions.Dp8))
-
-                // Type badge
                 TypeBadge(type = reaction.type)
-                Spacer(modifier = Modifier.width(6.dp))
-
-                // Level badge
+                Spacer(modifier = Modifier.width(Dimensions.Dp6))
                 LevelBadge(level = reaction.level)
             }
 
@@ -441,6 +483,7 @@ private fun ReactionListItem(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
@@ -473,13 +516,8 @@ private fun LabDetailContent(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = reaction.name,
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                },
+            PeriodicTopBar(
+                title = reaction.name,
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
@@ -488,9 +526,6 @@ private fun LabDetailContent(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                ),
             )
         },
     ) { padding ->
@@ -498,37 +533,40 @@ private fun LabDetailContent(
             modifier = modifier
                 .fillMaxSize()
                 .padding(padding)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = Dimensions.Dp16),
         ) {
-            // Equation section
-            Box(
+            // 方程式区 — 沉降面卡片
+            Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                        shape = RoundedCornerShape(Dimensions.Dp12),
-                    )
-                    .padding(Dimensions.Dp24),
-                contentAlignment = Alignment.Center,
+                    .padding(vertical = Dimensions.Dp8),
+                shape = MaterialTheme.shapes.medium,
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
             ) {
-                Text(
-                    text = reaction.equation,
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = FontFamily.Monospace,
-                    textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.primary,
-                    lineHeight = 36.sp,
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(Dimensions.Dp24),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = reaction.equation,
+                        style = MaterialTheme.typography.headlineSmall.copy(
+                            fontFamily = FontFamily.Monospace,
+                        ),
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        lineHeight = 36.sp,
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(Dimensions.Dp16))
 
             // Meta info cards
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = Dimensions.Dp16),
+                modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(Dimensions.Dp12),
             ) {
                 // Type + Level
@@ -540,14 +578,16 @@ private fun LabDetailContent(
                         label = stringResource(R.string.lab_reaction_type),
                         value = stringResource(typeLabelRes(reaction.type)),
                         badgeColor = typeColor(reaction.type),
+                        modifier = Modifier.weight(1f),
                     )
                     MetaChip(
                         label = stringResource(R.string.lab_reaction_level),
                         value = stringResource(levelLabelRes(reaction.level)),
                         badgeColor = when (reaction.level) {
-                            ReactionLevel.JUNIOR -> LabColors.JuniorBadge
-                            ReactionLevel.SENIOR -> LabColors.SeniorBadge
+                            ReactionLevel.JUNIOR -> Semantic.colors.junior
+                            ReactionLevel.SENIOR -> Semantic.colors.senior
                         },
+                        modifier = Modifier.weight(1f),
                     )
                 }
 
@@ -559,7 +599,10 @@ private fun LabDetailContent(
                     )
                 }
 
-                HorizontalDivider(thickness = 0.5.dp)
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                )
 
                 // Phenomenon
                 DetailSectionTitle(text = stringResource(R.string.lab_phenomenon))
@@ -567,10 +610,12 @@ private fun LabDetailContent(
                     text = reaction.phenomenon,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
-                    lineHeight = MaterialTheme.typography.bodyMedium.lineHeight,
                 )
 
-                HorizontalDivider(thickness = 0.5.dp)
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                )
 
                 // Involved elements
                 DetailSectionTitle(text = stringResource(R.string.lab_involved_elements))
@@ -590,7 +635,10 @@ private fun LabDetailContent(
 
                 // Note
                 if (reaction.note != null) {
-                    HorizontalDivider(thickness = 0.5.dp)
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                    )
                     DetailSectionTitle(text = stringResource(R.string.lab_note))
                     Text(
                         text = reaction.note,
@@ -612,24 +660,27 @@ private fun MetaChip(
     badgeColor: Color,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .clip(RoundedCornerShape(Dimensions.Dp8))
-            .background(badgeColor.copy(alpha = 0.1f))
-            .padding(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp8),
+    Surface(
+        modifier = modifier,
+        shape = MaterialTheme.shapes.small,
+        color = badgeColor.copy(alpha = CategoryAlpha.BADGE),
     ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Spacer(modifier = Modifier.height(2.dp))
-        Text(
-            text = value,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.SemiBold,
-            color = badgeColor,
-        )
+        Column(
+            modifier = Modifier.padding(horizontal = Dimensions.Dp12, vertical = Dimensions.Dp8),
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = badgeColor,
+            )
+        }
     }
 }
 
@@ -645,15 +696,13 @@ private fun DetailInfoRow(
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.SemiBold,
+            style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.width(80.dp),
         )
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSurface,
         )
     }
@@ -667,7 +716,6 @@ private fun DetailSectionTitle(
     Text(
         text = text,
         style = MaterialTheme.typography.titleSmall,
-        fontWeight = FontWeight.SemiBold,
         color = MaterialTheme.colorScheme.onSurface,
         modifier = modifier,
     )
@@ -679,18 +727,16 @@ private fun TypeBadge(
     modifier: Modifier = Modifier,
 ) {
     val color = typeColor(type)
-    val bg = typeBgColor(type)
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(bg)
-            .padding(horizontal = 6.dp, vertical = 2.dp),
+    Surface(
+        modifier = modifier,
+        shape = MaterialTheme.shapes.extraSmall,
+        color = color.copy(alpha = CategoryAlpha.BADGE),
     ) {
         Text(
             text = stringResource(typeShortLabelRes(type)),
             style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Bold,
             color = color,
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
         )
     }
 }
@@ -700,21 +746,20 @@ private fun LevelBadge(
     level: ReactionLevel,
     modifier: Modifier = Modifier,
 ) {
-    val (color, bg) = when (level) {
-        ReactionLevel.JUNIOR -> LabColors.JuniorBadge to LabColors.JuniorBadge.copy(alpha = 0.12f)
-        ReactionLevel.SENIOR -> LabColors.SeniorBadge to LabColors.SeniorBadge.copy(alpha = 0.12f)
+    val color = when (level) {
+        ReactionLevel.JUNIOR -> Semantic.colors.junior
+        ReactionLevel.SENIOR -> Semantic.colors.senior
     }
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(bg)
-            .padding(horizontal = 6.dp, vertical = 2.dp),
+    Surface(
+        modifier = modifier,
+        shape = MaterialTheme.shapes.extraSmall,
+        color = color.copy(alpha = CategoryAlpha.BADGE),
     ) {
         Text(
             text = stringResource(levelLabelRes(level)),
             style = MaterialTheme.typography.labelSmall,
-            fontWeight = FontWeight.Bold,
             color = color,
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
         )
     }
 }
@@ -727,40 +772,42 @@ private fun ElementChip(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(Dimensions.Dp8))
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .clickable(onClick = onClick)
-            .padding(horizontal = Dimensions.Dp12, vertical = 6.dp),
+    Surface(
+        modifier = modifier.clip(MaterialTheme.shapes.small),
+        shape = MaterialTheme.shapes.small,
+        color = MaterialTheme.colorScheme.primaryContainer,
+        onClick = onClick,
     ) {
-        Text(
-            text = symbol,
-            style = MaterialTheme.typography.labelLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-        )
+        Row(
+            modifier = Modifier.padding(horizontal = Dimensions.Dp12, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = "$atomicNumber",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f),
+            )
+            Spacer(modifier = Modifier.width(Dimensions.Dp4))
+            Text(
+                text = symbol,
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+            )
+        }
     }
 }
 
 // ===== Helper functions =====
 
+@Composable
 private fun typeColor(type: ReactionType): Color = when (type) {
-    ReactionType.COMBINATION -> LabColors.Combination
-    ReactionType.DECOMPOSITION -> LabColors.Decomposition
-    ReactionType.DISPLACEMENT -> LabColors.Displacement
-    ReactionType.DOUBLE_DISPLACEMENT -> LabColors.DoubleDisplacement
-    ReactionType.REDOX -> LabColors.Redox
-    ReactionType.OTHER -> LabColors.Other
-}
-
-private fun typeBgColor(type: ReactionType): Color = when (type) {
-    ReactionType.COMBINATION -> LabColors.CombinationBg
-    ReactionType.DECOMPOSITION -> LabColors.DecompositionBg
-    ReactionType.DISPLACEMENT -> LabColors.DisplacementBg
-    ReactionType.DOUBLE_DISPLACEMENT -> LabColors.DoubleDisplacementBg
-    ReactionType.REDOX -> LabColors.RedoxBg
-    ReactionType.OTHER -> LabColors.OtherBg
+    ReactionType.COMBINATION -> Semantic.colors.rxCombination
+    ReactionType.DECOMPOSITION -> Semantic.colors.rxDecomposition
+    ReactionType.DISPLACEMENT -> Semantic.colors.rxDisplacement
+    ReactionType.DOUBLE_DISPLACEMENT -> Semantic.colors.rxDoubleDisplacement
+    ReactionType.REDOX -> Semantic.colors.rxRedox
+    ReactionType.OTHER -> Semantic.colors.rxOther
 }
 
 private fun typeLabelRes(type: ReactionType): Int = when (type) {

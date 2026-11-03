@@ -1,11 +1,14 @@
 package com.periodic.pro.feature.category
 
 import android.content.res.Configuration
-import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,36 +30,38 @@ import androidx.compose.material.icons.filled.PropaneTank
 import androidx.compose.material.icons.filled.Radar
 import androidx.compose.material.icons.filled.Science
 import androidx.compose.material.icons.filled.WbSunny
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.R
 import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.theme.Dimensions
-import com.periodic.pro.theme.Elevation
 import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.PeriodicProTheme
 import com.periodic.pro.theme.forCategory
-import com.periodic.pro.ui.components.ElementCard
+import com.periodic.pro.theme.pressScale
+import com.periodic.pro.ui.components.ElementTile
+import com.periodic.pro.ui.components.IconBadge
+import com.periodic.pro.ui.components.PeriodicTopBar
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -90,12 +95,7 @@ fun CategoryScreen(
     if (state.isLoading) {
         Scaffold(
             topBar = {
-                TopAppBar(
-                    title = { Text(stringResource(R.string.category_all)) },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                    ),
-                )
+                PeriodicTopBar(title = stringResource(R.string.category_all))
             },
             modifier = modifier,
         ) { padding ->
@@ -134,10 +134,10 @@ fun CategoryScreen(
     }
 }
 
+/** Spectra 统一 TopBar 见 ui/components/PeriodicTopBar.kt */
+
 /**
- * 分类入口 Grid 内容。
- *
- * 2 列网格布局，每个卡片展示分类色条、图标、名称和元素数量。
+ * 分类入口 Grid 内容。2 列网格：IconBadge + 分类名 + 元素数量（tnum）。
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -149,17 +149,7 @@ private fun CategoryEntranceContent(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.category_all),
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                ),
-            )
+            PeriodicTopBar(title = stringResource(R.string.category_all))
         },
         modifier = modifier,
     ) { padding ->
@@ -184,9 +174,7 @@ private fun CategoryEntranceContent(
 }
 
 /**
- * 分类入口卡片。
- *
- * 顶部 4dp 分类色条 + 图标 + 分类名 + 元素数量。
+ * 分类入口卡片 — surface + 发丝描边 + IconBadge + 名称 + 数量（tnum）。
  */
 @Composable
 private fun CategoryEntranceCard(
@@ -196,15 +184,22 @@ private fun CategoryEntranceCard(
     modifier: Modifier = Modifier,
 ) {
     val categoryColor = LocalCategoryColors.current.forCategory(category)
+    val shape = MaterialTheme.shapes.medium
+    val interaction = remember { MutableInteractionSource() }
 
-    Card(
-        onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = Elevation.Shadow1),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-        ),
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(shape)
+            .pressScale(interaction)
+            .clickable(
+                interactionSource = interaction,
+                indication = ripple(),
+            ) { onClick() },
+        shape = shape,
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = Dimensions.Dp0,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
     ) {
         Column(
             modifier = Modifier
@@ -212,52 +207,33 @@ private fun CategoryEntranceCard(
                 .padding(Dimensions.Dp16),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            // 分类色条（4dp 高）
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(4.dp)
-                    .background(categoryColor),
-            )
-
-            Spacer(modifier = Modifier.height(Dimensions.Dp4))
-
-            // 图标
-            Icon(
-                imageVector = categoryIcon(category),
-                contentDescription = category.displayName,
+            IconBadge(
+                icon = categoryIcon(category),
                 tint = categoryColor,
-                modifier = Modifier.height(Dimensions.Dp24),
+                size = Dimensions.Dp40,
             )
 
-            Spacer(modifier = Modifier.height(Dimensions.Dp8))
+            Spacer(modifier = Modifier.height(Dimensions.Dp12))
 
-            // 分类名称
             Text(
                 text = category.displayName,
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(Dimensions.Dp4))
 
-            // 元素数量
             Text(
-                text = "$elementCount 个元素",
-                style = MaterialTheme.typography.bodySmall,
+                text = "$elementCount",
+                style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
             )
         }
     }
 }
 
 /**
- * 分类详情列表内容。
- *
- * TopAppBar（分类名 + 返回按钮）+ LazyColumn（ElementCard 列表）。
+ * 分类详情列表：TopBar（分类名 + 返回）+ ElementTile 列表。
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -271,13 +247,8 @@ private fun CategoryDetailContent(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = category.displayName,
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                },
+            PeriodicTopBar(
+                title = category.displayName,
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(
@@ -286,9 +257,6 @@ private fun CategoryDetailContent(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                ),
             )
         },
         modifier = modifier,
@@ -304,7 +272,7 @@ private fun CategoryDetailContent(
             verticalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
         ) {
             items(elements, key = { it.atomicNumber }) { element ->
-                ElementCard(
+                ElementTile(
                     element = element,
                     onClick = { onElementClick(element.atomicNumber) },
                     zhName = zhMap[element.atomicNumber],
@@ -316,9 +284,7 @@ private fun CategoryDetailContent(
 }
 
 /**
- * 分类对应图标。
- *
- * 为每个分类分配一个 Material Icon 用于 Grid 卡片展示。
+ * 分类对应图标（Material Icon）。
  */
 private fun categoryIcon(category: Category): ImageVector = when (category) {
     Category.ALKALI_METAL -> Icons.Filled.Bolt

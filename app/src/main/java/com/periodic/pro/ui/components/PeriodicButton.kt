@@ -1,6 +1,7 @@
 package com.periodic.pro.ui.components
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -15,8 +16,8 @@ import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.PeriodicProTheme
 
 /**
- * Periodic Pro 主按钮。
- * 紫色填充，圆角 shapeMedium(12dp)，高度 48dp。
+ * Periodic Pro 主按钮 — Spectra（DESIGN.md §8.8）。
+ * primary 填充，圆角 shapeMedium(12dp)，最小高度 48dp。
  * 支持 enabled / loading 态。
  */
 @Composable
@@ -29,7 +30,7 @@ fun PeriodicButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.heightIn(min = 48.dp),
         enabled = enabled && !loading,
         shape = MaterialTheme.shapes.medium,
         contentPadding = PaddingValues(

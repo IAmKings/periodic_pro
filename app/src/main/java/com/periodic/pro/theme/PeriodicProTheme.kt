@@ -22,37 +22,57 @@ import org.koin.compose.koinInject
 val LocalCategoryColors = staticCompositionLocalOf { CategoryColors() }
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
+    primary = LightPrimary,
+    onPrimary = LightOnPrimary,
+    primaryContainer = LightPrimaryContainer,
+    onPrimaryContainer = LightOnPrimaryContainer,
+    secondary = LightSecondary,
+    onSecondary = LightOnSecondary,
+    secondaryContainer = LightSecondaryContainer,
+    onSecondaryContainer = LightOnSecondaryContainer,
+    tertiary = LightTertiary,
+    onTertiary = LightOnTertiary,
+    tertiaryContainer = LightTertiaryContainer,
+    onTertiaryContainer = LightOnTertiaryContainer,
+    background = LightBackground,
+    onBackground = LightOnBackground,
     surface = LightSurface,
     onSurface = LightOnSurface,
     surfaceVariant = LightSurfaceVariant,
     onSurfaceVariant = LightOnSurfaceVariant,
     outline = LightOutline,
-    primaryContainer = LightPrimaryContainer,
-    secondaryContainer = LightSecondaryContainer,
-    background = LightBackground,
-    onBackground = LightOnBackground,
+    outlineVariant = LightOutlineVariant,
     error = LightError,
     onError = LightOnError,
+    errorContainer = LightErrorContainer,
+    onErrorContainer = LightOnErrorContainer,
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
+    primary = DarkPrimary,
+    onPrimary = DarkOnPrimary,
+    primaryContainer = DarkPrimaryContainer,
+    onPrimaryContainer = DarkOnPrimaryContainer,
+    secondary = DarkSecondary,
+    onSecondary = DarkOnSecondary,
+    secondaryContainer = DarkSecondaryContainer,
+    onSecondaryContainer = DarkOnSecondaryContainer,
+    tertiary = DarkTertiary,
+    onTertiary = DarkOnTertiary,
+    tertiaryContainer = DarkTertiaryContainer,
+    onTertiaryContainer = DarkOnTertiaryContainer,
+    background = DarkBackground,
+    onBackground = DarkOnBackground,
     surface = DarkSurface,
     onSurface = DarkOnSurface,
     surfaceVariant = DarkSurfaceVariant,
     onSurfaceVariant = DarkOnSurfaceVariant,
     outline = DarkOutline,
-    primaryContainer = DarkPrimaryContainer,
-    secondaryContainer = DarkSecondaryContainer,
-    background = DarkBackground,
-    onBackground = DarkOnBackground,
+    outlineVariant = DarkOutlineVariant,
     error = DarkError,
     onError = DarkOnError,
+    errorContainer = DarkErrorContainer,
+    onErrorContainer = DarkOnErrorContainer,
 )
 
 @Composable
@@ -75,8 +95,12 @@ fun PeriodicProTheme(
 
     val colorScheme = if (effectiveDarkTheme) DarkColorScheme else LightColorScheme
     val categoryColors = if (effectiveDarkTheme) DarkCategoryColors else CategoryColors()
+    val semanticColors = if (effectiveDarkTheme) DarkSemanticColors else SemanticColors()
 
-    CompositionLocalProvider(LocalCategoryColors provides categoryColors) {
+    CompositionLocalProvider(
+        LocalCategoryColors provides categoryColors,
+        LocalSemanticColors provides semanticColors,
+    ) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = Typography,
@@ -84,4 +108,10 @@ fun PeriodicProTheme(
             content = content,
         )
     }
+}
+
+/** 便捷读取语义色 */
+object Semantic {
+    val colors: SemanticColors
+        @Composable get() = LocalSemanticColors.current
 }

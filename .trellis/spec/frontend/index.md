@@ -24,6 +24,7 @@
 | 4 | [hook-guidelines.md](./hook-guidelines.md) | `remember` / `rememberSaveable` / `derivedStateOf` / `produceState` / `collectAsStateWithLifecycle` 用法 | ✅ |
 | 5 | [type-safety.md](./type-safety.md) | Kotlin idioms：sealed、data class、value class、Result、`@Serializable` 路由 | ✅ |
 | 6 | [quality-guidelines.md](./quality-guidelines.md) | Lint / detekt / 单测 / Compose UI 测试 / PR 质量门 | ✅ |
+| 7 | [design-system.md](./design-system.md) | Spectra 设计语言实现规范：token 铁律、组件规则、深色模式、UI 验收门（事实源：根 `DESIGN.md`） | ✅ |
 
 ---
 

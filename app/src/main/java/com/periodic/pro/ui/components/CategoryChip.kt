@@ -1,32 +1,46 @@
 package com.periodic.pro.ui.components
 
 import android.content.res.Configuration
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.periodic.pro.theme.CategoryAlpha
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.PeriodicProTheme
-import com.periodic.pro.theme.Shapes
 
 /**
- * 分类筛选 Chip。
+ * 分类筛选 Chip — Spectra 风格（DESIGN.md §8.4）。
  *
- * 选中态填充 Category 色 + 白色文字，未选中态空心描边。
- * 圆角 shapeExtraSmall(4dp)，高度 32dp。
+ * 未选：surface 底 + 发丝描边 + 分类色圆点 + onSurface 文字
+ * 选中：分类色 × 0.14 底 + 分类色文字 + 圆点放大
  *
- * @param text Chip 显示文本（如"全部"/"碱金属"/"过渡金属"）
+ * @param text Chip 显示文本（如"全部"/"碱金属"）
  * @param selected 是否选中
  * @param onClick 点击回调
  * @param modifier Modifier
- * @param selectedColor 选中时的填充色（"全部"时为 null，用 primary）
+ * @param selectedColor 分类色（"全部"等无分类色时传 null，用 primary）
  */
 @Composable
 fun CategoryChip(
@@ -36,44 +50,50 @@ fun CategoryChip(
     modifier: Modifier = Modifier,
     selectedColor: Color? = null,
 ) {
-    val chipColor = if (selected && selectedColor != null) {
-        selectedColor
-    } else if (selected) {
-        MaterialTheme.colorScheme.primary
+    val accent = selectedColor ?: MaterialTheme.colorScheme.primary
+    val container by animateColorAsState(
+        targetValue = if (selected) {
+            accent.copy(alpha = CategoryAlpha.CHIP)
+        } else {
+            MaterialTheme.colorScheme.surface
+        },
+        animationSpec = tween(durationMillis = 150),
+        label = "chipContainer",
+    )
+    val contentColor = if (selected) accent else MaterialTheme.colorScheme.onSurfaceVariant
+    val borderColor = if (selected) {
+        accent.copy(alpha = 0.4f)
     } else {
-        Color.Transparent
+        MaterialTheme.colorScheme.outlineVariant
     }
+    val shape = MaterialTheme.shapes.small
+    val interaction = remember { MutableInteractionSource() }
 
-    val textColor = if (selected) {
-        MaterialTheme.colorScheme.onPrimary
-    } else {
-        MaterialTheme.colorScheme.onSurfaceVariant
-    }
-
-    val borderStroke = if (selected) {
-        null
-    } else {
-        BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.outline,
-        )
-    }
-
-    Surface(
-        onClick = onClick,
-        modifier = modifier,
-        shape = Shapes.extraSmall,
-        color = chipColor,
-        contentColor = textColor,
-        border = borderStroke,
+    Row(
+        modifier = modifier
+            .height(36.dp)
+            .clip(shape)
+            .background(container)
+            .border(width = 1.dp, color = borderColor, shape = shape)
+            .clickable(
+                interactionSource = interaction,
+                indication = ripple(),
+                onClick = onClick,
+            )
+            .padding(horizontal = Dimensions.Dp12),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
+        // 分类色圆点
+        Spacer(
+            modifier = Modifier
+                .size(if (selected) 8.dp else 6.dp)
+                .background(accent, CircleShape),
+        )
+        Spacer(modifier = Modifier.size(Dimensions.Dp8))
         Text(
             text = text,
-            modifier = Modifier.padding(
-                horizontal = Dimensions.Dp12,
-                vertical = Dimensions.Dp4,
-            ),
             style = MaterialTheme.typography.labelMedium,
+            color = contentColor,
             textAlign = TextAlign.Center,
         )
     }
@@ -93,6 +113,6 @@ private fun CategoryChipUnselectedPreview() {
 @Composable
 private fun CategoryChipSelectedPreview() {
     PeriodicProTheme {
-        CategoryChip(text = "碱金属", selected = true, onClick = {}, selectedColor = Color(0xFFFF6B6B))
+        CategoryChip(text = "碱金属", selected = true, onClick = {}, selectedColor = Color(0xFFE5484D))
     }
 }

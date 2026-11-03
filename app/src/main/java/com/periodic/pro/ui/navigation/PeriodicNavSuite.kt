@@ -89,6 +89,9 @@ fun PeriodicNavSuite(
 
     AppGlassProvider {
         NavigationSuiteScaffold(
+            // Spectra：导航容器走中性 surface，禁用默认 tonal 紫底（DESIGN.md §2.1）
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.background,
             navigationSuiteItems = {
                 navItems.forEach { item ->
                     val selected = currentDestination?.hierarchy

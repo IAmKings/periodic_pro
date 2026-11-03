@@ -1,7 +1,11 @@
 package com.periodic.pro.feature.discover
 
 import android.content.res.Configuration
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,49 +16,49 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.R
 import com.periodic.pro.data.discover.model.DiscoverItem
-import androidx.compose.ui.graphics.Color
 import com.periodic.pro.data.element.model.Category
-import com.periodic.pro.theme.CATEGORY_CIRCLE_ALPHA
-import com.periodic.pro.theme.LocalCategoryColors
-import com.periodic.pro.theme.forCategory
+import com.periodic.pro.theme.CategoryAlpha
 import com.periodic.pro.theme.Dimensions
-import com.periodic.pro.theme.Elevation
+import com.periodic.pro.theme.LocalCategoryColors
 import com.periodic.pro.theme.PeriodicProTheme
+import com.periodic.pro.theme.forCategory
+import com.periodic.pro.theme.pressScale
+import com.periodic.pro.ui.components.PeriodicTopBar
+import com.periodic.pro.ui.components.SectionHeader
+import com.periodic.pro.ui.components.TextBadge
 import org.koin.androidx.compose.koinViewModel
 
 /**
- * Discover 屏入口。
- *
- * 展示每日推荐 Hero 卡片 + Feed 流知识点列表。
- *
- * @param onNavigateToDetail 导航到元素详情
- * @param modifier Modifier
+ * Discover 屏 — Spectra（DESIGN.md §9.4）。
+ * 每日推荐 Hero（分类色渐变）+ Feed 流知识点卡片。
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,17 +80,7 @@ fun DiscoverScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.screen_discover),
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                ),
-            )
+            PeriodicTopBar(title = stringResource(R.string.screen_discover))
         },
     ) { padding ->
         if (state.isLoading) {
@@ -128,9 +122,7 @@ fun DiscoverScreen(
 }
 
 /**
- * Discover 屏纯 UI 内容。
- *
- * 顶部每日推荐 Hero 卡片 + 下方 Feed 流知识点列表。
+ * Discover 屏纯 UI 内容：每日推荐 Hero + Feed 流。
  */
 @Composable
 private fun DiscoverContent(
@@ -149,7 +141,7 @@ private fun DiscoverContent(
         ),
         verticalArrangement = Arrangement.spacedBy(Dimensions.Dp12),
     ) {
-        // 每日推荐
+        // 每日推荐 Hero
         if (dailyRecommend != null) {
             item(key = "daily_recommend") {
                 DailyRecommendSection(
@@ -165,12 +157,9 @@ private fun DiscoverContent(
 
         // Feed 列表标题
         item(key = "feed_title") {
-            Text(
-                text = stringResource(R.string.discover_feed_title),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.padding(top = Dimensions.Dp8, bottom = Dimensions.Dp4),
+            SectionHeader(
+                title = stringResource(R.string.discover_feed_title),
+                modifier = Modifier.padding(top = Dimensions.Dp8),
             )
         }
 
@@ -194,9 +183,7 @@ private fun DiscoverContent(
 }
 
 /**
- * 每日推荐 Hero 卡片。
- *
- * 大尺寸卡片，顶部彩色色条 + 元素符号大标记 + 标题 + 描述。
+ * 每日推荐 Hero：分类色渐变底 + 大符号 + 标题 + 摘要 + 查看箭头。
  */
 @Composable
 private fun DailyRecommendSection(
@@ -206,79 +193,89 @@ private fun DailyRecommendSection(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val shape = MaterialTheme.shapes.extraLarge
+    val interaction = remember { MutableInteractionSource() }
 
-    Card(
-        onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.large,
-        elevation = CardDefaults.cardElevation(defaultElevation = Elevation.Shadow2),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-        ),
-    ) {
-        Column {
-            // 彩色色条
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(6.dp)
-                    .background(categoryColor),
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(shape)
+            .background(
+                Brush.linearGradient(
+                    colors = listOf(
+                        categoryColor.copy(alpha = CategoryAlpha.HERO),
+                        Color.Transparent,
+                    ),
+                ),
             )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(Dimensions.Dp16),
+            .border(1.dp, MaterialTheme.colorScheme.outlineVariant, shape)
+            .pressScale(interaction)
+            .clickable(
+                interactionSource = interaction,
+                indication = ripple(),
+                onClick = onClick,
+            ),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Dimensions.Dp20),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Column {
-                    // 标签
-                    Text(
-                        text = stringResource(R.string.discover_daily_recommend),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = categoryColor,
-                        fontWeight = FontWeight.Bold,
-                    )
-
-                    Spacer(modifier = Modifier.height(Dimensions.Dp8))
-
-                    // 元素符号大标
-                    Text(
-                        text = symbol,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = categoryColor,
-                    )
-
-                    Spacer(modifier = Modifier.height(Dimensions.Dp4))
-
-                    // 标题
-                    Text(
-                        text = item.title,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-
-                    Spacer(modifier = Modifier.height(Dimensions.Dp8))
-
-                    // 描述
-                    Text(
-                        text = item.description,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 4,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                }
+                Text(
+                    text = stringResource(R.string.discover_daily_recommend),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = categoryColor,
+                    modifier = Modifier.weight(1f),
+                )
+                Icon(
+                    imageVector = Icons.Filled.ArrowForward,
+                    contentDescription = null,
+                    tint = categoryColor,
+                )
             }
+
+            Spacer(modifier = Modifier.height(Dimensions.Dp12))
+
+            // 元素符号大标 + 标题
+            Row(
+                verticalAlignment = Alignment.Bottom,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(
+                    text = symbol,
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = categoryColor,
+                )
+                Spacer(modifier = Modifier.width(Dimensions.Dp12))
+                Text(
+                    text = item.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f),
+                )
+            }
+
+            Spacer(modifier = Modifier.height(Dimensions.Dp8))
+
+            Text(
+                text = item.description,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 4,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
     }
 }
 
 /**
- * Feed 流知识点卡片。
- *
- * 较小尺寸的卡片，左侧元素符号圆形标记 + 标题 + 描述摘要。
+ * Feed 卡：TextBadge（元素序号）+ 标题 + 2 行摘要。
  */
 @Composable
 private fun DiscoverFeedCard(
@@ -288,14 +285,20 @@ private fun DiscoverFeedCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
+    val shape = MaterialTheme.shapes.medium
+    val interaction = remember { MutableInteractionSource() }
+
+    Surface(
         onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = Elevation.Shadow1),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-        ),
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(shape)
+            .pressScale(interaction),
+        shape = shape,
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = Dimensions.Dp0,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        interactionSource = interaction,
     ) {
         Row(
             modifier = Modifier
@@ -303,23 +306,11 @@ private fun DiscoverFeedCard(
                 .padding(Dimensions.Dp12),
             verticalAlignment = Alignment.Top,
         ) {
-            // 元素序号圆形标记
-            Box(
-                modifier = Modifier
-                    .size(44.dp)
-                    .background(
-                        color = categoryColor.copy(alpha = CATEGORY_CIRCLE_ALPHA),
-                        shape = RoundedCornerShape(22.dp),
-                    ),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = item.atomicNumber.toString(),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = categoryColor,
-                )
-            }
+            TextBadge(
+                text = item.atomicNumber.toString(),
+                tint = categoryColor,
+                size = Dimensions.Dp40,
+            )
 
             Spacer(modifier = Modifier.width(Dimensions.Dp12))
 
@@ -327,7 +318,6 @@ private fun DiscoverFeedCard(
                 Text(
                     text = item.title,
                     style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

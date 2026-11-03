@@ -1,9 +1,10 @@
 package com.periodic.pro.feature.profile
 
 import android.content.res.Configuration
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,32 +22,31 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.periodic.pro.BuildConfig
 import com.periodic.pro.R
@@ -54,15 +54,15 @@ import com.periodic.pro.data.theme.ThemeMode
 import com.periodic.pro.data.update.UpdateResult
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.PeriodicProTheme
+import com.periodic.pro.ui.components.IconBadge
 import com.periodic.pro.ui.components.PeriodicButton
+import com.periodic.pro.ui.components.PeriodicTopBar
+import com.periodic.pro.ui.components.SectionHeader
 import com.periodic.pro.ui.components.UpdateDialog
 import org.koin.androidx.compose.koinViewModel
 
 /**
- * Profile 屏入口。
- *
- * @param onNavigateBack 返回回调
- * @param modifier Modifier
+ * Profile 屏 — Spectra 分组卡布局（DESIGN.md §9.6）。
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -131,7 +131,7 @@ fun ProfileScreen(
 }
 
 /**
- * Profile 屏纯 UI 层。
+ * Profile 屏纯 UI 层：分组卡 + 组内发丝分隔。
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -145,17 +145,7 @@ private fun ProfileContent(
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.tab_settings),
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                ),
-            )
+            PeriodicTopBar(title = stringResource(R.string.tab_settings))
         },
         modifier = modifier,
     ) { padding ->
@@ -163,144 +153,142 @@ private fun ProfileContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = Dimensions.Dp16),
         ) {
-            // === 1. 主题切换区 ===
-            ThemeSection(
-                currentMode = state.themeMode,
-                onModeChange = { mode -> onIntent(ProfileIntent.SetThemeMode(mode)) },
+            // === 1. 主题切换组 ===
+            SectionHeader(
+                title = stringResource(R.string.profile_theme),
+                modifier = Modifier.padding(top = Dimensions.Dp8, bottom = Dimensions.Dp12),
             )
+            SettingsCard {
+                ThemeSegmented(
+                    currentMode = state.themeMode,
+                    onModeChange = { mode -> onIntent(ProfileIntent.SetThemeMode(mode)) },
+                )
+            }
 
-            HorizontalDivider(
-                modifier = Modifier.padding(horizontal = Dimensions.Dp16),
-                thickness = 0.5.dp,
+            Spacer(modifier = Modifier.height(Dimensions.Dp24))
+
+            // === 2. 更新检查组 ===
+            SectionHeader(
+                title = stringResource(R.string.profile_check_update),
+                modifier = Modifier.padding(bottom = Dimensions.Dp12),
             )
+            SettingsCard {
+                UpdateSection(
+                    isChecking = state.isChecking,
+                    isDownloading = state.isDownloading,
+                    hasNewVersion = state.hasNewVersion,
+                    onCheckUpdate = { onIntent(ProfileIntent.CheckUpdate) },
+                )
+            }
 
-            // === 2. 更新检查区 ===
-            UpdateSection(
-                isChecking = state.isChecking,
-                isDownloading = state.isDownloading,
-                hasNewVersion = state.hasNewVersion,
-                onCheckUpdate = { onIntent(ProfileIntent.CheckUpdate) },
+            Spacer(modifier = Modifier.height(Dimensions.Dp24))
+
+            // === 3. 关于组 ===
+            SectionHeader(
+                title = stringResource(R.string.profile_about),
+                modifier = Modifier.padding(bottom = Dimensions.Dp12),
             )
+            SettingsCard {
+                AboutSection()
+            }
 
-            HorizontalDivider(
-                modifier = Modifier.padding(horizontal = Dimensions.Dp16),
-                thickness = 0.5.dp,
+            Spacer(modifier = Modifier.height(Dimensions.Dp24))
+
+            // === 4. 数据署名组 ===
+            SectionHeader(
+                title = stringResource(R.string.profile_attribution),
+                modifier = Modifier.padding(bottom = Dimensions.Dp12),
             )
-
-            // === 3. 关于区 ===
-            AboutSection()
-
-            HorizontalDivider(
-                modifier = Modifier.padding(horizontal = Dimensions.Dp16),
-                thickness = 0.5.dp,
-            )
-
-            // === 4. 数据署名区 ===
-            AttributionSection()
+            SettingsCard {
+                AttributionSection()
+            }
 
             Spacer(modifier = Modifier.height(Dimensions.Dp32))
         }
     }
 }
 
-/**
- * 主题切换区。
- *
- * 提供三段式选择：跟随系统 / 浅色 / 深色，即时生效。
- */
+/** 分组设置卡：surface + 发丝描边 + 16dp 内边距 */
 @Composable
-private fun ThemeSection(
-    currentMode: ThemeMode,
-    onModeChange: (ThemeMode) -> Unit,
+private fun SettingsCard(
+    content: @Composable () -> Unit,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(Dimensions.Dp16),
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.medium,
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = Dimensions.Dp0,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
     ) {
-        Text(
-            text = stringResource(R.string.profile_theme),
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-
-        Spacer(modifier = Modifier.height(Dimensions.Dp12))
-
-        ThemeOption(
-            icon = Icons.Filled.Visibility,
-            title = stringResource(R.string.profile_theme_system),
-            subtitle = stringResource(R.string.profile_theme_system_desc),
-            selected = currentMode == ThemeMode.SYSTEM,
-            onClick = { onModeChange(ThemeMode.SYSTEM) },
-        )
-
-        Spacer(modifier = Modifier.height(Dimensions.Dp8))
-
-        ThemeOption(
-            icon = Icons.Filled.LightMode,
-            title = stringResource(R.string.profile_theme_light),
-            subtitle = stringResource(R.string.profile_theme_light_desc),
-            selected = currentMode == ThemeMode.LIGHT,
-            onClick = { onModeChange(ThemeMode.LIGHT) },
-        )
-
-        Spacer(modifier = Modifier.height(Dimensions.Dp8))
-
-        ThemeOption(
-            icon = Icons.Filled.DarkMode,
-            title = stringResource(R.string.profile_theme_dark),
-            subtitle = stringResource(R.string.profile_theme_dark_desc),
-            selected = currentMode == ThemeMode.DARK,
-            onClick = { onModeChange(ThemeMode.DARK) },
-        )
+        Box(modifier = Modifier.padding(Dimensions.Dp16)) {
+            content()
+        }
     }
 }
 
 /**
- * 单行主题选择项：图标 + 标题 + 副标题 + RadioButton。
+ * 主题三段选择（Segmented）：跟随系统 / 浅色 / 深色。
  */
 @Composable
-private fun ThemeOption(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    title: String,
-    subtitle: String,
-    selected: Boolean,
-    onClick: () -> Unit,
+private fun ThemeSegmented(
+    currentMode: ThemeMode,
+    onModeChange: (ThemeMode) -> Unit,
 ) {
+    val options = listOf(
+        Triple(ThemeMode.SYSTEM, Icons.Filled.Visibility, stringResource(R.string.profile_theme_system)),
+        Triple(ThemeMode.LIGHT, Icons.Filled.LightMode, stringResource(R.string.profile_theme_light)),
+        Triple(ThemeMode.DARK, Icons.Filled.DarkMode, stringResource(R.string.profile_theme_dark)),
+    )
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.small)
+            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)),
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = title,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(Dimensions.Dp24),
-        )
-
-        Spacer(modifier = Modifier.width(Dimensions.Dp16))
-
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            Text(
-                text = subtitle,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+        options.forEach { (mode, icon, label) ->
+            val selected = currentMode == mode
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(MaterialTheme.shapes.small)
+                    .background(
+                        if (selected) {
+                            MaterialTheme.colorScheme.primaryContainer
+                        } else {
+                            Color.Transparent
+                        }
+                    )
+                    .clickable { onModeChange(mode) }
+                    .padding(vertical = Dimensions.Dp8),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp),
+                    tint = if (selected) {
+                        MaterialTheme.colorScheme.onPrimaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                )
+                Spacer(modifier = Modifier.width(Dimensions.Dp4))
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = if (selected) {
+                        MaterialTheme.colorScheme.onPrimaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                    maxLines = 1,
+                )
+            }
         }
-
-        RadioButton(
-            selected = selected,
-            onClick = onClick,
-        )
     }
 }
 
@@ -314,76 +302,72 @@ private fun UpdateSection(
     hasNewVersion: Boolean,
     onCheckUpdate: () -> Unit,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(Dimensions.Dp16),
-    ) {
-        Text(
-            text = stringResource(R.string.profile_check_update),
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-
-        Spacer(modifier = Modifier.height(Dimensions.Dp12))
-
-        if (isDownloading) {
-            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-            Spacer(modifier = Modifier.height(Dimensions.Dp8))
-            Text(
-                text = stringResource(R.string.profile_downloading_update),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            IconBadge(
+                icon = Icons.Filled.Refresh,
+                tint = MaterialTheme.colorScheme.primary,
+                size = Dimensions.Dp32,
+                iconSize = 16.dp,
             )
-        } else if (isChecking) {
-            LinearProgressIndicator(
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Spacer(modifier = Modifier.height(Dimensions.Dp8))
-            Text(
-                text = stringResource(R.string.profile_checking_update),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        } else {
-            PeriodicButton(
-                onClick = onCheckUpdate,
-                text = if (hasNewVersion) {
-                    stringResource(R.string.profile_upgrade)
-                } else {
-                    stringResource(R.string.profile_check_update)
-                },
-                modifier = Modifier.fillMaxWidth(),
-            )
+            Spacer(modifier = Modifier.width(Dimensions.Dp12))
+            if (isDownloading) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = stringResource(R.string.profile_downloading_update),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                    Spacer(modifier = Modifier.height(Dimensions.Dp8))
+                    LinearProgressIndicator(
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+            } else if (isChecking) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = stringResource(R.string.profile_checking_update),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                    Spacer(modifier = Modifier.height(Dimensions.Dp8))
+                    LinearProgressIndicator(
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+            } else {
+                Text(
+                    text = if (hasNewVersion) {
+                        stringResource(R.string.profile_upgrade)
+                    } else {
+                        stringResource(R.string.profile_version, BuildConfig.VERSION_NAME)
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.weight(1f),
+                )
+                Spacer(modifier = Modifier.width(Dimensions.Dp12))
+                PeriodicButton(
+                    onClick = onCheckUpdate,
+                    text = stringResource(R.string.profile_check_update),
+                )
+            }
         }
     }
 }
 
 /**
- * 关于区：App 图标 + 版本号 + 技术栈标签。
+ * 关于区：App 图标 + 名称 + 版本（tnum）+ 技术栈标签。
  */
 @Composable
 private fun AboutSection() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(Dimensions.Dp16),
-    ) {
-        Text(
-            text = stringResource(R.string.profile_about),
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-
-        Spacer(modifier = Modifier.height(Dimensions.Dp16))
-
+    Column(modifier = Modifier.fillMaxWidth()) {
         // App 图标 + 名称 + 版本
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            // 应用图标（带背景）
             Box(
                 modifier = Modifier
                     .size(Dimensions.Dp56)
@@ -411,7 +395,7 @@ private fun AboutSection() {
                 )
                 Text(
                     text = stringResource(R.string.profile_version, BuildConfig.VERSION_NAME),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
@@ -441,17 +425,15 @@ private fun AboutSection() {
 }
 
 /**
- * 技术栈标签 Chip。
+ * 技术栈标签 Chip：tonal 底。
  */
 @Composable
 private fun TechTag(
     text: String,
 ) {
-    Card(
-        shape = RoundedCornerShape(Dimensions.Dp8),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        ),
+    Surface(
+        shape = MaterialTheme.shapes.small,
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
     ) {
         Text(
             text = text,
@@ -470,20 +452,7 @@ private fun TechTag(
  */
 @Composable
 private fun AttributionSection() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(Dimensions.Dp16),
-    ) {
-        Text(
-            text = stringResource(R.string.profile_attribution),
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-
-        Spacer(modifier = Modifier.height(Dimensions.Dp12))
-
+    Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = stringResource(R.string.profile_attribution_desc),
             style = MaterialTheme.typography.bodyMedium,
@@ -494,7 +463,7 @@ private fun AttributionSection() {
 
         Text(
             text = stringResource(R.string.profile_attribution_license),
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }

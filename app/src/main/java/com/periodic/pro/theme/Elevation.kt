@@ -4,11 +4,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /**
- * 4 层 Elevation token。
- * L1 Shadow1：微弱投影（卡片）
- * L2 Shadow2：标准悬浮
- * L3 Floating：浮层（BottomSheet、Tooltip）
- * L4 Modal：模态弹窗
+ * 高度 token — 事实源：/DESIGN.md §6
+ * 分层策略：卡片靠表面+发丝线，无阴影；阴影只属于漂浮层。
+ * Shadow1 顶栏滚动态 / Shadow2 FAB / Floating 浮层 / Modal 模态
  */
 object Elevation {
     val Shadow1: Dp = 1.dp

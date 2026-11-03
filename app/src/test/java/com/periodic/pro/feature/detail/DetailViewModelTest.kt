@@ -4,6 +4,7 @@ import com.periodic.pro.data.element.ElementRepository
 import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.data.element.model.Element
 import com.periodic.pro.data.favorites.FavoritesRepository
+import com.periodic.pro.data.lab.LabRepository
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
@@ -32,6 +33,9 @@ class DetailViewModelTest {
 
     @MockK
     private lateinit var favoritesRepo: FavoritesRepository
+
+    @MockK
+    private lateinit var labRepo: LabRepository
 
     private val testDispatcher = StandardTestDispatcher()
     private val testScope = TestScope(testDispatcher)
@@ -66,6 +70,7 @@ class DetailViewModelTest {
         // Default: not a favorite
         every { favoritesRepo.isFavorite(1) } returns flowOf(false)
         coEvery { favoritesRepo.toggle(any()) } returns Unit
+        coEvery { labRepo.getByElement(any()) } returns emptyList()
     }
 
     @After
@@ -75,7 +80,8 @@ class DetailViewModelTest {
 
     @Test
     fun `load element success sets element in state`() {
-        val viewModel = DetailViewModel(elementRepo, favoritesRepo, 1)
+        val viewModel = DetailViewModel(elementRepo, favoritesRepo, labRepo, 1)
+        testDispatcher.scheduler.advanceUntilIdle()
 
         val state = viewModel.state.value
         assertNotNull(state.element)
@@ -89,7 +95,7 @@ class DetailViewModelTest {
         // Simulate favorite state changing after toggle
         every { favoritesRepo.isFavorite(1) } returns flowOf(false, true)
 
-        val viewModel = DetailViewModel(elementRepo, favoritesRepo, 1)
+        val viewModel = DetailViewModel(elementRepo, favoritesRepo, labRepo, 1)
         testDispatcher.scheduler.advanceUntilIdle()
 
         viewModel.handle(DetailIntent.ToggleFavorite)
@@ -106,7 +112,7 @@ class DetailViewModelTest {
     fun `isFavorite starts false when not favorited`() {
         every { favoritesRepo.isFavorite(1) } returns flowOf(false)
 
-        val viewModel = DetailViewModel(elementRepo, favoritesRepo, 1)
+        val viewModel = DetailViewModel(elementRepo, favoritesRepo, labRepo, 1)
 
         assertFalse(viewModel.state.value.isFavorite)
     }
@@ -115,7 +121,7 @@ class DetailViewModelTest {
     fun `isFavorite starts true when already favorited`() = testScope.runTest {
         every { favoritesRepo.isFavorite(1) } returns flowOf(true)
 
-        val viewModel = DetailViewModel(elementRepo, favoritesRepo, 1)
+        val viewModel = DetailViewModel(elementRepo, favoritesRepo, labRepo, 1)
         testDispatcher.scheduler.advanceUntilIdle()
 
         assertTrue(viewModel.state.value.isFavorite)

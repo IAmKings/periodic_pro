@@ -19,21 +19,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.PeriodicProTheme
+import com.periodic.pro.ui.components.IconBadge
 import com.periodic.pro.ui.components.PeriodicButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 
 /**
- * 空状态组件。
+ * 空状态 — Spectra 风格（DESIGN.md §8.9）。
  *
- * 居中布局：图标 + title + subtitle（可选）+ Button（可选）。
- *
- * @param icon 图标
- * @param title 主标题
- * @param subtitle 副标题（可选）
- * @param actionLabel 按钮文案（可选）
- * @param onAction 按钮点击回调
- * @param modifier Modifier
+ * 图标置于 56dp tonal 圆底（primaryContainer 系）+ 标题 + 副文 + Primary 按钮；
+ * 整体居中，上下留白 ≥ 64dp。
  */
 @Composable
 fun EmptyState(
@@ -47,15 +42,15 @@ fun EmptyState(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(Dimensions.Dp32),
+            .padding(horizontal = Dimensions.Dp32, vertical = Dimensions.Dp64),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = title,
-            modifier = Modifier.size(Dimensions.Dp64),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+        IconBadge(
+            icon = icon,
+            tint = MaterialTheme.colorScheme.primary,
+            size = Dimensions.Dp56,
+            iconSize = Dimensions.Dp24,
         )
 
         Spacer(modifier = Modifier.height(Dimensions.Dp16))
@@ -63,7 +58,7 @@ fun EmptyState(
         Text(
             text = title,
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center,
         )
 
@@ -72,7 +67,7 @@ fun EmptyState(
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
             )
         }

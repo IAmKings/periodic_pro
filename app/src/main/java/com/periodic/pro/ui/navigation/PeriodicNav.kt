@@ -56,6 +56,10 @@ fun PeriodicNav(
                 onNavigateToLearn = { rootNavController?.navigate("learn") },
                 onNavigateToLab = { rootNavController?.navigate("lab") },
                 onNavigateToQuiz = { rootNavController?.navigate("quiz") },
+                onNavigateToCategory = { categoryId ->
+                    // category 路由注册在内层 NavHost（本 graph），不能走 rootNavController
+                    navController.navigateRestorable(Routes.categoryDetail(categoryId))
+                },
                 onNavigateToFavorites = { navController.navigateTab(Routes.FAVORITES) },
             )
         }

@@ -12,22 +12,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.periodic.pro.theme.CategoryAlpha
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.PeriodicProTheme
-import com.periodic.pro.theme.Shapes
 
 /**
- * 属性标签 Chip，用于 Detail 页属性分类标签和 Category 页标签。
- *
- * 选中态：category 色填充 + 白色文字。
- * 非选中态：透明背景 + 描边 + category 色文字。
- * 圆角 shapeExtraSmall(4dp)，高度 24dp。
+ * 属性标签 Chip — tonal 风格（DESIGN.md §8.4 同族）。
+ * 分类色 14% 底 + 分类色文字，用于元素分类标识（详情页 / 分类页）。
  *
  * @param text Chip 显示文本
- * @param selected 是否选中
+ * @param selected 是否选中（选中时 tonal 填充，否则仅描边）
  * @param onClick 点击回调
  * @param modifier Modifier
- * @param categoryColor 分类色（选中时作为填充色，非选中时作为文字和描边色）
+ * @param categoryColor 分类色
  */
 @Composable
 fun PropertyChip(
@@ -37,22 +34,26 @@ fun PropertyChip(
     modifier: Modifier = Modifier,
     categoryColor: Color = MaterialTheme.colorScheme.primary,
 ) {
-    val chipColor = if (selected) categoryColor else Color.Transparent
-    val textColor = if (selected) Color.White else categoryColor
+    val container = if (selected) {
+        categoryColor.copy(alpha = CategoryAlpha.CHIP)
+    } else {
+        Color.Transparent
+    }
+    val textColor = if (selected) categoryColor else MaterialTheme.colorScheme.onSurfaceVariant
     val borderStroke = if (selected) {
-        null
+        BorderStroke(width = 1.dp, color = categoryColor.copy(alpha = 0.4f))
     } else {
         BorderStroke(
             width = 1.dp,
-            color = categoryColor,
+            color = MaterialTheme.colorScheme.outlineVariant,
         )
     }
 
     Surface(
         onClick = onClick,
         modifier = modifier,
-        shape = Shapes.extraSmall,
-        color = chipColor,
+        shape = MaterialTheme.shapes.small,
+        color = container,
         contentColor = textColor,
         border = borderStroke,
     ) {
@@ -77,7 +78,7 @@ private fun PropertyChipUnselectedPreview() {
             text = "过渡金属",
             selected = false,
             onClick = {},
-            categoryColor = Color(0xFFFFD43B),
+            categoryColor = Color(0xFFF5A623),
         )
     }
 }
@@ -91,7 +92,7 @@ private fun PropertyChipSelectedPreview() {
             text = "过渡金属",
             selected = true,
             onClick = {},
-            categoryColor = Color(0xFFFFD43B),
+            categoryColor = Color(0xFFF5A623),
         )
     }
 }

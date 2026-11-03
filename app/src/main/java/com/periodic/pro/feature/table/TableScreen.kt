@@ -14,8 +14,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,9 +37,12 @@ import com.periodic.pro.R
 import com.periodic.pro.data.element.model.Category
 import com.periodic.pro.theme.Dimensions
 import com.periodic.pro.theme.LocalCategoryColors
+import com.periodic.pro.theme.PeriodicProTheme
 import com.periodic.pro.theme.forCategory
 import com.periodic.pro.ui.components.CategoryChip
+import com.periodic.pro.ui.components.PeriodicButton
 import com.periodic.pro.ui.components.PeriodicSearchBar
+import com.periodic.pro.ui.components.PeriodicTopBar
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -70,12 +71,7 @@ private val categoryEntries = listOf(
 )
 
 /**
- * 周期表屏入口。
- *
- * @param initialQuery 初始搜索 query（从 Home 搜索进入时携带）
- * @param onNavigateToDetail 导航到元素详情
- * @param onNavigateToCompare 导航到元素对比
- * @param modifier Modifier
+ * 周期表屏 — Spectra「仪器主屏」（DESIGN.md §9.2）。
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -126,12 +122,13 @@ fun TableScreen(
         modifier = modifier,
         topBar = {
             if (state.isMultiSelectMode) {
-                // 多选模式 ContextualTopAppBar
+                // 多选上下文栏：primaryContainer 容器（DESIGN.md §8.10）
                 TopAppBar(
                     title = {
                         Text(
                             text = stringResource(R.string.multiselect_selected, state.selectedIds.size),
                             style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
                         )
                     },
                     navigationIcon = {
@@ -139,40 +136,24 @@ fun TableScreen(
                             Icon(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = stringResource(R.string.multiselect_cancel),
+                                tint = MaterialTheme.colorScheme.onPrimaryContainer,
                             )
                         }
                     },
                     actions = {
-                        Button(
+                        PeriodicButton(
                             onClick = { viewModel.handle(TableIntent.ConfirmCompare) },
+                            text = stringResource(R.string.multiselect_confirm),
                             enabled = state.selectedIds.isNotEmpty(),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary,
-                            ),
-                        ) {
-                            Text(
-                                text = stringResource(R.string.multiselect_confirm),
-                                style = MaterialTheme.typography.labelLarge,
-                            )
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                    ),
-                )
-            } else {
-                // 正常模式 TopAppBar
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = stringResource(R.string.screen_table),
-                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.padding(end = Dimensions.Dp8),
                         )
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.surface,
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
                     ),
                 )
+            } else {
+                PeriodicTopBar(title = stringResource(R.string.screen_table))
             }
         },
     ) { padding ->
@@ -183,23 +164,23 @@ fun TableScreen(
         ) {
             // 搜索框
             PeriodicSearchBar(
-                    query = state.searchQuery,
-                    onQueryChange = { viewModel.handle(TableIntent.Search(it)) },
-                    cursorAtEndTrigger = cursorTrigger,
+                query = state.searchQuery,
+                onQueryChange = { viewModel.handle(TableIntent.Search(it)) },
+                cursorAtEndTrigger = cursorTrigger,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = Dimensions.Dp16, vertical = Dimensions.Dp8),
                 placeholder = stringResource(R.string.search_elements),
             )
 
-            // 分类筛选 Chips
+            // 分类筛选 Chips（圆点即图例）
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = Dimensions.Dp16),
                 horizontalArrangement = Arrangement.spacedBy(Dimensions.Dp8),
             ) {
-                items(categoryEntries, key = { it.id ?: "all" }) { entry ->
+                items(categoryEntries, key = { it.id?.id ?: "all" }) { entry ->
                     CategoryChip(
                         text = stringResource(entry.labelRes),
                         selected = state.selectedCategory == entry.id,
@@ -207,7 +188,7 @@ fun TableScreen(
                         selectedColor = if (entry.id != null) {
                             LocalCategoryColors.current.forCategory(entry.id)
                         } else {
-                            MaterialTheme.colorScheme.primary
+                            null
                         },
                     )
                 }
@@ -264,7 +245,7 @@ fun TableScreen(
 @Preview(name = "Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun TableScreenPreview() {
-    com.periodic.pro.theme.PeriodicProTheme {
+    PeriodicProTheme {
         TableScreen(
             onNavigateToDetail = {},
             onNavigateToCompare = {},
