@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">周期表 Pro — 元素阶序概念</title>
+  <g fill="#111111">
+    <rect x="24" y="48" width="40" height="40" rx="6"/>
+    <rect x="192" y="48" width="40" height="40" rx="6"/>
+    <rect x="24" y="104" width="40" height="40" rx="6"/>
+    <rect x="80" y="104" width="40" height="40" rx="6"/>
+    <rect x="136" y="104" width="40" height="40" rx="6"/>
+    <rect x="192" y="104" width="40" height="40" rx="6"/>
+    <rect x="24" y="160" width="40" height="40" rx="6"/>
+    <rect x="80" y="160" width="40" height="40" rx="6"/>
+    <rect x="136" y="160" width="40" height="40" rx="6"/>
+    <rect x="192" y="160" width="40" height="40" rx="6"/>
+  </g>
+</svg>

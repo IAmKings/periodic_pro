@@ -1,0 +1,60 @@
+
+=== periodic-pro-app-icon.svg  (507 bytes)
+viewBox 0 0 256 256 · aspect 1.0 (square)
+colours 2: #6650a4 #ffffff · gradients 0 · anchors 33
+margins L0.0 R0.0 T0.0 B0.0 · bbox fill 1.0
+· INFO [on-tile] White artwork on a full-canvas tile/container — fine for app icons and avatars; make sure a version without the tile exists for other uses.
+production-readiness score: 99/100 (heuristic)
+
+=== periodic-pro-horizontal.svg  (3397 bytes)
+viewBox 0 0 680 256 · aspect 2.656 (horizontal)
+colours 1: #6650a4 · gradients 0 · anchors 219
+margins L64.0 R44.3 T56.0 B40.0 · bbox fill 0.525
+· INFO [complexity] 219 anchor points (library median 75.0, p75 155.0). Check every point earns its place.
+production-readiness score: 99/100 (heuristic)
+
+=== periodic-pro-play-icon.svg  (535 bytes)
+viewBox 0 0 256 256 · aspect 1.0 (square)
+colours 2: #6650a4 #ffffff · gradients 0 · anchors 29
+margins L0.0 R0.0 T0.0 B0.0 · bbox fill 1.0
+· INFO [on-tile] White artwork on a full-canvas tile/container — fine for app icons and avatars; make sure a version without the tile exists for other uses.
+production-readiness score: 99/100 (heuristic)
+
+=== periodic-pro-stacked.svg  (3434 bytes)
+viewBox 0 0 512 416 · aspect 1.231 (square)
+colours 1: #6650a4 · gradients 0 · anchors 219
+margins L84.0 R84.0 T64.0 B49.3 · bbox fill 0.489
+· INFO [complexity] 219 anchor points (library median 53.0, p75 95.5). Check every point earns its place.
+production-readiness score: 99/100 (heuristic)
+
+=== periodic-pro-symbol-reversed.svg  (456 bytes)
+viewBox 0 0 256 256 · aspect 1.0 (square)
+colours 1: #ffffff · gradients 0 · anchors 24
+margins L64.5 R48.5 T56.5 B40.5 · bbox fill 0.347
+· INFO [off-centre-x] Horizontal margins differ (left 64.5, right 48.5). Intentional optical centring? Otherwise centre it.
+· INFO [off-centre-y] Vertical margins differ (top 56.5, bottom 40.5). Remember the optical centre sits slightly above the geometric centre.
+· INFO [small-in-canvas] The mark occupies little of its square canvas; tighten the viewBox or scale up.
+production-readiness score: 97/100 (heuristic)
+
+=== periodic-pro-symbol-small.svg  (402 bytes)
+viewBox 0 0 256 256 · aspect 1.0 (square)
+colours 1: #6650a4 · gradients 0 · anchors 24
+margins L64.0 R48.0 T56.0 B40.0 · bbox fill 0.352
+· INFO [off-centre-x] Horizontal margins differ (left 64.0, right 48.0). Intentional optical centring? Otherwise centre it.
+· INFO [off-centre-y] Vertical margins differ (top 56.0, bottom 40.0). Remember the optical centre sits slightly above the geometric centre.
+production-readiness score: 98/100 (heuristic)
+
+=== periodic-pro-symbol.svg  (384 bytes)
+viewBox 0 0 256 256 · aspect 1.0 (square)
+colours 1: #6650a4 · gradients 0 · anchors 24
+margins L64.0 R48.0 T56.0 B40.0 · bbox fill 0.352
+· INFO [off-centre-x] Horizontal margins differ (left 64.0, right 48.0). Intentional optical centring? Otherwise centre it.
+· INFO [off-centre-y] Vertical margins differ (top 56.0, bottom 40.0). Remember the optical centre sits slightly above the geometric centre.
+production-readiness score: 98/100 (heuristic)
+
+=== periodic-pro-wordmark.svg  (3175 bytes)
+viewBox 0 0 512 256 · aspect 2.0 (wide)
+colours 1: #6650a4 · gradients 0 · anchors 195
+margins L69.2 R69.2 T92.5 B92.6 · bbox fill 0.202
+· INFO [complexity] 195 anchor points (library median 75.0, p75 155.0). Check every point earns its place.
+production-readiness score: 99/100 (heuristic)

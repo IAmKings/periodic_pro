@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">周期表 Pro — 周期之环概念</title>
+  <path fill="#111111" d="M128 32A92 92 0 1 0 220 124H188A60 60 0 1 1 128 64Z"/>
+  <rect x="104" y="100" width="48" height="48" rx="8" fill="#111111"/>
+  <rect x="164" y="40" width="48" height="48" rx="8" fill="#111111"/>
+</svg>

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title">
+  <title id="title">周期表 Pro — 元素 P 概念</title>
+  <path fill="#111111" d="M56 48H152V80H88V128H152Q168 128 168 112V96H200V112Q200 160 152 160H88V208H56Z"/>
+  <rect x="168" y="48" width="32" height="32" rx="6" fill="#111111"/>
+</svg>
