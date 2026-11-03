@@ -1,4 +1,4 @@
-# 周期表 Pro (Periodic Pro) · v0.3.2
+# 周期表 Pro (Periodic Pro) · v0.4.0
 
 一款基于 Jetpack Compose 的交互式化学元素周期表 Android 应用。
 
